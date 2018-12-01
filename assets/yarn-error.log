@@ -1,0 +1,59 @@
+Arguments: 
+  /usr/local/Cellar/node/11.3.0_1/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js init
+
+PATH: 
+  /usr/local/bin:/Users/mickey/.asdf/shims:/Users/mickey/.asdf/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.12.3
+
+Node version: 
+  11.3.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:125278:13)
+      at Interface.emit (events.js:182:13)
+      at Interface._ttyWrite (readline.js:818:16)
+      at ReadStream.onkeypress (readline.js:178:10)
+      at ReadStream.emit (events.js:182:13)
+      at emitKeys (internal/readline.js:424:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1055:36)
+      at ReadStream.emit (events.js:182:13)
+      at addChunk (_stream_readable.js:287:12)
+
+npm manifest: 
+  {
+    "repository": {},
+    "license": "MIT",
+    "scripts": {
+      "deploy": "webpack --mode production",
+      "watch": "webpack --mode development --watch"
+    },
+    "dependencies": {
+      "phoenix": "file:../deps/phoenix",
+      "phoenix_html": "file:../deps/phoenix_html"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.0.0",
+      "@babel/preset-env": "^7.0.0",
+      "babel-loader": "^8.0.0",
+      "copy-webpack-plugin": "^4.5.0",
+      "css-loader": "^0.28.10",
+      "mini-css-extract-plugin": "^0.4.0",
+      "optimize-css-assets-webpack-plugin": "^4.0.0",
+      "uglifyjs-webpack-plugin": "^1.2.4",
+      "webpack": "4.4.0",
+      "webpack-cli": "^2.0.10"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
