@@ -1,6 +1,10 @@
 defmodule ZaZaarWeb.PageController do
   use ZaZaarWeb, :controller
 
+  def index(conn, _attr) do
+    render(conn, "index.html")
+  end
+
   def about(conn, _attr) do
     render(conn, "about.html")
   end

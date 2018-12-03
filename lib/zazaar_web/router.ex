@@ -17,8 +17,8 @@ defmodule ZaZaarWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get("/about", PageController, :about)
-    get("/privacy", PageController, :privacy)
+    get "/about", PageController, :about
+    get "/privacy", PageController, :privacy
     get "/service", PageController, :service
   end
 
