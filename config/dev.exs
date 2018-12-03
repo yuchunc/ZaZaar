@@ -68,8 +68,6 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :zazaar, ZaZaar.Repo,
-  username: "postgres",
-  password: "postgres",
   database: "zazaar_dev",
   hostname: "localhost",
   pool_size: 10
