@@ -33,6 +33,7 @@ defmodule ZaZaar.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Phoenix
       {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
@@ -42,7 +43,13 @@ defmodule ZaZaar.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      # Auth
+      {:argon2_elixir, "~> 1.3"},
+      {:comeonin, "~> 4.1"},
+      {:guardian, "~> 1.1"},
+      {:ueberauth, "~> 0.5.0"},
+      {:ueberauth_facebook, "~> 0.7.0"}
     ]
   end
 
