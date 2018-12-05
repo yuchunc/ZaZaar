@@ -12,7 +12,12 @@
       <section class="container">
         <nav role="navigation">
           <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
+            <%= if @view_module == ZaZaarWeb.PageView do %>
+              <li><a href="/m">Login</a></li>
+            <% else %>
+              <li><a href="/m">Streams</a></li>
+              <li><a href="/o">Orders</a></li>
+            <% end %>
           </ul>
         </nav>
         <a href="http://phoenixframework.org/" class="phx-logo">
