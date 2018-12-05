@@ -24,8 +24,8 @@ defmodule ZaZaarWeb.Router do
     # TODO introduce login path
 
     # TODO pipe this in to auth
-    scope "/m" do
-      get "/", StreamController, :index
+    scope "/" do
+      get "/m", StreamController, :index
 
       scope "/s" do
         resources "/", StreamController, only: [:show]
@@ -35,11 +35,7 @@ defmodule ZaZaarWeb.Router do
       resources "/o", OrderController, only: [:index, :show]
     end
 
+    # NOTE user invoice path
     resources "/i", InvoiceController, only: [:show]
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", ZaZaarWeb do
-  #   pipe_through :api
-  # end
 end

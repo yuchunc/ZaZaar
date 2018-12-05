@@ -5,6 +5,7 @@ defmodule ZaZaarWeb.StreamController do
     render(conn, "index.html")
   end
 
-  def show do
+  def show(conn, %{"id" => id}) do
+    render(conn, "show.html", id: id)
   end
 end

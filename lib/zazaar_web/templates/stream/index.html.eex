@@ -7,11 +7,10 @@
     <div class="panel-block">
       <a href="/s/current">Currently Streamming</a>
     </div>
-    <div class="panel-block">
-      <a href="/s/1">old stream 1</a>
-    </div>
-    <div class="panel-block">
-      <a href="/s/2">old stream 2</a>
-    </div>
+    <%= for x <- 1..10 do %>
+      <div class="panel-block">
+        <a href="/s/1">old stream <%= x %></a>
+      </div>
+    <% end %>
   </div>
 </div>

@@ -1,0 +1,9 @@
+<div class="content">
+  <h1>Stream id <%= @id %></h1>
+</div>
+
+<div class="content comment-area">
+  <h2>This is the comment Area</h2>
+</div>
+
+<%= render ZaZaarWeb.OrderView, "_order_list.html" %>

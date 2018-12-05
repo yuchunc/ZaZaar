@@ -1,0 +1,29 @@
+Order table
+<table class="table is-fullwidth is-hoverable is-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Snapshot</th>
+      <th>Name</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for x <- 0..15 do %>
+      <tr>
+        <td><%= NaiveDateTime.utc_now %></td>
+        <td><img src="https://via.placeholder.com/90" alt=""/></td>
+        <td>Somename</td>
+        <td>3000</td>
+        <td>
+          <div class="buttons has-addons">
+            <a href="#" class="button">btn1</a>
+            <a href="#" class="button">btn2</a>
+            <a href="#" class="button">btn3</a>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
