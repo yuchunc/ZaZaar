@@ -20,6 +20,22 @@ defmodule ZaZaarWeb.Router do
     get "/about", PageController, :about
     get "/privacy", PageController, :privacy
     get "/service", PageController, :service
+
+    # TODO introduce login path
+
+    # TODO pipe this in to auth
+    scope "/m" do
+      get "/", StreamController, :index
+
+      scope "/s" do
+        resources "/", StreamController, only: [:show]
+        resources "/current", StreamController, singleton: true, only: [:show]
+      end
+
+      resources "/o", OrderController, only: [:index, :show]
+    end
+
+    resources "/i", InvoiceController, only: [:show]
   end
 
   # Other scopes may use custom stacks.

@@ -1,13 +1,16 @@
 <section class="section">
   <div class="container">
+
+    <!-- Links -->
     <div class="panel">
       <div class="panel-block">
         <div class="panel-control">
-          <%= link to: "/facebook" do %>
+          <%= link to: "/m" do %>
             FB Sign Up / Login
           <% end %>
         </div>
       </div>
     </div>
+
   </div>
 </section>
