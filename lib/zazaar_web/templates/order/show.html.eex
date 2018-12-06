@@ -1,0 +1,9 @@
+<h1>Order ID: <%= @id %></h1>
+
+<a class="button is-text" href=<%= "/i/#{@id}" %> target="_target">
+  View Invoice
+</a>
+
+<div class="box">
+  order information goes in here
+</div>
