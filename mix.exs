@@ -48,8 +48,8 @@ defmodule ZaZaar.MixProject do
       {:argon2_elixir, "~> 1.3"},
       {:comeonin, "~> 4.1"},
       {:guardian, "~> 1.1"},
-      {:ueberauth, "~> 0.5.0"},
-      {:ueberauth_facebook, "~> 0.7.0"}
+      {:ueberauth, "~> 0.5"},
+      {:ueberauth_facebook, "~> 0.7"}
     ]
   end
 
