@@ -11,6 +11,5 @@ defmodule ZaZaar.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
-
   end
 end

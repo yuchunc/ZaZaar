@@ -70,4 +70,7 @@ config :zazaar, ZaZaar.Repo,
   hostname: "localhost",
   pool_size: 10
 
+config :zazaar, ZaZaar.Auth.Guardian,
+  secret_key: "p3dKt7RTFoUe8gPVoO9Qz9bGI7xowt0dyYuqDv/9KUdva8bS6fZc74oTtfy/Bnvk"
+
 import_config "dev.secret.exs"
