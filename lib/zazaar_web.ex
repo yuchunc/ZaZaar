@@ -25,7 +25,7 @@ defmodule ZaZaarWeb do
       import ZaZaarWeb.Gettext
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
-      ZaZaarWeb.aliases
+      ZaZaarWeb.aliases()
 
       def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end
@@ -47,7 +47,7 @@ defmodule ZaZaarWeb do
       import ZaZaarWeb.Gettext
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
-      ZaZaarWeb.aliases
+      ZaZaarWeb.aliases()
 
       def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end
@@ -59,7 +59,7 @@ defmodule ZaZaarWeb do
       import Plug.Conn
       import Phoenix.Controller
 
-      ZaZaarWeb.aliases
+      ZaZaarWeb.aliases()
     end
   end
 
@@ -68,7 +68,7 @@ defmodule ZaZaarWeb do
       use Phoenix.Channel
       import ZaZaarWeb.Gettext
 
-      ZaZaarWeb.aliases
+      ZaZaarWeb.aliases()
 
       def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end

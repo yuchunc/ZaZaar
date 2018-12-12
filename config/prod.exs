@@ -20,6 +20,10 @@ config :zazaar, ZaZaar.Auth.Guardian,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
+  client_id: System.get_env("FACEBOOK_CLIENT_ID"),
+  client_secret: System.get_env("FACEBOOK_CLIENT_SECRET")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
