@@ -8,17 +8,11 @@ defmodule ZaZaarWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
-    plug(
-      Guardian.Plug.Pipeline,
-      module: ZaZaar.Auth.Guardian
-    )
-
-    plug(Guardian.Plug.VerifySession)
-    plug(Guardian.Plug.LoadResource, allow_blank: true)
+    plug Auth.Pipeline
   end
 
   pipeline :auth do
-    plug(Guardian.Plug.EnsureAuthenticated)
+    plug(GPlug.EnsureAuthenticated)
   end
 
   pipeline :api do

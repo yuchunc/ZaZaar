@@ -12,11 +12,11 @@
       <section class="container">
         <nav role="navigation">
           <ul>
-            <%= if @view_module == ZaZaarWeb.PageView do %>
-              <li><a href="/m">Login</a></li>
-            <% else %>
+            <%= if current_resource(@conn) do %>
               <li><a href="/m">Streams</a></li>
               <li><a href="/o">Orders</a></li>
+            <% else %>
+              <li><a href="/m">Login</a></li>
             <% end %>
           </ul>
         </nav>

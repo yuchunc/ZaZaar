@@ -1,8 +1,6 @@
 defmodule ZaZaarWeb.SessionController do
   use ZaZaarWeb, :controller
 
-  alias ZaZaar.Auth.Guardian.Plug, as: GPlug
-
   def delete(conn, _params) do
     conn
     |> GPlug.sign_out()
