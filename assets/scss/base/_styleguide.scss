@@ -26,15 +26,16 @@ $c-marble: #fafafa;
 .is-aligned-between   {align-items: space-between;}
 .is-aligned-self-end  {align-self: flex-end;}
 
-.has-text-zazaar {color: $c-zazaar;}
+.has-text-z {color: $c-zazaar;}
 .has-text-z-light {color: $c-z-light;}
+.has-text-z-dark {color: $c-z-dark;}
 
 .has-border-bottom-zazaar {
   padding-bottom: 10px;
   border-bottom: 2px solid rgba($c-zazaar, 0.3);
 }
 
-.has-background-zazaar {background-color: $c-zazaar;}
+.has-background-z {background-color: $c-zazaar;}
 .has-background-z-dark {background-color: $c-z-dark;}
 
 .has-z-gradient {background-image: linear-gradient(to top, $c-zazaar, rgba(#fff, 0));}
