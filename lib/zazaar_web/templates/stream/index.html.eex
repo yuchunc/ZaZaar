@@ -1,16 +1,66 @@
-<div class="content">
-  <h1>This is the Stream Index</h1>
-  <h2>Are we using this as the initial dashboard?</h2>
+<%= render(ZaZaarWeb.LayoutView, "main_nav.html", conn: @conn) %>
 
-  <!-- Links -->
-  <div class="panel">
-    <div class="panel-block">
-      <a href="/s/current">Currently Streamming</a>
+<section class="section stream">
+
+  <div class="container">
+
+    <!-- 正在直播 -->
+    <div class="box has-margin-bottom-md">
+      <a href="/s/current">
+        <div class="columns">
+          <div class="column">
+            <figure class="image is-4by3">
+              <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="column">
+            <h1 class="title is-3">Currently Streamming</h1>
+            <div class="card">
+              <div class="card-content">
+                這塊空空的，可以放什麼？即時留言觀看？
+                <br><br>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. 
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
     </div>
-    <%= for x <- 1..10 do %>
-      <div class="panel-block">
-        <a href="/s/1">old stream <%= x %></a>
-      </div>
-    <% end %>
+
+    <!-- 過去直播 -->
+    <div class="columns is-flex-wrap">
+
+      <%= for x <- 1..10 do %>
+
+        <div class="column is-half is-one-third-desktop">
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-4">old stream <%= x %></p>
+                  <p class="subtitle is-6">11:09 PM - 1 Jan 2016</p>
+                </div>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <a class="card-footer-item" href="/s/1">
+                查看訂單
+              </a>
+              <a class="card-footer-item" href="#">
+                Facebook 連結
+              </a>
+            </footer>
+          </div>
+        </div>
+
+      <% end %>
+
+    </div>
+
   </div>
-</div>
+</section>
