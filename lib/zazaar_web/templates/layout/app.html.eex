@@ -6,30 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>ZaZaar</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanstc.css"/>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <%= if @view_module == ZaZaarWeb.PageView do %>
-              <li><a href="/m">Login</a></li>
-            <% else %>
-              <li><a href="/m">Streams</a></li>
-              <li><a href="/o">Orders</a></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
-    </header>
-    <main role="main" class="container content">
+    <main role="main" class="main-container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
       <%= render @view_module, @view_template, assigns %>
+
     </main>
+
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+
   </body>
 </html>

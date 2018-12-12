@@ -1,16 +1,17 @@
-<section class="section">
-  <div class="container">
+<section class="hero is-fullheight has-background-zazaar">
+  <div class="hero-body">
+    <div class="container">
 
-    <!-- Links -->
-    <div class="panel">
-      <div class="panel-block">
-        <div class="panel-control">
-          <%= link to: "/m" do %>
-            FB Sign Up / Login
-          <% end %>
+      <a href="/" class="zazaar-logo">
+        <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
+      </a>
+
+      <div class="level has-margin-top-lg">
+        <div class="level-item">
+          <%= link( "Facebook 登入", to: "/m", class: "button is-outlined is-large ")%>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
