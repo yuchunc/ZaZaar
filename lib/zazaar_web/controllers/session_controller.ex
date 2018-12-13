@@ -19,7 +19,7 @@ defmodule ZaZaarWeb.SessionController do
   end
 
   def create(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    case Auth.fb_auth(auth.uid, auth.info) do
+    case Auth.fb_auth(auth) do
       {:ok, user} ->
         conn
         |> GPlug.sign_in(user)

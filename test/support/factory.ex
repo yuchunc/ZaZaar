@@ -1,7 +1,7 @@
 defmodule Factory do
   use ExMachina.Ecto, repo: ZaZaar.Repo
 
-  alias ZaZaar.{Account, Streaming, Following, Feed, ChatLog}
+  alias ZaZaar.{Account}
 
   # ====== Account =========
   def user_factory do
