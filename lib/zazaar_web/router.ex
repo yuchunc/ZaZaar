@@ -12,7 +12,7 @@ defmodule ZaZaarWeb.Router do
   end
 
   pipeline :auth do
-    plug(GPlug.EnsureAuthenticated)
+    plug(Guardian.Plug.EnsureAuthenticated)
   end
 
   pipeline :api do

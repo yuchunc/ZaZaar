@@ -4,6 +4,6 @@ defmodule ZaZaar.Auth.Pipeline do
     error_handler: Auth.ErrorHandler,
     module: Auth.Guardian
 
-  plug(GPlug.VerifySession)
-  plug(GPlug.LoadResource, allow_blank: true)
+  plug(Guardian.Plug.VerifySession)
+  plug(Guardian.Plug.LoadResource, allow_blank: true)
 end

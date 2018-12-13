@@ -3,6 +3,8 @@ defmodule ZaZaarWeb.SessionController do
 
   plug Ueberauth
 
+  alias Auth.Guardian.Plug, as: GPlug
+
   def delete(conn, _params) do
     conn
     |> GPlug.sign_out()
@@ -18,12 +20,14 @@ defmodule ZaZaarWeb.SessionController do
 
   def create(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case Auth.fb_auth(auth.uid, auth.info) do
-      {:ok, user}  ->
+      {:ok, user} ->
         conn
         |> GPlug.sign_in(user)
         |> put_flash(:success, dgettext("success", "Login Successful"))
         |> redirect(to: "/")
-      err -> err
+
+      err ->
+        err
     end
   end
 end
