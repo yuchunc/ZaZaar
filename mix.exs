@@ -51,6 +51,8 @@ defmodule ZaZaar.MixProject do
       {:guardian, "~> 1.1"},
       {:ueberauth, "~> 0.5"},
       {:ueberauth_facebook, "~> 0.7"},
+      # Utils
+      {:facebook, "~> 0.20.0"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},

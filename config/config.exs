@@ -44,6 +44,10 @@ config :ueberauth, Ueberauth,
        ]}
   ]
 
+config :facebook,
+  graph_url: "https://graph.facebook.com",
+  graph_video_url: "https://graph-video.facebook.com"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
