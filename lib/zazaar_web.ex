@@ -90,7 +90,6 @@ defmodule ZaZaarWeb do
       alias ZaZaarWeb.FallbackController
 
       alias ZaZaar.Auth
-      alias Auth.Guardian.Plug, as: GPlug
 
       alias ZaZaar.Account
       alias Account.User
