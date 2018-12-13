@@ -8,6 +8,7 @@ defmodule ZaZaar.Repo.Migrations.CreateUsers do
       add :email, :string
       add :image_url, :string
       add :fb_id, :string
+      add :fb_access_token, :string
 
       timestamps()
     end
