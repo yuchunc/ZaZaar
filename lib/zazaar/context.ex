@@ -3,7 +3,7 @@ defmodule ZaZaar.Context do
   DRY boilerplate setup in context
   """
 
-  defmacro __using__() do
+  defmacro __using__(_) do
     quote do
       import Ecto.Query
 

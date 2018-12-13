@@ -5,13 +5,6 @@ defmodule ZaZaarWeb.SessionController do
 
   alias Auth.Guardian.Plug, as: GPlug
 
-  def delete(conn, _params) do
-    conn
-    |> GPlug.sign_out()
-    |> put_flash(:info, dgettext("success", "Logout Successful"))
-    |> redirect(to: "/")
-  end
-
   def create(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     conn
     |> put_flash(:error, dgettext("error", "Login Failed"))
@@ -29,5 +22,12 @@ defmodule ZaZaarWeb.SessionController do
       err ->
         err
     end
+  end
+
+  def delete(conn, _params) do
+    conn
+    |> GPlug.sign_out()
+    |> put_flash(:info, dgettext("success", "Logout Successful"))
+    |> redirect(to: "/")
   end
 end

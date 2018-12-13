@@ -42,6 +42,8 @@ defmodule ZaZaarWeb.Router do
       end
 
       resources "/o", OrderController, only: [:index, :show]
+
+      delete("/logout", SessionController, :delete)
     end
 
     # NOTE user invoice path

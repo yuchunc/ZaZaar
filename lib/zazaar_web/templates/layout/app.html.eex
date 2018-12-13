@@ -15,8 +15,13 @@
             <%= if current_resource(@conn) do %>
               <li><a href="/m"><%= gettext "Streams" %></a></li>
               <li><a href="/o"><%= gettext "Orders" %></a></li>
+              <li>
+                <%= link(to: "/logout", method: :delete) do %>
+                  <%= gettext "Sign Out" %>
+                <% end %>
+              </li>
             <% else %>
-              <li><a href="/auth/facebook"><%= gettext "Login" %></a></li>
+              <li><a href="/auth/facebook"><%= gettext "Sign In" %></a></li>
             <% end %>
           </ul>
         </nav>
@@ -26,9 +31,9 @@
       </section>
     </header>
     <main role="main" class="container content">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      <%= render @view_module, @view_template, assigns %>
+    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <%= render @view_module, @view_template, assigns %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
