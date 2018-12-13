@@ -19,6 +19,12 @@ config :zazaar, ZaZaarWeb.Endpoint,
   render_errors: [view: ZaZaarWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: ZaZaar.PubSub, adapter: Phoenix.PubSub.PG2]
 
+# Guardian Configs
+config :zazaar, ZaZaar.Auth.Guardian,
+  issuer: "zazaar",
+  error_handler: ZaZaar.Auth.ErrorHandler,
+  verify_issuer: true
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -26,6 +32,11 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :ueberauth, Ueberauth,
+  providers: [
+    facebook: {Ueberauth.Strategy.Facebook, []}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

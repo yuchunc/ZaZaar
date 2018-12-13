@@ -14,8 +14,15 @@ config :zazaar, ZaZaarWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :zazaar, ZaZaar.Auth.Guardian,
+  secret_key: "2/nWZqdFSoZfy6uBodFFsa/irmciffdFGUoV+wP1auIFXGt8ruAV+LFgVM1LNyFZ"
+
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
+  client_id: System.get_env("FACEBOOK_CLIENT_ID"),
+  client_secret: System.get_env("FACEBOOK_CLIENT_SECRET")
 
 # ## SSL Support
 #

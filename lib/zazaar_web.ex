@@ -24,6 +24,10 @@ defmodule ZaZaarWeb do
       import Plug.Conn
       import ZaZaarWeb.Gettext
       alias ZaZaarWeb.Router.Helpers, as: Routes
+
+      ZaZaarWeb.aliases()
+
+      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end
   end
 
@@ -42,6 +46,10 @@ defmodule ZaZaarWeb do
       import ZaZaarWeb.ErrorHelpers
       import ZaZaarWeb.Gettext
       alias ZaZaarWeb.Router.Helpers, as: Routes
+
+      ZaZaarWeb.aliases()
+
+      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end
   end
 
@@ -50,6 +58,8 @@ defmodule ZaZaarWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+
+      ZaZaarWeb.aliases()
     end
   end
 
@@ -57,6 +67,10 @@ defmodule ZaZaarWeb do
     quote do
       use Phoenix.Channel
       import ZaZaarWeb.Gettext
+
+      ZaZaarWeb.aliases()
+
+      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
     end
   end
 
@@ -65,5 +79,20 @@ defmodule ZaZaarWeb do
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
+  end
+
+  @doc """
+  Add aliases for modules
+  USE WITH CAUTION
+  """
+  defmacro aliases do
+    quote do
+      alias ZaZaarWeb.FallbackController
+
+      alias ZaZaar.Auth
+
+      alias ZaZaar.Account
+      alias Account.User
+    end
   end
 end

@@ -22,6 +22,11 @@ defmodule ZaZaar.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import ZaZaar.DataCase
+      import Factory
+
+      require ZaZaarWeb
+
+      ZaZaarWeb.aliases()
     end
   end
 

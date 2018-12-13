@@ -7,6 +7,12 @@ defmodule ZaZaarWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+
+    plug Auth.Pipeline
+  end
+
+  pipeline :auth do
+    plug(Guardian.Plug.EnsureAuthenticated)
   end
 
   pipeline :api do
@@ -21,7 +27,10 @@ defmodule ZaZaarWeb.Router do
     get "/privacy", PageController, :privacy
     get "/service", PageController, :service
 
-    # TODO introduce login path
+    scope "/auth" do
+      get("/:provider", SessionController, :request)
+      get("/:provider/callback", SessionController, :create)
+    end
 
     # TODO pipe this in to auth
     scope "/" do
@@ -33,6 +42,8 @@ defmodule ZaZaarWeb.Router do
       end
 
       resources "/o", OrderController, only: [:index, :show]
+
+      delete("/logout", SessionController, :delete)
     end
 
     # NOTE user invoice path
