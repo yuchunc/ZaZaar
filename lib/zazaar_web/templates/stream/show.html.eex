@@ -1,11 +1,102 @@
-<h1>Stream id <%= @id %></h1>
+<section class="section stream__page">
 
-<div class="comment-area">
-  <h2>This is the comment Area</h2>
+  <div class="container">
 
-  <div class="box" style="height: 15em">
-    <p>maybe use bulma media object in here</p>
+    <header class="has-margin-bottom-md">
+
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="#">直播列表</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Stream id <%= @id %></a></a></li>
+        </ul>
+      </nav>
+
+      <h1 class="title">Stream id <%= @id %></h1>
+      <p class="subtitle has-text-grey-light">直播時間：2018-12-15 15:09:19</p>
+
+    </header>
+
+    <div class="columns is-variable is-5">
+
+      <!-- Comment Area-->
+      <div class="column card is-full-tablet is-one-quarter-desktop">
+        <div class="has-text-weight-bold has-margin-bottom-sm">留言</div>
+        <div class="comment-area">
+
+          <%= for i <- 0..15 do %>
+            <article class="media">
+              <figure class="media-left">
+                <p class="image is-32x32">
+                  <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
+                </p>
+              </figure>
+              <div class="media-content">
+                <div class="content">
+                  <strong>FB User <%= i %></strong>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
+                  </p>
+                </div>
+              </div>
+            </article>
+          <% end %>
+          
+        </div>
+      </div>
+
+      <!-- Stream Table -->
+      <div class="column">
+        <div class="main-table">
+
+          <!-- Header: Datetime | Snapshot | Product Name | Buyer | Amount -->
+          <div class="main-table__header has-text-weight-bold">
+            <div class="columns">
+              <div class="column is-2"><%= gettext "Datetime" %></div>
+              <div class="column is-2"><%= gettext "Snapshot" %></div>
+              <div class="column is-2"><%= gettext "Product Name" %></div>
+              <div class="column is-2"><%= gettext "Buyer" %></div>
+              <div class="column is-1"><%= gettext "Amount" %></div>
+              <div class="column is-3"><!-- Action --></div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="main-table__body">
+            <%= for x <- 0..15 do %>
+              <div class="columns">
+                <div class="column is-2"><%= NaiveDateTime.utc_now %></div>
+                <div class="column is-2">
+                  <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
+                    <img src="https://bulma.io/images/placeholders/640x480.png">
+                  </figure>
+                  <div class="modal is-origin"> <!-- Image Pop-up -->
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                      <p class="image is-4by3">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png">
+                      </p>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                  </div>
+                </div>
+                <div class="column is-2">Product <%= x %></div>
+                <div class="column is-2">Buyer <%= x %></div>
+                <div class="column is-1">3000</div>
+                <div class="column is-3">
+                  <div class="buttons">
+                    <a class="button is-fullwidth">前往買家訂單</a>
+                    <a class="button">修改 <!-- 可修改項目： Product Name | Amount | --></a>
+                    <a class="button">刪除</a>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <div>
+
+        </div>  
+      </div>
+    </div>
+
   </div>
-</div>
-
-<%= render ZaZaarWeb.OrderView, "_order_list.html" %>
+</section>

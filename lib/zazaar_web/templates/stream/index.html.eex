@@ -1,5 +1,3 @@
-<%= render(ZaZaarWeb.LayoutView, "main_nav.html", conn: @conn) %>
-
 <section class="section stream">
 
   <div class="container">
