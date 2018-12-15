@@ -11,8 +11,6 @@ config :logger, level: :warn
 
 # Configure your database
 config :zazaar, ZaZaar.Repo,
-  username: "postgres",
-  password: "postgres",
   database: "zazaar_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

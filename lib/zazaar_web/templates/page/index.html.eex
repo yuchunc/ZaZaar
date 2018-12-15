@@ -8,7 +8,11 @@
 
       <div class="level has-margin-top-lg">
         <div class="level-item">
-          <%= link( "Facebook 登入", to: "/m", class: "button is-outlined is-large ")%>
+
+          <%= link(to: "/auth/facebook", class: "button is-outlined is-large") do %>
+            <%= gettext "Sign In" %>
+          <% end %>
+
         </div>
       </div>
 

@@ -10,14 +10,21 @@
 
       <div class="navbar-end">
 
-        <a class="navbar-item has-text-white" href="/m">Streams</a>
-        <a class="navbar-item has-text-white" href="/o">Orders</a>
+        <%= if current_resource(@conn) do %>
+          <a class="navbar-item has-text-white" href="/m"><%= gettext "Streams" %></a>
+          <a class="navbar-item has-text-white" href="/o"><%= gettext "Orders" %></a>
 
-        <%# 登出 %>
-        <%= link(to: "/m/logout", class: "navbar-item") do %>
-          <div class="button is-outlined">登出</div>
+          <%= link(to: "/logout", class: "navbar-item", method: :delete) do %>
+            <div class="button is-outlined"><%= gettext "Sign Out" %></div>
+          <% end %>
+
+        <% else %>
+
+          <%= link(to: "/auth/facebook", class: "navbar-item") do %>
+            <div class="button is-outlined"><%= gettext "Sign In" %></div>
+          <% end %>
+
         <% end %>
-
       </div>
     </div>
   </div>

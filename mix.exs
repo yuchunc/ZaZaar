@@ -25,7 +25,8 @@ defmodule ZaZaar.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(:dev), do: ["lib", "test/support/factory.ex"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -48,8 +49,13 @@ defmodule ZaZaar.MixProject do
       {:argon2_elixir, "~> 1.3"},
       {:comeonin, "~> 4.1"},
       {:guardian, "~> 1.1"},
-      {:ueberauth, "~> 0.5.0"},
-      {:ueberauth_facebook, "~> 0.7.0"}
+      {:ueberauth, "~> 0.5"},
+      {:ueberauth_facebook, "~> 0.7"},
+      # Dev and Test Utils
+      {:ex_machina, "~> 2.2", only: [:test, :dev]},
+      {:faker, "~> 0.11", only: [:test, :dev]},
+      {:stream_data, "~> 0.1", only: :test},
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
     ]
   end
 
