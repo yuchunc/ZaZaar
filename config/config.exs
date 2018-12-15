@@ -25,6 +25,8 @@ config :zazaar, ZaZaar.Auth.Guardian,
   error_handler: ZaZaar.Auth.ErrorHandler,
   verify_issuer: true
 
+config :zazaar, :fb_api, ZaZaar.Fb.Api
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
