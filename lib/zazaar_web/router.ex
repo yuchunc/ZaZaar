@@ -32,8 +32,9 @@ defmodule ZaZaarWeb.Router do
       get("/:provider/callback", SessionController, :create)
     end
 
-    # TODO pipe this in to auth
     scope "/" do
+      pipe_through :auth
+
       get "/m", StreamController, :index
 
       scope "/s" do
@@ -45,9 +46,9 @@ defmodule ZaZaarWeb.Router do
         resources "/pages", PageController, singleton: true, only: [:show, :update]
       end
 
-      resources "/o", OrderController, only: [:index, :show]
-
       delete("/logout", SessionController, :delete)
+
+      resources "/o", OrderController, only: [:index, :show]
     end
 
     # NOTE user invoice path
