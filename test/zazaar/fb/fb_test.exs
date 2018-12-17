@@ -11,6 +11,7 @@ defmodule ZaZaar.FbTest do
 
   describe "set_pages/1" do
     test "get list of pages and stores pages in Account" do
+      user = insert(:user)
       page_access_token = "lookatmeIamaccesstoken"
       page_name = "some page name"
       page_id = "1736200000004778"
@@ -42,14 +43,11 @@ defmodule ZaZaar.FbTest do
         {:ok, resp}
       end)
 
-      assert {:ok, [page]} = Fb.set_pages("useraccesstoken")
-
-      assert %Page{
-               name: page_name,
-               access_token: page_access_token,
-               fb_page_id: page_id,
-               tasks: [_]
-             } = page
+      assert {:ok, [page]} = Fb.set_pages(user)
+      assert page.name == page_name
+      assert page.access_token == page_access_token
+      assert page.fb_page_id == page_id
+      refute Enum.empty?(page.tasks)
     end
   end
 end

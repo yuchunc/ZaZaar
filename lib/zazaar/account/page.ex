@@ -22,14 +22,15 @@ defmodule ZaZaar.Account.Page do
   @doc false
   def changeset(page, attrs) do
     page
-    |> cast(attrs, [:fb_page_id, :access_token, :tasks])
+    |> cast(attrs, [:fb_page_id, :access_token, :tasks, :name])
     |> validate_change(:tasks, &validate_tasks/2)
-    |> validate_required([:fb_page_id, :access_token, :tasks, :user_id])
+    |> validate_required([:fb_page_id, :access_token, :tasks, :name, :user_id])
+    |> unique_constraint(:fb_page_id, name: :pages_user_id_fb_page_id_index)
     |> assoc_constraint(:user)
   end
 
   defp validate_tasks(:tasks, tasks) do
-    invalid_tasks = tasks -- @valid_tasks
+    invalid_tasks = Enum.uniq(tasks) -- @valid_tasks
 
     if Enum.empty?(invalid_tasks) do
       []

@@ -6,7 +6,7 @@ defmodule ZaZaar.Account do
   use ZaZaar.Context
 
   alias ZaZaar.Account
-  alias Account.User
+  alias Account.{User, Page}
 
   @doc """
   Finds a single user record in DB
@@ -34,5 +34,43 @@ defmodule ZaZaar.Account do
     user
     |> User.changeset(params)
     |> Repo.update()
+  end
+
+  @doc """
+  Insert or Update Facebook page permissions
+  This is probably just going to be used internally
+  """
+  def upsert_pages(user, page_maps) do
+    fb_page_ids =
+      page_maps
+      |> Enum.map(&Map.get(&1, :fb_page_id))
+
+    current_pages = get_pages(user_id: user.id, fb_page_id: fb_page_ids)
+
+    pages =
+      Enum.map(page_maps, fn pm ->
+        current_pages
+        |> Enum.find(%Page{user_id: user.id}, &(&1.fb_page_id == pm.fb_page_id))
+        |> Page.changeset(pm)
+        |> Repo.insert_or_update!()
+      end)
+
+    {:ok, pages}
+  end
+
+  defp get_pages(attrs), do: get_pages(Page, attrs)
+
+  defp get_pages(query, []), do: Repo.all(query)
+
+  defp get_pages(query, [{k, v} | t]) when is_list(v) do
+    query
+    |> where([p], field(p, ^k) in ^v)
+    |> get_pages(t)
+  end
+
+  defp get_pages(query, [{k, v} | t]) do
+    query
+    |> where([p], field(p, ^k) == ^v)
+    |> get_pages(t)
   end
 end
