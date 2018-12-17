@@ -15,5 +15,6 @@ defmodule ZaZaar.Repo.Migrations.CreatePages do
     end
 
     create index(:pages, [:user_id])
+    create unique_index(:pages, [:user_id, :fb_page_id], name: :pages_user_id_fb_page_id_index)
   end
 end
