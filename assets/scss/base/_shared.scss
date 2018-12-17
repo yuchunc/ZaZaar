@@ -1,0 +1,21 @@
+.landing {
+  z-index: 31;
+  margin-top: -52px;
+}
+
+.comment-area {
+  overflow-y: scroll;
+}
+
+.main-table {
+  overflow: hidden;
+
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+
+    .columns {
+      width: 100%;
+    }
+  }
+}
