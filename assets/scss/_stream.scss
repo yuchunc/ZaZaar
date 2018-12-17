@@ -19,4 +19,25 @@
       height: calc( 100% - 4.5rem );
     }
   }
+
+  &__page {
+    height: calc( 100vh - 52px);
+
+    .container {
+      height: 100%;
+
+      .columns {
+        height: calc( 100% - 8.5rem);
+
+        .comment-area {
+          overflow-y: scroll;
+          height: calc( 100% - 3rem);
+        }
+        
+        .column + .column {
+          margin-left: 3rem;
+        }
+      }
+    }
+  }
 }

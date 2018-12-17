@@ -6,21 +6,20 @@
 
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-          <li><a href="#">直播列表</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Stream id <%= @id %></a></a></li>
+          <li><a href="/m">直播列表</a></li>
+          <li class="is-active"><a href="#" aria-current="page">12月16日下午<%= @id %>:06 (直播時間)</a></a></li>
         </ul>
       </nav>
 
-      <h1 class="title">Stream id <%= @id %></h1>
-      <p class="subtitle has-text-grey-light">直播時間：2018-12-15 15:09:19</p>
+      <h1 class="title">12月16日下午<%= @id %>:06 (直播時間)</h1>
 
     </header>
 
-    <div class="columns is-variable is-5">
+    <div class="columns is-marginless">
 
       <!-- Comment Area-->
-      <div class="column card is-full-tablet is-one-quarter-desktop">
-        <div class="has-text-weight-bold has-margin-bottom-sm">留言</div>
+      <div class="column card is-one-quarter-desktop">
+        <p class="has-text-weight-bold has-text-grey-light has-margin-bottom-sm">留言</p>
         <div class="comment-area">
 
           <%= for i <- 0..15 do %>
@@ -45,28 +44,50 @@
       </div>
 
       <!-- Stream Table -->
-      <div class="column">
-        <div class="main-table">
+      <div class="column is-paddingless">
 
-          <!-- Header: Datetime | Snapshot | Product Name | Buyer | Amount -->
-          <div class="main-table__header has-text-weight-bold">
-            <div class="columns">
-              <div class="column is-2"><%= gettext "Datetime" %></div>
-              <div class="column is-2"><%= gettext "Snapshot" %></div>
-              <div class="column is-2"><%= gettext "Product Name" %></div>
-              <div class="column is-2"><%= gettext "Buyer" %></div>
-              <div class="column is-1"><%= gettext "Amount" %></div>
-              <div class="column is-3"><!-- Action --></div>
-            </div>
-          </div>
+        <table class="table main-table is-striped is-hoverable">
+          <thead class="main-table__header">
+            <tr>
+              <th width="10%"><%= gettext "Datetime" %></th>
+              <th width="20%" class="has-text-centered"><%= gettext "Snapshot" %></th>
+              <th width="15%"><%= gettext "Product Name" %></th>
+              <th width="15%"><%= gettext "Buyer" %></th>
+              <th width="10%" class="has-text-centered"><%= gettext "Price" %></th>
+              <th width="10%" class="has-text-centered"><%= gettext "Quantity" %></th>
+              <th width="10%" class="has-text-centered"><%= gettext "Amount" %></th>
+              <th width="10%"></th>
+            </tr>
+          </thead>
 
-          <hr>
+          <tbody class="main-table__body">
 
-          <div class="main-table__body">
-            <%= for x <- 0..15 do %>
-              <div class="columns">
-                <div class="column is-2"><%= NaiveDateTime.utc_now %></div>
-                <div class="column is-2">
+              <!-- 編輯模式，可編輯項目：Product Name, Price, Quantity -->
+              <tr>
+                <td>15:10:54</td>
+                <td>
+                  <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
+                    <img src="https://bulma.io/images/placeholders/640x480.png">
+                  </figure>
+                </td>
+                <td><input class="input" type="text" placeholder="Product Name" value="Product 1"></td>
+                <td>Buyer 1</td>
+                <td class="has-text-centered"><input class="input" type="text" placeholder="Price" value="1000"></td>
+                <td class="has-text-centered"><input class="input" type="text" placeholder="Quantity" value="1"></td>
+                <td class="has-text-centered">1000</td>
+                <td class="has-text-centered">
+                  <div class="buttons">
+                    <a class="button is-link is-outlined" disabled>訂單</a>
+                    <a class="button is-success is-outlined">儲存</a>
+                    <a class="button" disabled>刪除</a>
+                  </div>
+                </td>
+              </tr>
+
+            <%= for x <- 2..15 do %>
+              <tr>
+                <td>15:<%= x %>0:54</td>
+                <td>
                   <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
                     <img src="https://bulma.io/images/placeholders/640x480.png">
                   </figure>
@@ -79,24 +100,26 @@
                     </div>
                     <button class="modal-close is-large" aria-label="close"></button>
                   </div>
-                </div>
-                <div class="column is-2">Product <%= x %></div>
-                <div class="column is-2">Buyer <%= x %></div>
-                <div class="column is-1">3000</div>
-                <div class="column is-3">
+                </td>
+                <td>Product <%= x %></td>
+                <td>Buyer <%= x %></td>
+                <td class="has-text-centered">1000</td>
+                <td class="has-text-centered"><%= x%></td>
+                <td class="has-text-centered"><%= 1000 * x %></td>
+                <td class="has-text-centered">
                   <div class="buttons">
-                    <a class="button is-fullwidth">前往買家訂單</a>
-                    <a class="button">修改 <!-- 可修改項目： Product Name | Amount | --></a>
+                    <a class="button is-link is-outlined">訂單</a>
+                    <a class="button">修改</a>
                     <a class="button">刪除</a>
                   </div>
-                </div>
-              </div>
+                </td>
+              </tr>
             <% end %>
-          <div>
 
-        </div>  
+          </tbody>
+        </table>
+
       </div>
     </div>
-
   </div>
 </section>
