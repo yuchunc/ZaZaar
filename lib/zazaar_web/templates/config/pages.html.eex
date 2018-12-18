@@ -1,0 +1,13 @@
+<div class="name">
+  <h1>Place to choose the current page</h1>
+
+  <div>
+    path to persist:
+    PATCH or PUT to /config/pages
+  </div>
+
+  <div>
+    example payload:
+    {"page_id": <page_uuid_goes_here>}
+  </div>
+</div>
