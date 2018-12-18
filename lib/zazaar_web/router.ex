@@ -42,7 +42,7 @@ defmodule ZaZaarWeb.Router do
       end
 
       scope "/config", Config do
-        resources "pages", PageController, singleton: true, only: [:show, :update]
+        resources "/pages", PageController, singleton: true, only: [:show, :update]
       end
 
       resources "/o", OrderController, only: [:index, :show]

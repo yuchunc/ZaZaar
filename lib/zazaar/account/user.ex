@@ -17,6 +17,6 @@ defmodule ZaZaar.Account.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :email, :image_url])
-    |> validate_required([:name, :email, :fb_id])
+    |> validate_required([:name, :fb_id])
   end
 end
