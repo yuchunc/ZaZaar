@@ -37,8 +37,8 @@ defmodule ZaZaarWeb.Router do
       get "/m", StreamController, :index
 
       scope "/s" do
+        resources "/current", StreamingController, singleton: true, only: [:show]
         resources "/", StreamController, only: [:show]
-        resources "/current", StreamController, singleton: true, only: [:show]
       end
 
       resources "/o", OrderController, only: [:index, :show]

@@ -16,7 +16,7 @@
             <p class="has-text-weight-bold has-text-grey-light has-margin-bottom-sm">即時留言</p>
             <div class="comment-area">
 
-              <%= for i <- 0..5 do %>
+              <%= for _ <- 0..5 do %>
                 <article class="media">
                   <figure class="media-left">
                     <p class="image is-32x32">
