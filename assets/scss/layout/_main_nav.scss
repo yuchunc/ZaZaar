@@ -1,0 +1,19 @@
+.navbar {
+
+  .navbar-brand .main-logo {
+    width: 114px;
+  }
+
+  .navbar-item {
+    transition: color 0.3s;
+
+    &.has-text-white:hover {
+      color: $c-z-dark !important;
+    }
+
+    &:hover {
+      background: transparent !important;
+    }
+  }
+
+}

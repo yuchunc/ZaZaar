@@ -1,0 +1,88 @@
+/* Color palette */
+$c-zazaar: #fd5f00;
+$c-z-light:#fa9856;
+$c-z-red:  #D0021B;
+$c-z-dark: #243342;
+$c-z-grey: #455a64;
+$c-dark:   #4a4a4a;
+$c-warm:   #9b9b9b;
+$c-light:  #dddddd;
+$c-marble: #fafafa;
+
+/* Customized Helpers */
+
+.is-flex-wrap         {flex-wrap: wrap;}
+.is-flex-column       {flex-direction: column;}
+.is-justified-center  {justify-content: center;}
+.is-justified-start   {justify-content: flex-start;}
+.is-justified-end     {justify-content: flex-end;}
+.is-justified-around  {justify-content: space-around;}
+.is-justified-between {justify-content: space-between;}
+.is-aligned-start     {align-items: flex-start;}
+.is-aligned-center    {align-items: center;}
+.is-aligned-end       {align-items: flex-end;}
+.is-aligned-stretch   {align-items: stretch;}
+.is-aligned-around    {align-items: space-around;}
+.is-aligned-between   {align-items: space-between;}
+.is-aligned-self-end  {align-self: flex-end;}
+
+.has-text-z {color: $c-zazaar;}
+.has-text-z-light {color: $c-z-light;}
+.has-text-z-dark {color: $c-z-dark;}
+
+.has-text-hover-z:hover {color: $c-zazaar;}
+
+.has-border-bottom-zazaar {
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba($c-zazaar, 0.3);
+}
+
+.has-background-z {background-color: $c-zazaar;}
+.has-background-z-dark {background-color: $c-z-dark;}
+
+.has-z-gradient {background-image: linear-gradient(to top, $c-zazaar, rgba(#fff, 0));}
+
+.has-shadow {box-shadow: 0 2px 4px 0 rgba($c-z-dark ,0.3) !important;}
+
+$size: (
+  sm: 1.5rem,
+  md: 3rem,
+  lg: 5rem,
+);
+
+@each $key, $val in $size {
+  .has-margin-top-#{$key} {margin-top: $val !important;}
+  .has-margin-bottom-#{$key} {margin-bottom: $val !important;}
+  .has-padding-#{$key} {padding: $val !important;}
+  .has-padding-width-#{$key} {padding: 0 $val !important;}
+}
+
+/* Overwritten Bulma */
+
+.button {
+  transition: all 0.3s;
+
+  &.is-outlined {
+    background-color: transparent;
+    border-color: #fff;
+    color: #fff;
+
+    &:hover, &:focus {
+      background-color: #fff;
+      border-color: #fff;
+      color: $c-zazaar;
+    }
+  }
+
+  &.is-inverted.is-outlined {
+    background-color: transparent;
+    border-color: $c-zazaar;
+    color: $c-zazaar;
+
+    &:hover, &:focus {
+      background-color: $c-zazaar;
+      border-color: $c-zazaar;
+      color: #fff;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+<nav class="navbar has-background-z has-shadow" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img class="main-logo" src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
+      </a>
+    </div>
+
+    <div id="main-navbar" class="navbar-menu">
+
+      <div class="navbar-end">
+
+        <%= if current_resource(@conn) do %>
+          <a class="navbar-item has-text-white" href="/m"><%= gettext "Streams" %> (直播列表)</a>
+          <a class="navbar-item has-text-white" href="/o"><%= gettext "Orders" %> (訂單管理)</a>
+
+          <%= link(to: "/logout", class: "navbar-item", method: :delete) do %>
+            <div class="button is-outlined"><%= gettext "Sign Out" %></div>
+          <% end %>
+
+        <% else %>
+
+          <%= link(to: "/auth/facebook", class: "navbar-item") do %>
+            <div class="button is-outlined"><%= gettext "Sign In" %></div>
+          <% end %>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

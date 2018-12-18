@@ -1,0 +1,21 @@
+.landing {
+  z-index: 31;
+  margin-top: -52px;
+}
+
+.comment-area {
+  overflow-y: scroll;
+}
+
+.main-table {
+
+  &__body {
+    td {
+      vertical-align: middle;
+    }
+  }
+
+  figure {
+    cursor: pointer;
+  }
+}
