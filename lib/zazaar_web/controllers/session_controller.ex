@@ -17,7 +17,7 @@ defmodule ZaZaarWeb.SessionController do
         conn
         |> GPlug.sign_in(user)
         |> put_flash(:success, dgettext("success", "Login Successful"))
-        |> redirect(to: "/")
+        |> redirect(to: "/config/pages")
 
       err ->
         err

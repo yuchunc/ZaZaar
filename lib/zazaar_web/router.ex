@@ -41,6 +41,10 @@ defmodule ZaZaarWeb.Router do
         resources "/", StreamController, only: [:show]
       end
 
+      scope "/config", Config do
+        resources "/pages", PageController, singleton: true, only: [:show, :update]
+      end
+
       resources "/o", OrderController, only: [:index, :show]
 
       delete("/logout", SessionController, :delete)

@@ -9,7 +9,6 @@
     <div id="main-navbar" class="navbar-menu">
 
       <div class="navbar-end">
-
         <%= if current_resource(@conn) do %>
           <a class="navbar-item has-text-white" href="/m"><%= gettext "Streams" %> (直播列表)</a>
           <a class="navbar-item has-text-white" href="/o"><%= gettext "Orders" %> (訂單管理)</a>

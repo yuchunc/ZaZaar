@@ -3,7 +3,7 @@ defmodule ZaZaar.Auth do
 
   alias ZaZaar.Account
 
-  def fb_auth(%UAuth{uid: uid, info: info}) do
+  def fb_auth(%UAuth{uid: uid, info: info} = uauth) do
     case Account.get_user(fb_id: uid) do
       nil ->
         %{fb_id: uid, name: info.name, email: info.email, image_url: info.image}
