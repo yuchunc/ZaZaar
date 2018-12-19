@@ -6,8 +6,7 @@
       </a>
     </div>
 
-    <div id="main-navbar" class="navbar-menu">
-
+    <div id="main-navbar" class="navbar-menu is-active">
       <div class="navbar-end">
         <%= if current_resource(@conn) do %>
           <a class="navbar-item has-text-white" href="/m"><%= gettext "Streams" %> (直播列表)</a>
