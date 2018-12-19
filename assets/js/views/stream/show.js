@@ -4,6 +4,7 @@ let merchSnapshotModal = document.getElementById("merch-snapshot-modal");
 
 const tbodyOnclickHandler = (e) => {
   let elem = e.target
+  let editables = elem.closest("tr").getElementsByClassName("editable");
 
   if(elem.classList.contains("merch-snapshot")) {
     event.preventDefault();
@@ -11,23 +12,40 @@ const tbodyOnclickHandler = (e) => {
     merchSnapshotModal.classList.add("is-active");
   } else if(elem.classList.contains('edit-merch')) {
     event.preventDefault();
-    let editables = elem.closest("tr").getElementsByClassName("editable");
     for(let td of editables) {
       if(td.classList.contains("merch-actions")) {
-        console.log("td", td);
         let editBtn = td.getElementsByClassName("edit-merch")[0];
-        let saveBtn = el(`<a class="button is-success is-outlined">儲存</a>`);
-
+        let saveBtn = el(`<a class="button is-success is-outlined save-merch">儲存</a>`);
         editBtn.replaceWith(saveBtn);
       } else {
         replaceInnerWithInput(td);
       }
     };
+  } else if(elem.classList.contains('save-merch')) {
+    event.preventDefault();
+    // TODO Websocket send update to server, and success
+
+    for(let td of editables) {
+      if(td.classList.contains("merch-actions")) {
+        let saveBtn = td.getElementsByClassName("save-merch")[0];
+        let editBtn = el(`<a class="button edit-merch">修改</a>`)
+
+        saveBtn.replaceWith(editBtn);
+      } else {
+        replaceInputWithText(td);
+      }
+    }
+    // TODO Websocket the update to server, and failed
+      // Flashes error message
   };
 };
 
 const replaceInnerWithInput = (td) => {
   td.innerHTML = `<input class="input" type="text" value="${td.innerHTML}">`;
+};
+
+const replaceInputWithText = (td) => {
+  td.innerText = td.children[0].value;
 };
 
 const el = ( domstring ) => {
