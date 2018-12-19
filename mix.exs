@@ -55,7 +55,8 @@ defmodule ZaZaar.MixProject do
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},
       {:stream_data, "~> 0.1", only: :test},
-      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
+      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false}
     ]
   end
 
