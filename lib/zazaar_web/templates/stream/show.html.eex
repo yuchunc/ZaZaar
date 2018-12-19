@@ -70,10 +70,16 @@
                   <img class="merch-snapshot" src="https://bulma.io/images/placeholders/640x480.png">
                 </figure>
               </td>
-              <td><input class="input" type="text" placeholder="Product Name" value="Product 1"></td>
+              <td>
+                <input class="input" type="text" placeholder="Product Name" value="Product 1">
+              </td>
               <td>Buyer 1</td>
-              <td class="has-text-centered"><input class="input" type="text" placeholder="Price" value="1000"></td>
-              <td class="has-text-centered"><input class="input" type="text" placeholder="Quantity" value="1"></td>
+              <td class="has-text-centered">
+                <input class="input" type="text" placeholder="Price" value="1000">
+              </td>
+              <td class="has-text-centered">
+                <input class="input" type="text" placeholder="Quantity" value="1">
+              </td>
               <td class="has-text-centered">1000</td>
               <td class="has-text-centered">
                 <div class="buttons">
@@ -92,15 +98,15 @@
                     <img class="merch-snapshot"src="https://bulma.io/images/placeholders/640x480.png">
                   </figure>
                 </td>
-                <td>Product <%= x %></td>
+                <td class="merch-name editable">Product <%= x %></td>
                 <td>Buyer <%= x %></td>
-                <td class="has-text-centered">1000</td>
-                <td class="has-text-centered"><%= x%></td>
+                <td class="has-text-centered merch-price editable">1000</td>
+                <td class="has-text-centered merch-quantity editable"><%= x %></td>
                 <td class="has-text-centered"><%= 1000 * x %></td>
                 <td class="has-text-centered">
-                  <div class="buttons">
+                  <div class="buttons merch-actions editable">
                     <a class="button is-link is-outlined">訂單</a>
-                    <a class="button">修改</a>
+                    <a class="button edit-merch">修改</a>
                     <a class="button">刪除</a>
                   </div>
                 </td>
