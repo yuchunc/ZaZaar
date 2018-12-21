@@ -56,7 +56,16 @@
               <div class="media">
                 <div class="media-content">
                   <p class="title is-4">12月16日下午<%= x %>:06 (直播時間)</p>
-                  <p class="subtitle is-6 has-text-grey"><%= x %>66則留言</p>
+                  <div class="tags has-addons">
+                    <span class="tag is-medium">訂單狀態</span>
+                    <span class="tag is-danger is-medium">待處理</span>
+                    <!-- 已確認狀態
+                    <span class="tag is-success is-medium">已確認</span>
+                    -->
+                    <!-- 已完成狀態
+                    <span class="tag is-primary is-medium">已完成</span>
+                    -->
+                  </div>
                 </div>
               </div>
             </div>
