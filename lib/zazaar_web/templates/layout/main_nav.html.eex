@@ -13,7 +13,7 @@
           <a class="navbar-item" href="/o"><%= gettext "Orders" %> (訂單管理)</a>
 
           <%= link(to: "/logout", class: "navbar-item", method: :delete) do %>
-            <div class="button is-outlined"><%= gettext "Sign Out" %></div>
+            <div class="button is-primary is-inverted is-outlined"><%= gettext "Sign Out" %></div>
           <% end %>
 
         <% else %>
