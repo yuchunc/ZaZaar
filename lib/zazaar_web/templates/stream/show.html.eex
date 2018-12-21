@@ -11,7 +11,29 @@
         </ul>
       </nav>
 
-      <h1 class="title">12月16日下午<%= @id %>:06 (直播時間)</h1>
+      <nav class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <h1 class="title">12月16日下午<%= @id %>:06 (直播時間)</h1>
+          </div>
+        </div>
+
+        <!-- Stream State -->
+        <div class="level-right">
+          <div class="level-item">
+            <div class="tags has-addons">
+              <span class="tag is-medium">訂單狀態</span>
+              <span class="tag is-danger is-medium">待處理</span>
+              <!-- 已確認狀態
+              <span class="tag is-success is-medium">已確認</span>
+              -->
+              <!-- 已完成狀態
+              <span class="tag is-primary is-medium">已完成</span>
+              -->
+            </div>
+          </div>
+        </div>
+      </nav>
 
     </header>
 
