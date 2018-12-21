@@ -21,23 +21,17 @@
   }
 
   &__page {
-    height: calc( 100vh - 52px);
 
-    .container {
-      height: 100%;
+    .columns {
 
-      .columns {
-        height: calc( 100% - 8.5rem);
-
-        .comment-area {
-          overflow-y: scroll;
-          height: calc( 100% - 3rem);
-        }
-        
-        .column + .column {
-          margin-left: 3rem;
-        }
+      .comment-container {
+        overflow-y: scroll;
+        height: calc( 100vh - 18rem);
       }
+    }
+
+    &__order {
+      margin-left: 3rem;
     }
   }
 }

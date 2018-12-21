@@ -25,6 +25,9 @@ $c-marble: #fafafa;
 .is-aligned-around    {align-items: space-around;}
 .is-aligned-between   {align-items: space-between;}
 .is-aligned-self-end  {align-self: flex-end;}
+.is-shrinkable        {flex-shrink: 1 !important;}
+
+.is-centered {margin: auto;}
 
 .has-text-z {color: $c-zazaar;}
 .has-text-z-light {color: $c-z-light;}

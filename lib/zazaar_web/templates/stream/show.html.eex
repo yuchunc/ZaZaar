@@ -17,7 +17,7 @@
 
     <div class="columns is-marginless">
       <!-- Comment Area-->
-      <div class="column card is-one-quarter-desktop">
+      <div class="column card comment-container is-one-quarter-desktop">
         <p class="has-text-weight-bold has-text-grey-light has-margin-bottom-sm">留言</p>
         <div class="comment-area">
 
@@ -43,70 +43,73 @@
       </div>
 
       <!-- Stream Table -->
-      <div class="column is-paddingless">
+      <div class="column is-paddingless stream__page__order">
+
+        <!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
+        <div class="columns">
+          <div class="column">
+            <article class="message is-primary">
+              <div class="message-body">
+                請確認本次直播售出的商品與得標者，確認後系統將產生每位得標者的明細。<strong>總訂單一經確認即無法修改。</strong>
+              </div>
+            </article>
+          </div>
+          <div class="column is-flex is-narrow is-aligned-center">
+            <a class="button is-primary is-medium">建立訂單</a>
+          </div>
+        </div>
+        <!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
 
         <table class="table main-table is-striped is-hoverable">
           <thead class="main-table__header">
             <tr>
               <th width="10%"><%= gettext "Time" %></th>
-              <th width="20%" class="has-text-centered"><%= gettext "Snapshot" %></th>
-              <th width="15%"><%= gettext "Product Name" %></th>
-              <th width="15%"><%= gettext "Buyer" %></th>
-              <th width="10%" class="has-text-centered"><%= gettext "Price" %></th>
-              <th width="10%" class="has-text-centered"><%= gettext "Quantity" %></th>
-              <th width="10%" class="has-text-centered"><%= gettext "Amount" %></th>
-              <th width="10%"></th>
+              <th width="20%"><%= gettext "Snapshot" %></th>
+              <th width="22%"><%= gettext "Product Name" %></th>
+              <th width="22%"><%= gettext "Buyer" %></th>
+              <th width="10%"><%= gettext "Amount" %></th>
+              <th width="16%"></th>
             </tr>
           </thead>
 
           <tbody class="main-table__body" id="items-table-body">
 
-            <!-- 編輯模式，可編輯項目：Product Name, Price, Quantity -->
+            <!-- 訂單建立後，移除編輯按鈕，改為單筆訂單連結 -->
             <tr>
               <td>15:10:54</td>
               <td>
                 <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
-                  <img class="merch-snapshot" src="https://bulma.io/images/placeholders/640x480.png">
+                  <img class="merch-snapshot"src="https://bulma.io/images/placeholders/1280x960.png">
                 </figure>
               </td>
-              <td class="merch-name editable">
-                <input class="input" type="text" placeholder="Product Name" value="Product 1">
-              </td>
+              <td class="merch-name editable">Product 1</td>
               <td>Buyer 1</td>
-              <td class="has-text-centered merch-price editable">
-                <input class="input" type="text" placeholder="Price" value="1000">
-              </td>
-              <td class="has-text-centered merch-quantity editable">
-                <input class="input" type="text" placeholder="Quantity" value="1">
-              </td>
-              <td class="has-text-centered">1000</td>
+              <td class="editable">1000</td>
               <td class="has-text-centered">
-                <div class="buttons merch-actions editable">
-                  <a class="button is-link is-outlined" disabled>訂單</a>
-                  <a class="button is-success is-outlined save-merch">儲存</a>
-                  <a class="button" disabled>刪除</a>
-                </div>
+                <a class="button is-primary is-outlined is-centered">查看訂單</a>
               </td>
             </tr>
+            <!-- 訂單建立後，移除編輯按鈕，改為單筆訂單連結 -->
 
             <%= for x <- 2..15 do %>
               <tr>
                 <td>15:<%= x %>0:54</td>
                 <td>
                   <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
-                    <img class="merch-snapshot"src="https://bulma.io/images/placeholders/640x480.png">
+                    <img class="merch-snapshot"src="https://bulma.io/images/placeholders/1280x960.png">
                   </figure>
                 </td>
                 <td class="merch-name editable">Product <%= x %></td>
                 <td>Buyer <%= x %></td>
-                <td class="has-text-centered merch-price editable">1000</td>
-                <td class="has-text-centered merch-quantity editable"><%= x %></td>
-                <td class="has-text-centered"><%= 1000 * x %></td>
-                <td class="has-text-centered">
-                  <div class="buttons merch-actions editable">
-                    <a class="button is-link is-outlined">訂單</a>
-                    <a class="button edit-merch">修改</a>
-                    <a class="button">刪除</a>
+                <td class="editable"><%= 1000 * x %></td>
+                <td>
+                  <div class="field is-grouped is-centered merch-actions editable">
+                    <div class="control">
+                      <a class="button is-primary is-outlined edit-merch">編輯</a>
+                    </div>
+                    <div class="control">
+                      <a class="button">刪除</a>
+                    </div>
                   </div>
                 </td>
               </tr>
