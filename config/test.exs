@@ -14,3 +14,7 @@ config :zazaar, ZaZaar.Repo,
   database: "zazaar_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :zazaar, :fb_api, ZaZaar.FbApiMock
+
+import_config "dev.secret.exs"
