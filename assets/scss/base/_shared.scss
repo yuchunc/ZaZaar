@@ -23,3 +23,10 @@
     cursor: pointer;
   }
 }
+
+@media (min-width: $tablet) {
+  .modal-content {
+    width: 100%;
+    max-width: 1280px;
+  }
+}

@@ -15,7 +15,7 @@ const tbodyOnclickHandler = (e) => {
     for(let td of editables) {
       if(td.classList.contains("merch-actions")) {
         let editBtn = td.getElementsByClassName("edit-merch")[0];
-        let saveBtn = el(`<a class="button is-success is-outlined save-merch">儲存</a>`);
+        let saveBtn = el(`<a class="button is-primary is-outlined save-merch">確認</a>`);
         editBtn.replaceWith(saveBtn);
       } else {
         replaceInnerWithInput(td);
@@ -28,7 +28,7 @@ const tbodyOnclickHandler = (e) => {
     for(let td of editables) {
       if(td.classList.contains("merch-actions")) {
         let saveBtn = td.getElementsByClassName("save-merch")[0];
-        let editBtn = el(`<a class="button edit-merch">修改</a>`)
+        let editBtn = el(`<a class="button is-primary is-outlined edit-merch">編輯</a>`)
 
         saveBtn.replaceWith(editBtn);
       } else {

@@ -9,7 +9,7 @@
       <div class="level has-margin-top-lg">
         <div class="level-item">
 
-          <%= link(to: "/auth/facebook", class: "button is-outlined is-large") do %>
+          <%= link(to: "/auth/facebook", class: "button is-primary is-inverted is-outlined is-large") do %>
             <%= gettext "Sign In" %>
           <% end %>
 
