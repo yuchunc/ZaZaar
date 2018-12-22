@@ -91,6 +91,8 @@ defmodule ZaZaarWeb do
 
       alias ZaZaar.Auth
 
+      alias ZaZaar.Fb
+
       alias ZaZaar.Account
       alias Account.{User, Page}
     end
