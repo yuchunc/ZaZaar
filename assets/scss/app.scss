@@ -1,10 +1,24 @@
-/* This file is for your main application css. */
+@charset "utf-8";
+@import "base/styleguide";
 
+// Import the initial variables
+@import "node_modules/bulma//sass/utilities/initial-variables";
+
+// Overwrite Bulma variables
+
+/* Color */
+$primary: $c-zazaar;
+
+/* Navbar */
+$navbar-background-color: $primary;
+$navbar-item-color: $white;
+$navbar-item-hover-color: rgba($white, 0.8);
+$navbar-item-hover-background-color: !important;
+$navbar-breakpoint: $tablet;
+
+//  Import the rest of Bulma
 @import "./node_modules/bulma/bulma.sass";
 
-@import "base/styleguide";
 @import "base/shared";
-
-@import "layout/main_nav";
 
 @import "stream";

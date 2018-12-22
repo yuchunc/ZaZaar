@@ -56,33 +56,3 @@ $size: (
   .has-padding-#{$key} {padding: $val !important;}
   .has-padding-width-#{$key} {padding: 0 $val !important;}
 }
-
-/* Overwritten Bulma */
-
-.button {
-  transition: all 0.3s;
-
-  &.is-outlined {
-    background-color: transparent;
-    border-color: #fff;
-    color: #fff;
-
-    &:hover, &:focus {
-      background-color: #fff;
-      border-color: #fff;
-      color: $c-zazaar;
-    }
-  }
-
-  &.is-inverted.is-outlined {
-    background-color: transparent;
-    border-color: $c-zazaar;
-    color: $c-zazaar;
-
-    &:hover, &:focus {
-      background-color: $c-zazaar;
-      border-color: $c-zazaar;
-      color: #fff;
-    }
-  }
-}
