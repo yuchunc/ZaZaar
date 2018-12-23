@@ -71,7 +71,7 @@ defmodule ZaZaar.FbTest do
 
         {:ok, resp}
       end)
-      |> expect(:get_edge_objects, fn "attachment", obj_ids, _, _ ->
+      |> expect(:get_edge_objects, fn "", obj_ids, _, [fields: "picture"] ->
         resp =
           Enum.reduce(obj_ids, %{}, fn obj_id, acc ->
             {k, data} = RespMock.image_media(object_id: obj_id)

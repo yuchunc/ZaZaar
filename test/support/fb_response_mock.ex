@@ -80,17 +80,8 @@ defmodule ZaZaar.FbResponseMock do
     {
       obj_id,
       %{
-        "data" => [
-          %{
-            "media" => %{
-              "image" => %{
-                "height" => 368,
-                "src" => src,
-                "width" => 654
-              }
-            }
-          }
-        ]
+        "id" => obj_id,
+        "picture" => src
       }
     }
   end

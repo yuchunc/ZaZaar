@@ -85,9 +85,8 @@ defmodule ZaZaar.Fb do
   defp append_images(page, videos) do
     with post_obj_ids <- Enum.map(videos, & &1.post_id),
          {:ok, datum} <-
-           @api.get_edge_objects("attachment", post_obj_ids, page.access_token, fields: "media"),
-         image_list <-
-           Enum.map(datum, fn {k, %{"data" => [data]}} -> {k, data["media"]["image"]["src"]} end) do
+           @api.get_edge_objects("", post_obj_ids, page.access_token, fields: "picture"),
+         image_list <- Enum.map(datum, fn {k, %{"picture" => img_url}} -> {k, img_url} end) do
       videos1 =
         Enum.map(videos, fn v ->
           {_k, img_url} = Enum.find(image_list, fn {k, _} -> v.post_id == k end)

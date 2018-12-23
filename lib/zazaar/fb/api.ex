@@ -3,15 +3,26 @@ defmodule ZaZaar.Fb.Api do
 
   alias Facebook.{GraphAPI, Config, ResponseFormatter}
 
+  @type object_ids :: list | String.t()
+  @type resp :: {:ok, map} | {:error, map}
+
   defdelegate me(fields, access_token), to: Facebook
 
   defdelegate get_object_edge(edge, object_id, access_token, params \\ []), to: Facebook
 
-  @spec get_object_edge(String.t(), [String.t()], String.t(), keyword) ::
-          {:ok, map} | {:error, map}
-  def get_edge_objects(edge, object_ids, access_token, params \\ []) do
+  @spec get_object_edge(String.t(), object_ids, String.t()) :: resp
+  def get_edge_objects(edge, object_ids, access_token) do
+    get_edge_objects(edge, object_ids, access_token, [])
+  end
+
+  @spec get_object_edge(String.t(), object_ids, String.t(), keyword) :: resp
+  def get_edge_objects(edge, object_ids, access_token, params) when is_list(object_ids) do
+    get_edge_objects(edge, Enum.join(object_ids, ","), access_token, params)
+  end
+
+  def get_edge_objects(edge, object_ids, access_token, params) do
     params =
-      params
+      (params ++ [ids: object_ids])
       |> add_app_secret(access_token)
       |> add_access_token(access_token)
 
