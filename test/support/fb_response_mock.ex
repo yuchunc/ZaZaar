@@ -27,41 +27,41 @@ defmodule ZaZaar.FbResponseMock do
     }
   end
 
-  def videos(fields \\ @live_videos_default_fields, opts0 \\ []) do
+  def videos(fields \\ @live_videos_default_fields, list_opts \\ []) do
     random_status =
       ["LIVE", "PROCESSING", "VOD"]
       |> Enum.random()
 
-    page_id = Keyword.get(opts0, :page_id, random_obj_id)
-    video_id = Keyword.get(opts0, :video_id, random_obj_id)
-    opts1 = Enum.into(opts0, %{})
+    page_id = list_opts[:page_id] || random_obj_id
+    video_id = list_opts[:video_id] || random_obj_id
+    opts = Enum.into(list_opts, %{})
 
     Enum.reduce(fields, [{"id", random_obj_id}], fn f, acc ->
       gen =
         case f do
           "embed_html" ->
-            opts1[:embed_html] || "<iframe src=\"fb_src\"></iframe>"
+            opts[:embed_html] || "<iframe src=\"fb_src\"></iframe>"
 
           "permalink_url" ->
-            opts1[:permalink_url] || ~s(/#{page_id}/videos/#{video_id}/)
+            opts[:permalink_url] || ~s(/#{page_id}/videos/#{video_id}/)
 
           "video" ->
             %{"id" => video_id}
 
           "creation_time" ->
-            opts1[:creation_time] || NaiveDateTime.utc_now() |> NaiveDateTime.to_iso8601()
+            opts[:creation_time] || NaiveDateTime.utc_now() |> NaiveDateTime.to_iso8601()
 
           "live_views" ->
             Enum.random(0..100)
 
           "status" ->
-            opts1[:status] || random_status
+            opts[:status] || random_status
 
           f when f in ["title", "description"] ->
-            Map.get(opts1, String.to_atom(f)) || nil
+            Map.get(opts, String.to_atom(f)) || nil
 
           f ->
-            Map.get(opts1, String.to_atom(f)) || Faker.String.base64(20)
+            Map.get(opts, String.to_atom(f)) || Faker.String.base64(20)
         end
 
       if gen do
@@ -71,6 +71,28 @@ defmodule ZaZaar.FbResponseMock do
       end
     end)
     |> Enum.into(%{})
+  end
+
+  def image_media(opts \\ []) do
+    obj_id = Keyword.get(opts, :object_id, random_obj_id <> "_" <> random_obj_id)
+    src = Keyword.get(opts, :src, "https://fbcdn.net/_n.jpg")
+
+    {
+      obj_id,
+      %{
+        "data" => [
+          %{
+            "media" => %{
+              "image" => %{
+                "height" => 368,
+                "src" => src,
+                "width" => 654
+              }
+            }
+          }
+        ]
+      }
+    }
   end
 
   def paging do

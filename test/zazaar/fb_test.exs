@@ -4,6 +4,8 @@ defmodule ZaZaar.FbTest do
   import Mox
 
   alias ZaZaar.Fb
+  alias Fb.Video
+
   alias ZaZaar.Account
   alias Account.Page
 
@@ -48,30 +50,41 @@ defmodule ZaZaar.FbTest do
     test "get the latest feeds and stores them" do
       page = insert(:page)
 
-      expect(ApiMock, :me, fn "live_videos", _ ->
+      ApiMock
+      |> expect(:get_object_edge, fn "live_videos", page_id, _, _ ->
         resp = %{
           "data" =>
             Enum.map(1..11, fn c ->
-              attrs = %{description: to_string(c), title: "Stream ##{c}"}
-
               ["embed_html", "permalink_url", "creation_time", "video", "description", "title"]
-              |> RespMock.videos(attrs)
+              |> RespMock.videos(
+                description: to_string(c),
+                title: "Stream ##{c}",
+                page_id: page_id
+              )
             end) ++
               Enum.map(12..25, fn c ->
-                attrs = %{description: to_string(c)}
-
                 ["embed_html", "permalink_url", "creation_time", "video", "description"]
-                |> RespMock.videos(attrs)
+                |> RespMock.videos(description: to_string(c), page_id: page_id)
               end),
           "paging" => RespMock.paging()
         }
 
         {:ok, resp}
       end)
+      |> expect(:get_edge_objects, fn "attachment", obj_ids, _, _ ->
+        resp =
+          Enum.reduce(obj_ids, %{}, fn obj_id, acc ->
+            {k, data} = RespMock.image_media(object_id: obj_id)
+            Map.put_new(acc, k, data)
+          end)
+
+        {:ok, resp}
+      end)
 
       assert {:ok, result} = Fb.fetch_videos(page)
 
-      # assert Enum.map(result, & {Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) == List.duplicate({Video, :loaded}, Enum.count(result))
+      assert Enum.map(result, &{Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) ==
+               List.duplicate({Video, :loaded}, Enum.count(result))
     end
   end
 end
