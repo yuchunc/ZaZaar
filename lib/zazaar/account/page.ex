@@ -4,6 +4,14 @@ defmodule ZaZaar.Account.Page do
 
   alias ZaZaar.Account
 
+  @type t :: %__MODULE__{
+          access_token: String.t(),
+          fb_page_id: String.t(),
+          tasks: [String.t()],
+          user_id: String.t(),
+          user: nil | Account.User.t()
+        }
+
   @valid_tasks ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
 
   @primary_key {:id, :binary_id, autogenerate: true}

@@ -2,6 +2,14 @@ defmodule ZaZaar.Account.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          email: String.t(),
+          fb_access_token: String.t(),
+          fb_id: String.t(),
+          image_url: String.t(),
+          name: String.t()
+        }
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do

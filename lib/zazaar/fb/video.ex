@@ -2,6 +2,17 @@ defmodule ZaZaar.Fb.Video do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          creation_time: NaiveDateTime.t(),
+          description: nil | String.t(),
+          embed_html: String.t(),
+          image_url: String.t(),
+          page_id: String.t(),
+          permalink_url: String.t(),
+          fb_video_id: String.t(),
+          title: nil | String.t()
+        }
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "videos" do
