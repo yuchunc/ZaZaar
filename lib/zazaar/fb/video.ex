@@ -33,14 +33,9 @@ defmodule ZaZaar.Fb.Video do
   def changeset(video, attrs) do
     video
     |> cast(attrs, [
-      :embed_html,
-      :permalink_url,
       :creation_time,
       :description,
-      :title,
-      :image_url,
-      :fb_video_id,
-      :page_id
+      :title
     ])
     |> validate_required([
       :embed_html,

@@ -46,8 +46,15 @@ defmodule ZaZaar.Account do
 
     pages =
       Enum.map(page_maps, fn pm ->
+        page_struct = %Page{
+          user_id: user.id,
+          fb_page_id: pm.fb_page_id,
+          tasks: pm.tasks,
+          access_token: pm.access_token
+        }
+
         current_pages
-        |> Enum.find(%Page{user_id: user.id}, &(&1.fb_page_id == pm.fb_page_id))
+        |> Enum.find(page_struct, &(&1.fb_page_id == pm.fb_page_id))
         |> Page.changeset(pm)
         |> Repo.insert_or_update!()
       end)

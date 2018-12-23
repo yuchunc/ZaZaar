@@ -57,8 +57,16 @@ defmodule ZaZaar.Fb do
 
     videos =
       Enum.map(video_maps, fn vm ->
+        video_struct = %Video{
+          embed_html: vm.embed_html,
+          image_url: vm.image_url,
+          page_id: page.fb_page_id,
+          permalink_url: vm.permalink_url,
+          fb_video_id: vm.fb_video_id
+        }
+
         current_videos
-        |> Enum.find(%Video{page_id: page.id}, &(&1.video_id == vm.video_id))
+        |> Enum.find(video_struct, &(&1.fb_video_id == vm.fb_video_id))
         |> Video.changeset(vm)
         |> Repo.insert_or_update!()
       end)
