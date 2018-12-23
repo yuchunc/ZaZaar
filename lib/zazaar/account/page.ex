@@ -4,6 +4,14 @@ defmodule ZaZaar.Account.Page do
 
   alias ZaZaar.Account
 
+  @type t :: %__MODULE__{
+          access_token: String.t(),
+          fb_page_id: String.t(),
+          tasks: [String.t()],
+          user_id: String.t(),
+          user: nil | Account.User.t()
+        }
+
   @valid_tasks ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -22,7 +30,7 @@ defmodule ZaZaar.Account.Page do
   @doc false
   def changeset(page, attrs) do
     page
-    |> cast(attrs, [:fb_page_id, :access_token, :tasks, :name])
+    |> cast(attrs, [:name])
     |> validate_change(:tasks, &validate_tasks/2)
     |> validate_required([:fb_page_id, :access_token, :tasks, :name, :user_id])
     |> unique_constraint(:fb_page_id, name: :pages_user_id_fb_page_id_index)
