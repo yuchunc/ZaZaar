@@ -26,7 +26,7 @@ defmodule ZaZaar.FbTest do
         resp = %{
           "accounts" => %{
             "data" => [
-              RespMock.pages(1, opts)
+              RespMock.pages(opts)
             ]
           },
           "paging" => RespMock.paging()
@@ -41,6 +41,37 @@ defmodule ZaZaar.FbTest do
       assert page.access_token == Keyword.get(opts, :page_access_token)
       assert page.fb_page_id == Keyword.get(opts, :page_id)
       refute Enum.empty?(page.tasks)
+    end
+  end
+
+  describe "fetch_videos/1" do
+    test "get the latest feeds and stores them" do
+      page = insert(:page)
+
+      expect(ApiMock, :me, fn "live_videos", _ ->
+        resp = %{
+          "data" =>
+            Enum.map(1..11, fn c ->
+              attrs = %{description: to_string(c), title: "Stream ##{c}"}
+
+              ["embed_html", "permalink_url", "creation_time", "video", "description", "title"]
+              |> RespMock.videos(attrs)
+            end) ++
+              Enum.map(12..25, fn c ->
+                attrs = %{description: to_string(c)}
+
+                ["embed_html", "permalink_url", "creation_time", "video", "description"]
+                |> RespMock.videos(attrs)
+              end),
+          "paging" => RespMock.paging()
+        }
+
+        {:ok, resp}
+      end)
+
+      assert {:ok, result} = Fb.fetch_videos(page)
+
+      # assert Enum.map(result, & {Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) == List.duplicate({Video, :loaded}, Enum.count(result))
     end
   end
 end

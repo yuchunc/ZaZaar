@@ -14,6 +14,20 @@ defmodule ZaZaar.Fb do
     end
   end
 
+  @doc """
+  This function fetches and stores Facebook feeds that is a video.
+  Facebook only allows 100 feed per request, and max of 600 per year.
+
+  https://developers.facebook.com/docs/graph-api/reference/v3.2/page/feed
+
+  NOTE possibly use tags for identify 團購
+
+  TODO any spec need to be identified
+  """
+  @spec fetch_feed(String.t()) :: any()
+  def fetch_feed(access_token) do
+  end
+
   defp format_page_map(raw) do
     %{
       access_token: raw["access_token"],
