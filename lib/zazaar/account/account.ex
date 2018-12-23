@@ -41,10 +41,7 @@ defmodule ZaZaar.Account do
   This is probably just going to be used internally
   """
   def upsert_pages(user, page_maps) do
-    fb_page_ids =
-      page_maps
-      |> Enum.map(&Map.get(&1, :fb_page_id))
-
+    fb_page_ids = Enum.map(page_maps, & &1.fb_page_id)
     current_pages = get_pages(user_id: user.id, fb_page_id: fb_page_ids)
 
     pages =
