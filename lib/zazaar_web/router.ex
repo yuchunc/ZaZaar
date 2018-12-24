@@ -41,7 +41,7 @@ defmodule ZaZaarWeb.Router do
     resources "/i", InvoiceController, only: [:show]
   end
 
-  scope "/" do
+  scope "/", ZaZaarWeb do
     pipe_through [:browser, :auth]
 
     get "/m", StreamController, :index
