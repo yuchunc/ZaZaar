@@ -13,6 +13,8 @@ defmodule ZaZaar.Repo.Migrations.CreateVideos do
       add :fb_video_id, :string, null: false
       add :fb_page_id, :string, null: false
 
+      add :comments, {:array, :map}
+
       timestamps()
     end
 

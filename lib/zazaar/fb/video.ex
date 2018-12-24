@@ -2,6 +2,8 @@ defmodule ZaZaar.Fb.Video do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias ZaZaar.Fb
+
   @type t :: %__MODULE__{
           creation_time: NaiveDateTime.t(),
           description: nil | String.t(),
@@ -25,6 +27,8 @@ defmodule ZaZaar.Fb.Video do
     field :fb_video_id, :string
     field :post_obj_id, :string, virtual: true
     field :title, :string
+
+    embeds_many :comments, Fb.Comment
 
     timestamps()
   end
