@@ -41,6 +41,7 @@ defmodule ZaZaar.Fb.Video do
       :description,
       :title
     ])
+    |> cast_embed(:comments)
     |> validate_required([
       :embed_html,
       :permalink_url,

@@ -4,7 +4,7 @@ defmodule ZaZaar.FbTest do
   import Mox
 
   alias ZaZaar.Fb
-  alias Fb.Video
+  alias Fb.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.Page
@@ -88,6 +88,33 @@ defmodule ZaZaar.FbTest do
 
       assert Enum.map(result, &Map.get(&1, :fb_page_id)) ==
                List.duplicate(page.fb_page_id, Enum.count(result))
+    end
+  end
+
+  describe "fetch_comments/1" do
+    test "fetch comments for video, and stores it in embedded schema" do
+      video = insert(:video)
+      count = 10
+      access_token = "iamaccesstoken"
+
+      ApiMock
+      |> expect(:get_object_edge, fn "comments", obj_id, "iamaccesstoken", _ ->
+        resp = %{
+          "data" =>
+            Enum.map(1..count, fn msg ->
+              opts = [message: to_string(msg), parent_id: obj_id]
+              RespMock.comment(opts)
+            end)
+        }
+
+        {:ok, resp}
+      end)
+
+      assert {:ok, result} = Fb.fetch_comments(video, access_token)
+      assert result.__struct__ == Video
+      comments = result.comments
+      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count)
+      assert comments |> Enum.map(& &1.message) == Enum.map(1..count, &to_string/1)
     end
   end
 end

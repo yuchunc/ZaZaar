@@ -8,7 +8,8 @@ defmodule ZaZaar.Fb do
   alias Account.{User, Page}
 
   @api Application.get_env(:zazaar, :fb_api)
-  @default_fields [
+
+  @video_default_fields [
     "embed_html",
     "permalink_url",
     "creation_time",
@@ -16,6 +17,8 @@ defmodule ZaZaar.Fb do
     "description",
     "title"
   ]
+
+  @comment_default_fields ["created_time", "from", "message", "parent{id}"]
 
   @spec set_pages(User.t()) :: {:ok, [Page.t()]} | {:error, String.t()}
   def set_pages(user) do
@@ -31,36 +34,63 @@ defmodule ZaZaar.Fb do
 
   @doc """
   This function fetches and stores Facebook feeds that is a video.
-  Facebook only allows 100 feed per request, and max of 600 per year.
+  Facebook only allows 100 feed per request, and max of 600 per year per page.
 
   https://developers.facebook.com/docs/graph-api/reference/v3.2/page/feed
 
   NOTE possibly use tags for identify 團購
   """
-  @spec fetch_videos(Page.t()) :: {:ok, [Video.t()]} | {:error, String.t()}
+  @spec fetch_videos(Page.t(), keyword) :: {:ok, [Video.t()]} | {:error, String.t()}
   def fetch_videos(%Page{} = page, opts \\ []) do
-    fields = Keyword.get(opts, :fields, @default_fields)
+    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
+
+    fields =
+      Keyword.get(opts, :fields, @video_default_fields)
+      |> Enum.join(",")
 
     with {:ok, %{"data" => videos0}} <-
-           @api.get_object_edge("live_videos", page.fb_page_id, page.access_token,
-             fields: Enum.join(fields, ",")
-           ),
+           @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
          videos1 <- Enum.map(videos0, &format_video_map/1),
-         {:ok, video2} <- append_images(page, videos1) do
-      upsert_videos(page, video2)
+         {:ok, video2} <- append_images(access_token, videos1) do
+      upsert_videos(page.fb_page_id, video2)
     end
   end
 
-  defp upsert_videos(%Page{} = page, video_maps) do
+  @doc """
+  Fetches and stores Facebook comments into Video embedded list
+  filter: :toplevel, :stream(default)
+  summary: true, false(default)
+  """
+  @spec fetch_comments(Video.t(), String.t(), keyword) :: {:ok, Video.t()} | {:error, any()}
+  def fetch_comments(%Video{} = video, access_token, opts \\ []) do
+    fields =
+      Keyword.get(opts, :fields, @comment_default_fields)
+      |> Enum.join(",")
+
+    filter = Keyword.get(opts, :filter, :stream)
+    summary = Keyword.get(opts, :summary, false)
+    limit = Keyword.get(opts, :limit, 100)
+
+    with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
+         {:ok, result} <-
+           @api.get_object_edge("comments", video.fb_video_id, access_token, req_opts),
+         comments <- Map.get(result, "data", []) |> cast_comments,
+         video_map <- Map.from_struct(video) |> Map.put(:comments, comments),
+         {:ok, [video1]} <- upsert_videos(video.fb_page_id, [video_map]) do
+      {:ok, video1}
+    end
+  end
+
+  defp upsert_videos(fb_page_id, video_maps) do
     fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
-    current_videos = get_videos(fb_page_id: page.fb_page_id, fb_video_id: fb_video_ids)
+    current_videos = get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
 
     videos =
       Enum.map(video_maps, fn vm ->
         video_struct = %Video{
           embed_html: vm.embed_html,
           image_url: vm.image_url,
-          fb_page_id: page.fb_page_id,
+          fb_page_id: fb_page_id,
           permalink_url: vm.permalink_url,
           fb_video_id: vm.fb_video_id
         }
@@ -90,10 +120,9 @@ defmodule ZaZaar.Fb do
     |> get_videos(t)
   end
 
-  defp append_images(page, videos) do
+  defp append_images(access_token, videos) do
     with post_obj_ids <- Enum.map(videos, & &1.post_id),
-         {:ok, datum} <-
-           @api.get_edge_objects("", post_obj_ids, page.access_token, fields: "picture"),
+         {:ok, datum} <- @api.get_edge_objects("", post_obj_ids, access_token, fields: "picture"),
          image_list <- Enum.map(datum, fn {k, %{"picture" => img_url}} -> {k, img_url} end) do
       videos1 =
         Enum.map(videos, fn v ->
@@ -112,6 +141,22 @@ defmodule ZaZaar.Fb do
       name: raw["name"],
       tasks: raw["tasks"]
     }
+  end
+
+  defp cast_comments(comments0) when is_list(comments0) do
+    Enum.map(comments0, fn c ->
+      created_time =
+        c["created_time"] |> NaiveDateTime.from_iso8601!() |> NaiveDateTime.truncate(:second)
+
+      %{
+        message: c["message"],
+        created_time: created_time,
+        object_id: c["id"],
+        parent_object_id: c["parent"]["id"],
+        commenter_fb_id: c["from"]["id"],
+        commenter_fb_name: c["from"]["name"]
+      }
+    end)
   end
 
   defp format_video_map(video) do
