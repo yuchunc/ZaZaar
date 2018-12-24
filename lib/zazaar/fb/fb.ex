@@ -122,7 +122,7 @@ defmodule ZaZaar.Fb do
       description: video["description"],
       embed_html: video["embed_html"],
       permalink_url: video["permalink_url"],
-      fb_post_id: page_id <> "_" <> video_id,
+      post_id: page_id <> "_" <> video_id,
       title: video["title"],
       fb_video_id: video_id
     }
