@@ -8,7 +8,9 @@ defmodule ZaZaar.FbResponseMock do
     "id"
   ]
 
-  def pages(opts0 \\ []) do
+  @comment_default_fields ["created_time", "from", "message"]
+
+  def page(opts0 \\ []) do
     opts1 = Enum.into(opts0, %{})
 
     default_tasks =
@@ -27,14 +29,14 @@ defmodule ZaZaar.FbResponseMock do
     }
   end
 
-  def videos(fields \\ @live_videos_default_fields, list_opts \\ []) do
+  def video(fields \\ @live_videos_default_fields, list_opts \\ []) do
     random_status =
       ["LIVE", "PROCESSING", "VOD"]
       |> Enum.random()
 
-    page_id = list_opts[:page_id] || random_obj_id
-    video_id = list_opts[:video_id] || random_obj_id
     opts = Enum.into(list_opts, %{})
+    page_id = opts[:page_id] || random_obj_id
+    video_id = opts[:video_id] || random_obj_id
 
     Enum.reduce(fields, [{"id", random_obj_id}], fn f, acc ->
       gen =
@@ -49,7 +51,7 @@ defmodule ZaZaar.FbResponseMock do
             %{"id" => video_id}
 
           "creation_time" ->
-            opts[:creation_time] || NaiveDateTime.utc_now() |> NaiveDateTime.to_iso8601()
+            opts[:creation_time] || current_time
 
           "live_views" ->
             Enum.random(0..100)
@@ -71,6 +73,23 @@ defmodule ZaZaar.FbResponseMock do
       end
     end)
     |> Enum.into(%{})
+  end
+
+  def comment(opts \\ []) do
+    parent_id = Keyword.get(opts, :parent_id, random_obj_id)
+    comment_id = Keyword.get(opts, :comment_id, random_obj_id)
+
+    opts1 = Enum.into(opts, %{})
+
+    %{
+      "created_time" => opts1[:created_time] || current_time,
+      "from" => %{
+        "name" => opts1[:name] || Faker.Name.name(),
+        "id" => random_obj_id
+      },
+      "message" => opts1[:message] || Faker.Lorem.sentence(),
+      "id" => "#{parent_id}_#{comment_id}"
+    }
   end
 
   def image_media(opts \\ []) do
@@ -95,7 +114,19 @@ defmodule ZaZaar.FbResponseMock do
     }
   end
 
+  def summary(count \\ 100) do
+    %{
+      "order" => "ranked",
+      "total_count" => count,
+      "can_comment" => true
+    }
+  end
+
   def random_obj_id do
     Enum.random(100_000_000_000_000..599_999_999_999_999) |> to_string
+  end
+
+  defp current_time do
+    NaiveDateTime.utc_now() |> NaiveDateTime.to_iso8601()
   end
 end

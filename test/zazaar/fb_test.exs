@@ -28,7 +28,7 @@ defmodule ZaZaar.FbTest do
         resp = %{
           "accounts" => %{
             "data" => [
-              RespMock.pages(opts)
+              RespMock.page(opts)
             ]
           },
           "paging" => RespMock.paging()
@@ -56,7 +56,7 @@ defmodule ZaZaar.FbTest do
           "data" =>
             Enum.map(1..11, fn c ->
               ["embed_html", "permalink_url", "creation_time", "video", "description", "title"]
-              |> RespMock.videos(
+              |> RespMock.video(
                 description: to_string(c),
                 title: "Stream ##{c}",
                 page_id: page_id
@@ -64,7 +64,7 @@ defmodule ZaZaar.FbTest do
             end) ++
               Enum.map(12..25, fn c ->
                 ["embed_html", "permalink_url", "creation_time", "video", "description"]
-                |> RespMock.videos(description: to_string(c), page_id: page_id)
+                |> RespMock.video(description: to_string(c), page_id: page_id)
               end),
           "paging" => RespMock.paging()
         }
@@ -85,6 +85,9 @@ defmodule ZaZaar.FbTest do
 
       assert Enum.map(result, &{Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) ==
                List.duplicate({Video, :loaded}, Enum.count(result))
+
+      assert Enum.map(result, &Map.get(&1, :fb_page_id)) ==
+               List.duplicate(page.fb_page_id, Enum.count(result))
     end
   end
 end
