@@ -53,14 +53,14 @@ defmodule ZaZaar.Fb do
 
   defp upsert_videos(%Page{} = page, video_maps) do
     fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
-    current_videos = get_videos(page_id: page.fb_page_id, fb_video_id: fb_video_ids)
+    current_videos = get_videos(fb_page_id: page.fb_page_id, fb_video_id: fb_video_ids)
 
     videos =
       Enum.map(video_maps, fn vm ->
         video_struct = %Video{
           embed_html: vm.embed_html,
           image_url: vm.image_url,
-          page_id: page.fb_page_id,
+          fb_page_id: page.fb_page_id,
           permalink_url: vm.permalink_url,
           fb_video_id: vm.fb_video_id
         }
@@ -122,7 +122,7 @@ defmodule ZaZaar.Fb do
       description: video["description"],
       embed_html: video["embed_html"],
       permalink_url: video["permalink_url"],
-      post_id: page_id <> "_" <> video_id,
+      fb_post_id: page_id <> "_" <> video_id,
       title: video["title"],
       fb_video_id: video_id
     }
