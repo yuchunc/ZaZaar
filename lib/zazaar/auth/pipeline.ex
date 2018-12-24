@@ -5,5 +5,4 @@ defmodule ZaZaar.Auth.Pipeline do
     module: ZaZaar.Auth.Guardian
 
   plug(Guardian.Plug.VerifySession)
-  plug(Guardian.Plug.LoadResource, allow_blank: true)
 end

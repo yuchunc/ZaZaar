@@ -11,8 +11,13 @@ defmodule ZaZaarWeb.Router do
     plug Auth.Pipeline
   end
 
+  pipeline :public do
+    plug Guardian.Plug.LoadResource, allow_blank: true
+  end
+
   pipeline :auth do
-    plug(Guardian.Plug.EnsureAuthenticated)
+    plug Guardian.Plug.LoadResource
+    plug Guardian.Plug.EnsureAuthenticated
   end
 
   pipeline :api do
@@ -20,7 +25,7 @@ defmodule ZaZaarWeb.Router do
   end
 
   scope "/", ZaZaarWeb do
-    pipe_through :browser
+    pipe_through [:browser, :public]
 
     get "/", PageController, :index
     get "/about", PageController, :about
@@ -32,26 +37,26 @@ defmodule ZaZaarWeb.Router do
       get("/:provider/callback", SessionController, :create)
     end
 
-    scope "/" do
-      pipe_through :auth
-
-      get "/m", StreamController, :index
-
-      scope "/s" do
-        resources "/current", StreamingController, singleton: true, only: [:show]
-        resources "/", StreamController, only: [:show]
-      end
-
-      scope "/config", Config do
-        resources "/pages", PageController, singleton: true, only: [:show, :update]
-      end
-
-      delete("/logout", SessionController, :delete)
-
-      resources "/o", OrderController, only: [:index, :show]
-    end
-
     # NOTE user invoice path
     resources "/i", InvoiceController, only: [:show]
+  end
+
+  scope "/" do
+    pipe_through [:browser, :auth]
+
+    get "/m", StreamController, :index
+
+    scope "/s" do
+      resources "/current", StreamingController, singleton: true, only: [:show]
+      resources "/", StreamController, only: [:show]
+    end
+
+    scope "/config", Config do
+      resources "/pages", PageController, singleton: true, only: [:show, :update]
+    end
+
+    delete("/logout", SessionController, :delete)
+
+    resources "/o", OrderController, only: [:index, :show]
   end
 end
