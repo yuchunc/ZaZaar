@@ -4,7 +4,7 @@ defmodule ZaZaar.FbTest do
   import Mox
 
   alias ZaZaar.Fb
-  alias Fb.Video
+  alias Fb.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.Page
@@ -28,7 +28,7 @@ defmodule ZaZaar.FbTest do
         resp = %{
           "accounts" => %{
             "data" => [
-              RespMock.pages(opts)
+              RespMock.page(opts)
             ]
           },
           "paging" => RespMock.paging()
@@ -56,7 +56,7 @@ defmodule ZaZaar.FbTest do
           "data" =>
             Enum.map(1..11, fn c ->
               ["embed_html", "permalink_url", "creation_time", "video", "description", "title"]
-              |> RespMock.videos(
+              |> RespMock.video(
                 description: to_string(c),
                 title: "Stream ##{c}",
                 page_id: page_id
@@ -64,7 +64,7 @@ defmodule ZaZaar.FbTest do
             end) ++
               Enum.map(12..25, fn c ->
                 ["embed_html", "permalink_url", "creation_time", "video", "description"]
-                |> RespMock.videos(description: to_string(c), page_id: page_id)
+                |> RespMock.video(description: to_string(c), page_id: page_id)
               end),
           "paging" => RespMock.paging()
         }
@@ -85,6 +85,36 @@ defmodule ZaZaar.FbTest do
 
       assert Enum.map(result, &{Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) ==
                List.duplicate({Video, :loaded}, Enum.count(result))
+
+      assert Enum.map(result, &Map.get(&1, :fb_page_id)) ==
+               List.duplicate(page.fb_page_id, Enum.count(result))
+    end
+  end
+
+  describe "fetch_comments/1" do
+    test "fetch comments for video, and stores it in embedded schema" do
+      video = insert(:video)
+      count = 10
+      access_token = "iamaccesstoken"
+
+      ApiMock
+      |> expect(:get_object_edge, fn "comments", obj_id, "iamaccesstoken", _ ->
+        resp = %{
+          "data" =>
+            Enum.map(1..count, fn msg ->
+              opts = [message: to_string(msg), parent_id: obj_id]
+              RespMock.comment(opts)
+            end)
+        }
+
+        {:ok, resp}
+      end)
+
+      assert {:ok, result} = Fb.fetch_comments(video, access_token)
+      assert result.__struct__ == Video
+      comments = result.comments
+      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count)
+      assert comments |> Enum.map(& &1.message) == Enum.map(1..count, &to_string/1)
     end
   end
 end
