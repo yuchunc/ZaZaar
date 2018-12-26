@@ -10,7 +10,6 @@ defmodule ZaZaarWeb.SessionController do
       {:ok, user} ->
         conn
         |> GPlug.sign_in(user, %{}, key: :user)
-        |> IO.inspect(label: "label")
         |> put_flash(:success, dgettext("success", "Login Successful"))
         |> redirect(to: "/config/pages")
 

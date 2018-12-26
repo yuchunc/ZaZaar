@@ -20,6 +20,10 @@ defmodule ZaZaarWeb.Router do
     plug Guardian.Plug.LoadResource, key: :user
   end
 
+  pipeline :page_authed do
+    plug Auth.PagePipeline
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -41,7 +45,6 @@ defmodule ZaZaarWeb.Router do
     resources "/i", InvoiceController, only: [:show]
   end
 
-  # Only need User to be logged in
   scope "/", ZaZaarWeb, as: :config do
     pipe_through [:browser, :user_authed]
 
@@ -50,9 +53,8 @@ defmodule ZaZaarWeb.Router do
     delete("/logout", SessionController, :delete)
   end
 
-  # Need both User and Page to be logged in
   scope "/", ZaZaarWeb do
-    pipe_through [:browser, :user_authed]
+    pipe_through [:browser, :user_authed, :page_authed]
 
     get "/m", StreamController, :index
 
