@@ -1,6 +1,5 @@
-<div class="content">
-  <h2>Order table</h2>
-</div>
+<h2>Order table</h2>
+
 <table class="table is-fullwidth is-hoverable is-striped">
   <thead>
     <tr>
