@@ -90,7 +90,44 @@ defmodule ZaZaar.AccountTest do
         |> Enum.concat(Enum.take(pages_stream, 3))
         |> Enum.shuffle()
 
-      assert {:ok, _} = Account.upsert_pages(user, page_maps)
+      assert {:ok, pages} = Account.upsert_pages(user, page_maps)
+      assert Enum.count(pages) == 6
+    end
+
+    test "accepts strategy :flush, and deletes existing data", ctx do
+      %{pages_stream: pages_stream, user: user} = ctx
+      current_pages = insert_list(4, :page, user: user)
+
+      page_maps =
+        Enum.take(pages_stream, 3)
+        |> Enum.with_index()
+        |> Enum.map(fn {p, i} ->
+          c_page = Enum.at(current_pages, i)
+          Map.put(p, :fb_page_id, c_page.fb_page_id)
+        end)
+        |> Enum.concat(Enum.take(pages_stream, 3))
+        |> Enum.shuffle()
+
+      assert {:ok, pages} = Account.upsert_pages(user, page_maps, strategy: :flush)
+      assert Repo.all(Page) |> Enum.count() == 6
+    end
+  end
+
+  describe "get_pages/1" do
+    test "get pages by attribute" do
+      attr = [name: "foobar"]
+      insert_list(3, :page, attr)
+      insert(:page)
+
+      assert Account.get_pages(attr) |> Enum.count() == 3
+    end
+
+    test "get pages by attributes" do
+      attr = [name: "bangbang", fb_page_id: "102301301103103201203"]
+      insert_list(3, :page, attr)
+      insert(:page)
+
+      assert Account.get_pages(attr) |> Enum.count() == 3
     end
   end
 end
