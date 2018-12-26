@@ -1,6 +1,5 @@
 defmodule ZaZaar.Account.Page do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use ZaZaar, :schema
 
   alias ZaZaar.Account
 

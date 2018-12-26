@@ -1,6 +1,5 @@
 defmodule ZaZaar.Fb.Video do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use ZaZaar, :schema
 
   alias ZaZaar.Fb
 

@@ -1,5 +1,5 @@
 defmodule ZaZaar.Fb do
-  use ZaZaar.Context
+  use ZaZaar, :context
 
   alias ZaZaar.Fb
   alias Fb.Video

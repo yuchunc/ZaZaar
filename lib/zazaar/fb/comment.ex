@@ -1,6 +1,5 @@
 defmodule ZaZaar.Fb.Comment do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use ZaZaar, :schema
 
   @primary_key false
   embedded_schema do

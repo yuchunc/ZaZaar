@@ -3,7 +3,7 @@ defmodule ZaZaar.Account do
   Account Context Module
   """
 
-  use ZaZaar.Context
+  use ZaZaar, :context
 
   alias ZaZaar.Account
   alias Account.{User, Page}
