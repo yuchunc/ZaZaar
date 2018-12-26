@@ -14,4 +14,8 @@ defmodule ZaZaar.Auth.Guardian do
       nil -> {:error, :resource_not_found}
     end
   end
+
+  def resource_from_claims(p) do
+    {:error, :bar}
+  end
 end

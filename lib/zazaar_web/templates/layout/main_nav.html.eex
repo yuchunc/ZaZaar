@@ -8,7 +8,7 @@
 
     <div id="main-navbar" class="navbar-menu is-marginless">
       <div class="navbar-end">
-        <%= if current_resource(@conn) do %>
+        <%= if current_user(@conn) do %>
           <a class="navbar-item" href="/m"><%= gettext "Streams" %> (直播列表)</a>
           <a class="navbar-item" href="/o"><%= gettext "Orders" %> (訂單管理)</a>
 

@@ -7,7 +7,7 @@
 
       <div class="buttons are-medium" id="pages-select">
         <%= for page <- @pages do %>
-          <a class="button is-fullwidth is-text"> <%= page.name %> </a>
+          <a class="button is-fullwidth is-text" href="/config/pages/<%= page.id %>"> <%= page.name %> </a>
         <% end %>
       </div>
     </div>
