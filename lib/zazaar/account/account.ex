@@ -10,6 +10,8 @@ defmodule ZaZaar.Account do
   alias ZaZaar.Account
   alias Account.{User, Page}
 
+  @type get_page_attrs :: User | keyword
+
   @doc """
   Finds a single user record in DB
   """
@@ -24,7 +26,20 @@ defmodule ZaZaar.Account do
   @doc """
   Gets user fb pages from DB
   """
-  def get_pages(attrs), do: get_many_query(Page, attrs) |> Repo.all()
+  @spec get_pages(get_page_attrs) :: [Ecto.Schema.t()]
+  def get_pages(attrs), do: get_pages(attrs, [])
+
+  @spec get_pages(get_page_attrs, keyword) :: [Ecto.Schema.t()]
+  def get_pages(%User{id: user_id}, opts), do: get_pages([user_id: user_id], opts)
+
+  def get_pages(attrs, opts) do
+    order = Keyword.get(opts, :order_by, [])
+
+    Page
+    |> get_many_query(attrs)
+    |> order_by(^order)
+    |> Repo.all()
+  end
 
   @doc """
   Sets the User in DB

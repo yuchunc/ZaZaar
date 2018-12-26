@@ -23,9 +23,8 @@ defmodule ZaZaar.Fb do
   @spec set_pages(User.t()) :: {:ok, [Page.t()]} | {:error, String.t()}
   def set_pages(user) do
     with {:ok, %{"accounts" => accounts}} <- @api.me("accounts", user.fb_access_token),
-         pages1 <- Enum.map(accounts["data"], &format_page_map/1),
-         pages2 <- Account.upsert_pages(user, pages1) do
-      pages2
+         pages1 <- Enum.map(accounts["data"], &format_page_map/1) do
+      Account.upsert_pages(user, pages1, strategy: :flush)
     else
       {:error, %{error: msg}} ->
         {:error, msg}
@@ -33,16 +32,25 @@ defmodule ZaZaar.Fb do
   end
 
   @doc """
-  This function fetches and stores Facebook feeds that is a video.
-  Facebook only allows 100 feed per request, and max of 600 per year per page.
+  Fetches and stores Facebook feeds that is a video.
+  Uses User Access Token.
 
-  https://developers.facebook.com/docs/graph-api/reference/v3.2/page/feed
+  Options:
+  - Field:
+    fields to fetch from Facebook
+    https://developers.facebook.com/docs/graph-api/reference/user/accounts/
+
+  - strategy:
+    strategy to perform on existing data
+    :update(defualt), :flush
 
   NOTE possibly use tags for identify 團購
   """
   @spec fetch_videos(Page.t(), keyword) :: {:ok, [Video.t()]} | {:error, String.t()}
   def fetch_videos(%Page{} = page, opts \\ []) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
+
+    strategy = Keyword.get(opts, :strategy, :update)
 
     fields =
       Keyword.get(opts, :fields, @video_default_fields)

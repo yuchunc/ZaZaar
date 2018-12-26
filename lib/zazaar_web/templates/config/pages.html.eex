@@ -6,7 +6,9 @@
       <h1> <%= gettext "Select Facebook Fan Page" %></h1>
 
       <div class="buttons are-medium" id="pages-select">
-        <a class="button is-fullwidth is-text"> some button </a>
+        <%= for page <- @pages do %>
+          <a class="button is-fullwidth is-text"> <%= page.name %> </a>
+        <% end %>
       </div>
     </div>
   </div>

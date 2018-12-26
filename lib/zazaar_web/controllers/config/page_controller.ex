@@ -9,8 +9,14 @@ defmodule ZaZaarWeb.Config.PageController do
   """
   def show(conn, _) do
     with %User{} = user <- current_resource(conn),
-         {:ok, pages} <- Fb.set_pages(user) do
-      render(conn, "pages.html", pages: pages)
+         pages0 <- Account.get_pages(user) do
+      {:ok, pages1} =
+        case pages0 do
+          [] -> Fb.set_pages(user)
+          pages -> {:ok, pages}
+        end
+
+      render(conn, "pages.html", pages: Enum.sort_by(pages1, & &1.fb_page_id))
     end
   end
 
