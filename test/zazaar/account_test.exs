@@ -132,7 +132,7 @@ defmodule ZaZaar.AccountTest do
   end
 
   describe "get_pages/1" do
-    test "get pages by attribute" do
+    test "get pages by an attribute" do
       attr = [name: "foobar"]
       insert_list(3, :page, attr)
       insert(:page)

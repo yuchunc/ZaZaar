@@ -1,6 +1,8 @@
 defmodule ZaZaar.Fb do
   use ZaZaar, :context
 
+  import ZaZaar.EctoUtil
+
   alias ZaZaar.Fb
   alias Fb.Video
 
@@ -113,20 +115,14 @@ defmodule ZaZaar.Fb do
     {:ok, videos}
   end
 
-  defp get_videos(attrs), do: get_videos(Video, attrs)
-
-  defp get_videos(query, []), do: Repo.all(query)
-
-  defp get_videos(query, [{k, values} | t]) when is_list(values) do
-    query
-    |> where([v], field(v, ^k) in ^values)
-    |> get_videos(t)
-  end
-
-  defp get_videos(query, [{k, value} | t]) do
-    query
-    |> where([v], field(v, ^k) == ^value)
-    |> get_videos(t)
+  @doc """
+  Gets a list of videos from DB
+  """
+  @spec get_videos(attrs :: keyword) :: [Video.t()]
+  def get_videos(attrs) do
+    Video
+    |> get_many_query(attrs)
+    |> Repo.all()
   end
 
   defp append_images(access_token, videos) do

@@ -117,4 +117,22 @@ defmodule ZaZaar.FbTest do
       assert comments |> Enum.map(& &1.message) == Enum.map(1..count, &to_string/1)
     end
   end
+
+  describe "get_videos/1" do
+    test "get videos by an attribute" do
+      attr = [title: "foobar"]
+      insert_list(3, :video, attr)
+      insert(:video)
+
+      assert Fb.get_videos(attr) |> Enum.count() == 3
+    end
+
+    test "get videos by attributes" do
+      attr = [title: "bangbang", fb_page_id: "102301301103103201203"]
+      insert_list(3, :video, attr)
+      insert(:video)
+
+      assert Fb.get_videos(attr) |> Enum.count() == 3
+    end
+  end
 end
