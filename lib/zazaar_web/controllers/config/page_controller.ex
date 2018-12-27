@@ -39,4 +39,14 @@ defmodule ZaZaarWeb.Config.PageController do
         |> redirect(to: "/config/pages")
     end
   end
+
+  def delete(conn, _) do
+    conn
+    |> current_user
+    |> Fb.set_pages()
+
+    conn
+    |> put_flash(:success, dgettext("success", "Pages Refetched!"))
+    |> redirect(to: "/config/pages")
+  end
 end

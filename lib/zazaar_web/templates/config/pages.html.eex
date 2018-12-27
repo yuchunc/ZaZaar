@@ -10,6 +10,10 @@
           <a class="button is-fullwidth is-text" href="/config/pages/<%= page.id %>"> <%= page.name %> </a>
         <% end %>
       </div>
+
+      <%= link to: "/config/pages/refetch", method: :delete, class: "button is-primary is-outlined" do %>
+        <%= gettext "Refetch Pages from Facebook" %>
+      <% end %>
     </div>
   </div>
   <div class="hero-footer">

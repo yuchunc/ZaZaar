@@ -1,7 +1,7 @@
 <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
   <div class="container">
     <div class="navbar-brand is-marginless">
-      <a class="navbar-item" href="/">
+      <a class="navbar-item" href=<%= if page = current_page(@conn), do: "/m", else: "/" %>>
         <img class="main-logo" src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
       </a>
     </div>
@@ -9,7 +9,7 @@
     <div id="main-navbar" class="navbar-menu is-marginless">
       <div class="navbar-start">
         <%= if page = current_page(@conn) do %>
-          <a href="/m" class="navbar-item"> <%= page.name %> </a>
+          <a href="/config/pages" class="navbar-item"> <%= page.name %> </a>
         <% end %>
       </div>
 
