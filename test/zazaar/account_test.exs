@@ -113,6 +113,24 @@ defmodule ZaZaar.AccountTest do
     end
   end
 
+  describe "get_page/1" do
+    test "gets a single page by string id" do
+      page = insert(:page)
+
+      assert Account.get_page(page.id) |> Map.get(:id) == page.id
+    end
+
+    test "gets page by attrs" do
+      page = insert(:page)
+
+      assert Account.get_page(fb_page_id: page.fb_page_id) |> Map.get(:id) == page.id
+    end
+
+    test "if doesn't exist returns nil" do
+      assert Account.get_page(Ecto.UUID.generate()) == nil
+    end
+  end
+
   describe "get_pages/1" do
     test "get pages by attribute" do
       attr = [name: "foobar"]

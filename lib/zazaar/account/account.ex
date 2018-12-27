@@ -10,8 +10,6 @@ defmodule ZaZaar.Account do
   alias ZaZaar.Account
   alias Account.{User, Page}
 
-  @type get_page_attrs :: User | keyword
-
   @doc """
   Finds a single user record in DB
   """
@@ -24,12 +22,20 @@ defmodule ZaZaar.Account do
   end
 
   @doc """
+  Get a single fb page
+  """
+  @spec get_page(attr :: String.t() | keyword) :: Page.t() | nil
+  def get_page(uuid) when is_binary(uuid), do: Repo.get(Page, uuid)
+
+  def get_page(attrs), do: Page |> get_many_query(attrs) |> Repo.one()
+
+  @doc """
   Gets user fb pages from DB
   """
-  @spec get_pages(get_page_attrs) :: [Ecto.Schema.t()]
+  @spec get_pages(attr :: User.t() | keyword) :: [Page.t()]
   def get_pages(attrs), do: get_pages(attrs, [])
 
-  @spec get_pages(get_page_attrs, keyword) :: [Ecto.Schema.t()]
+  @spec get_pages(attr :: User.t() | keyword, opts :: keyword) :: [Page.t()]
   def get_pages(%User{id: user_id}, opts), do: get_pages([user_id: user_id], opts)
 
   def get_pages(attrs, opts) do
