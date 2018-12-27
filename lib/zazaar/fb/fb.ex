@@ -118,7 +118,9 @@ defmodule ZaZaar.Fb do
   @doc """
   Gets a list of videos from DB
   """
-  @spec get_videos(attrs :: keyword) :: [Video.t()]
+  @spec get_videos(attrs :: Video.t() | keyword) :: [Video.t()]
+  def get_videos(%Page{} = page), do: get_videos(fb_page_id: page.fb_page_id)
+
   def get_videos(attrs) do
     Video
     |> get_many_query(attrs)
