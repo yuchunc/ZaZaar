@@ -3,7 +3,9 @@ defmodule ZaZaar.Account do
   Account Context Module
   """
 
-  use ZaZaar.Context
+  use ZaZaar, :context
+
+  import ZaZaar.EctoUtil
 
   alias ZaZaar.Account
   alias Account.{User, Page}
@@ -17,6 +19,32 @@ defmodule ZaZaar.Account do
 
   def get_user(user_id) do
     Repo.get(User, user_id)
+  end
+
+  @doc """
+  Get a single fb page
+  """
+  @spec get_page(attr :: String.t() | keyword) :: Page.t() | nil
+  def get_page(uuid) when is_binary(uuid), do: Repo.get(Page, uuid)
+
+  def get_page(attrs), do: Page |> get_many_query(attrs) |> Repo.one()
+
+  @doc """
+  Gets user fb pages from DB
+  """
+  @spec get_pages(attr :: User.t() | keyword) :: [Page.t()]
+  def get_pages(attrs), do: get_pages(attrs, [])
+
+  @spec get_pages(attr :: User.t() | keyword, opts :: keyword) :: [Page.t()]
+  def get_pages(%User{id: user_id}, opts), do: get_pages([user_id: user_id], opts)
+
+  def get_pages(attrs, opts) do
+    order = Keyword.get(opts, :order_by, [])
+
+    Page
+    |> get_many_query(attrs)
+    |> order_by(^order)
+    |> Repo.all()
   end
 
   @doc """
@@ -40,9 +68,21 @@ defmodule ZaZaar.Account do
   Insert or Update Facebook page permissions
   This is probably just going to be used internally
   """
-  def upsert_pages(user, page_maps) do
+  @spec upsert_pages(%User{}, map, keyword) :: {:ok, [%Page{}]}
+  def upsert_pages(user, page_maps, opts \\ []) do
+    strategy = Keyword.get(opts, :strategy, :update)
+
     fb_page_ids = Enum.map(page_maps, & &1.fb_page_id)
-    current_pages = get_pages(user_id: user.id, fb_page_id: fb_page_ids)
+
+    current_pages =
+      case strategy do
+        :flush ->
+          get_many_query(Page, user_id: user.id) |> Repo.delete_all()
+          []
+
+        _ ->
+          get_pages(user_id: user.id, fb_page_id: fb_page_ids)
+      end
 
     pages =
       Enum.map(page_maps, fn pm ->
@@ -53,28 +93,22 @@ defmodule ZaZaar.Account do
           access_token: pm.access_token
         }
 
-        current_pages
-        |> Enum.find(page_struct, &(&1.fb_page_id == pm.fb_page_id))
-        |> Page.changeset(pm)
-        |> Repo.insert_or_update!()
+        do_upsert_pages(pm, page_struct, current_pages)
       end)
 
     {:ok, pages}
   end
 
-  defp get_pages(attrs), do: get_pages(Page, attrs)
-
-  defp get_pages(query, []), do: Repo.all(query)
-
-  defp get_pages(query, [{k, v} | t]) when is_list(v) do
-    query
-    |> where([p], field(p, ^k) in ^v)
-    |> get_pages(t)
+  defp do_upsert_pages(page_map, page_struct, []) do
+    page_struct
+    |> Page.changeset(page_map)
+    |> Repo.insert!()
   end
 
-  defp get_pages(query, [{k, v} | t]) do
-    query
-    |> where([p], field(p, ^k) == ^v)
-    |> get_pages(t)
+  defp do_upsert_pages(page_map, page_struct, current_pages) do
+    current_pages
+    |> Enum.find(page_struct, &(&1.fb_page_id == page_map.fb_page_id))
+    |> Page.changeset(page_map)
+    |> Repo.insert_or_update!()
   end
 end

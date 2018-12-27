@@ -22,7 +22,7 @@ config :zazaar, ZaZaarWeb.Endpoint,
 # Guardian Configs
 config :zazaar, ZaZaar.Auth.Guardian,
   issuer: "zazaar",
-  error_handler: ZaZaar.Auth.ErrorHandler,
+  error_handler: ZaZaar.Auth.UserErrorHandler,
   verify_issuer: true
 
 config :zazaar, :fb_api, ZaZaar.Fb.Api

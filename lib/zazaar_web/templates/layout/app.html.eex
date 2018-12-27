@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanstc.css"/>
   </head>
   <body data-js-view-path="<%= js_view_path(@conn, @view_template) %>" class="<%= view_name(@conn) %> <%= template_name(@view_template) %>">
-    <main role="main" class="main-container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <main role="main" class="main-container content">
       <%= render(ZaZaarWeb.LayoutView, "main_nav.html", conn: @conn) %>
       <%= render @view_module, @view_template, assigns %>
     </main>

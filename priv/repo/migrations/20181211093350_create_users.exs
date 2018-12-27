@@ -12,5 +12,7 @@ defmodule ZaZaar.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
+
+    create index(:users, [:fb_id])
   end
 end

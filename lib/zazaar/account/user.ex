@@ -1,6 +1,5 @@
 defmodule ZaZaar.Account.User do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use ZaZaar, :schema
 
   @type t :: %__MODULE__{
           email: String.t(),

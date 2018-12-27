@@ -27,7 +27,8 @@ defmodule ZaZaarWeb do
 
       ZaZaarWeb.aliases()
 
-      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
+      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
+      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
     end
   end
 
@@ -49,7 +50,8 @@ defmodule ZaZaarWeb do
 
       ZaZaarWeb.aliases()
 
-      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
+      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
+      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
     end
   end
 
@@ -70,7 +72,8 @@ defmodule ZaZaarWeb do
 
       ZaZaarWeb.aliases()
 
-      def current_resource(conn), do: Guardian.Plug.current_resource(conn)
+      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
+      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
     end
   end
 

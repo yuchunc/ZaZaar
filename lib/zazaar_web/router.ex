@@ -8,16 +8,20 @@ defmodule ZaZaarWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
-    plug Auth.Pipeline
+    plug Auth.UserPipeline
   end
 
   pipeline :public do
-    plug Guardian.Plug.LoadResource, allow_blank: true
+    plug Guardian.Plug.LoadResource, key: :user, allow_blank: true
   end
 
-  pipeline :auth do
-    plug Guardian.Plug.LoadResource
-    plug Guardian.Plug.EnsureAuthenticated
+  pipeline :user_authed do
+    plug Guardian.Plug.EnsureAuthenticated, key: :user
+    plug Guardian.Plug.LoadResource, key: :user
+  end
+
+  pipeline :page_authed do
+    plug Auth.PagePipeline
   end
 
   pipeline :api do
@@ -41,8 +45,16 @@ defmodule ZaZaarWeb.Router do
     resources "/i", InvoiceController, only: [:show]
   end
 
+  scope "/", ZaZaarWeb, as: :config do
+    pipe_through [:browser, :user_authed]
+
+    resources "/config/pages", Config.PageController, only: [:index, :show, :delete]
+
+    delete("/logout", SessionController, :delete)
+  end
+
   scope "/", ZaZaarWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser, :user_authed, :page_authed]
 
     get "/m", StreamController, :index
 
@@ -50,12 +62,6 @@ defmodule ZaZaarWeb.Router do
       resources "/current", StreamingController, singleton: true, only: [:show]
       resources "/", StreamController, only: [:show]
     end
-
-    scope "/config", Config do
-      resources "/pages", PageController, singleton: true, only: [:show, :update]
-    end
-
-    delete("/logout", SessionController, :delete)
 
     resources "/o", OrderController, only: [:index, :show]
   end

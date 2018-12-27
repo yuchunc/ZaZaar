@@ -1,13 +1,22 @@
-<div class="name">
-  <h1>Place to choose the current page</h1>
-
-  <div>
-    path to persist:
-    PATCH or PUT to /config/pages
+<div class="hero">
+  <div class="hero-head">
   </div>
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1> <%= gettext "Select Facebook Fan Page" %></h1>
 
-  <div>
-    example payload:
-    {"page_id": <page_uuid_goes_here>}
+      <div class="buttons are-medium" id="pages-select">
+        <%= for page <- @pages do %>
+          <a class="button is-fullwidth is-text" href="/config/pages/<%= page.id %>"> <%= page.name %> </a>
+        <% end %>
+      </div>
+
+      <%= link to: "/config/pages/refetch", method: :delete, class: "button is-primary is-outlined" do %>
+        <%= gettext "Refetch Pages from Facebook" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="hero-footer">
+
   </div>
 </div>
