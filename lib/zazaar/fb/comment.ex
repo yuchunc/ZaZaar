@@ -15,7 +15,7 @@ defmodule ZaZaar.Fb.Comment do
     field :commenter_fb_id, :string
     field :commenter_fb_name, :string
 
-    timestamps
+    timestamps()
   end
 
   def changeset(comment, attrs) do

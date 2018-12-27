@@ -50,8 +50,6 @@ defmodule ZaZaar.Fb do
   def fetch_videos(%Page{} = page, opts \\ []) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
-    strategy = Keyword.get(opts, :strategy, :update)
-
     fields =
       Keyword.get(opts, :fields, @video_default_fields)
       |> Enum.join(",")
