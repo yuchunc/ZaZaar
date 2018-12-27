@@ -1,7 +1,7 @@
 <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
   <div class="container">
     <div class="navbar-brand is-marginless">
-      <a class="navbar-item" href=<%= if current_page(@conn), do: "/m", else: "/" %>>
+      <a class="navbar-item" href=<%= nav_logo_path(@conn) %>>
         <img class="main-logo" src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
       </a>
     </div>
