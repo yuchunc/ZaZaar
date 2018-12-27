@@ -1,9 +1,9 @@
 defmodule ZaZaarWeb.SessionController do
   use ZaZaarWeb, :controller
 
-  plug Ueberauth
-
   alias Auth.Guardian.Plug, as: GPlug
+
+  plug Ueberauth
 
   def create(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case Auth.fb_auth(auth) do

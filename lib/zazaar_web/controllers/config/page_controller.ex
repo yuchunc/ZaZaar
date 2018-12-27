@@ -1,6 +1,8 @@
 defmodule ZaZaarWeb.Config.PageController do
   use ZaZaarWeb, :controller
 
+  alias Auth.Guardian.Plug, as: GPlug
+
   plug :put_view, ZaZaarWeb.ConfigView
 
   @doc """
@@ -21,6 +23,20 @@ defmodule ZaZaarWeb.Config.PageController do
   end
 
   def show(conn, %{"id" => page_id}) do
-    redirect(conn, to: "/m")
+    case Account.get_page(page_id) do
+      %Page{} = page ->
+        conn
+        |> GPlug.sign_in(page, %{}, key: :page)
+        |> put_flash(
+          :success,
+          dgettext("success", "Welcome to your page: %{name}!", name: page.name)
+        )
+        |> redirect(to: "/m")
+
+      _ ->
+        conn
+        |> put_flash(:warning, dgettext("errors", "Unable to find page."))
+        |> redirect(to: "/config/pages")
+    end
   end
 end

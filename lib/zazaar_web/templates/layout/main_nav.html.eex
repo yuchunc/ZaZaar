@@ -7,6 +7,12 @@
     </div>
 
     <div id="main-navbar" class="navbar-menu is-marginless">
+      <div class="navbar-start">
+        <%= if page = current_page(@conn) do %>
+          <a href="/m" class="navbar-item"> <%= page.name %> </a>
+        <% end %>
+      </div>
+
       <div class="navbar-end">
         <%= if current_user(@conn) do %>
           <a class="navbar-item" href="/m"><%= gettext "Streams" %> (直播列表)</a>
