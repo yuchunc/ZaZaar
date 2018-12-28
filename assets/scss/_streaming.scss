@@ -1,0 +1,34 @@
+.streaming {
+  height: calc(100vh - 3.25rem);
+
+ .container, .is-ancestor{
+   height: 100%;
+ }
+
+ &__view, &__action {
+   flex-grow: 0;
+ }
+
+ &__metrics {
+   flex-grow: 1;
+ }
+
+ &__comments {
+
+  .comments {
+    height: calc(100vh - 11rem);
+   }
+
+   .card-footer {
+     padding: 0.5rem 1.5rem;
+
+     .media {
+       width: 100%;
+     }
+
+     .input {
+       border-radius: 1rem;
+     }
+   }
+ }
+}

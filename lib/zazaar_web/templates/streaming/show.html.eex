@@ -1,1 +1,89 @@
-<h1>Current Streaming Page</h1>
+<section class="hero streaming">
+  <div class="container is-fluid">
+    <div class="tile is-ancestor is-marginless">
+
+      <!-- Left Sidebar: Streaming View + Action Btn + Metrics -->
+      <div class="tile is-vertical is-4">
+        <div class="tile is-parent is-vertical">
+
+          <div class="tile is-child card streaming__view">
+            <header class="card-header">
+              <p class="card-header-title">直播預覽</p>
+            </header>
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+              </figure>
+            </div>
+          </div>
+
+          <div class="tile is-child streaming__action">
+            <a href="#" class="button is-primary is-medium is-fullwidth">Take a Snapshot</a>
+          </div>
+
+          <div class="tile is-child card streaming__metrics">
+            <header class="card-header">
+              <p class="card-header-title">統計</p>
+            </header>
+            <div class="card-content">
+              <ul>
+                <li><span class="icon"><i class="fas fa-user"></i></span>666 人正在觀看</li><!-- 觀看人數 -->
+                <li><span class="icon"><i class="fas fa-clock"></i></span>1:12</li><!-- 直播時間 -->
+                <li></li><!-- 可以再往下新增 -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tile is-parent is-4 streaming__comments">
+        <div class="tile is-child card">
+          <header class="card-header">
+            <p class="card-header-title">即時留言</p>
+          </header>
+
+          <div class="card-content comments">
+
+            <%= for _ <- 0..8 do %>
+              <div class="media">
+                <figure class="media-left image is-32x32 is-avatar">
+                  <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
+                </figure>
+                <div class="media-content comment has-background-light">
+                  <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
+                </div>
+              </div>
+            <% end %>
+
+          </div>
+
+          <footer class="card-footer has-background-light">
+            <div class="media">
+              <figure class="media-left image is-32x32 is-avatar">
+                <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
+              </figure>
+              <div class="media-content">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" placeholder="留言⋯⋯">
+                  </div>
+                </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <div class="tile is-parent is-4">
+        <div class="tile is-child card">
+          <header class="card-header">
+            <p class="card-header-title">商品列表</p>
+          </header>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
