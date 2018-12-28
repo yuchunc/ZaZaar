@@ -29,6 +29,7 @@ defmodule ZaZaar.Fb.Video do
     field :fb_video_id, :string
     field :post_obj_id, :string, virtual: true
     field :title, :string
+    field :completed_at, :naive_datetime
 
     embeds_many :comments, Fb.Comment
 
@@ -42,7 +43,8 @@ defmodule ZaZaar.Fb.Video do
       :creation_time,
       :description,
       :title,
-      :fb_status
+      :fb_status,
+      :completed_at
     ])
     |> cast_embed(:comments)
     |> validate_required([
@@ -54,6 +56,6 @@ defmodule ZaZaar.Fb.Video do
       :fb_page_id,
       :fb_status
     ])
-    |> validate_within(:fb_status, FbLiveVideoStatus.__valid_values__())
+    |> validate_inclusion(:fb_status, FbLiveVideoStatus.__valid_values__())
   end
 end

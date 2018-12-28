@@ -12,6 +12,10 @@ defmodule ZaZaarWeb.StreamController do
     render(conn, "show.html", id: id)
   end
 
+  # TODO
+  # default option
+  # pagination option
+  # fetch all option
   defp fetch_and_get_videos(:default, page) do
     with {:ok, fb_vids} <- Fb.fetch_videos(page),
          db_vids <- Fb.get_videos(page),
