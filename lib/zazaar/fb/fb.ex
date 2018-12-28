@@ -22,6 +22,10 @@ defmodule ZaZaar.Fb do
 
   @comment_default_fields ["created_time", "from", "message", "parent{id}"]
 
+  @doc """
+  fetches and stores Facebook Pages
+  uses user access token
+  """
   @spec set_pages(User.t()) :: {:ok, [Page.t()]} | {:error, String.t()}
   def set_pages(user) do
     with {:ok, %{"accounts" => accounts}} <- @api.me("accounts", user.fb_access_token),
@@ -34,17 +38,16 @@ defmodule ZaZaar.Fb do
   end
 
   @doc """
-  Fetches and stores Facebook feeds that is a video.
-  Uses User Access Token.
+  fetches and stores Facebook live videos
+  Uses pages access token.
+
+  Please refer to
+  https://developers.facebook.com/docs/graph-api/reference/live-video/
+  for more details on how to use the endpoint
 
   Options:
-  - Field:
-    fields to fetch from Facebook
-    https://developers.facebook.com/docs/graph-api/reference/user/accounts/
-
-  - strategy:
-    strategy to perform on existing data
-    :update(defualt), :flush
+  - `:fields` fields to fetch from Facebook
+  - `:limit` limit per request
 
   NOTE possibly use tags for identify 團購
   """
@@ -56,8 +59,14 @@ defmodule ZaZaar.Fb do
       Keyword.get(opts, :fields, @video_default_fields)
       |> Enum.join(",")
 
-    with {:ok, %{"data" => videos0}} <-
-           @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
+    limit = Keyword.get(opts, :limit, 25)
+
+    with {:ok, result} <-
+           @api.get_object_edge("live_videos", fb_page_id, access_token,
+             fields: fields,
+             limit: limit
+           ),
+         %{"data" => videos0} <- result,
          videos1 <- Enum.map(videos0, &format_video_map/1),
          {:ok, video2} <- append_images(access_token, videos1) do
       upsert_videos(page.fb_page_id, video2)

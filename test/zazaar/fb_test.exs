@@ -82,6 +82,7 @@ defmodule ZaZaar.FbTest do
       end)
 
       assert {:ok, result} = Fb.fetch_videos(page)
+      assert Enum.count(result) == 25
 
       assert Enum.map(result, &{Map.get(&1, :__struct__), Ecto.get_meta(&1, :state)}) ==
                List.duplicate({Video, :loaded}, Enum.count(result))
