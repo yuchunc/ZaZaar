@@ -1,0 +1,38 @@
+<%= unless @video.fb_status == :live do %>
+  <div class="column is-half is-one-third-desktop">
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src=<%= @video.image_url %> alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="media">
+          <div class="media-content">
+            <p class="title is-4">
+              <%= @video.title || @video.creation_time |> NaiveDateTime.to_iso8601 %>
+            </p>
+            <div class="tags has-addons">
+              <span class="tag is-medium">訂單狀態</span>
+              <span class="tag is-danger is-medium">待處理</span>
+              <!-- 已確認狀態
+                <span class="tag is-success is-medium">已確認</span>
+              -->
+              <!-- 已完成狀態
+                <span class="tag is-primary is-medium">已完成</span>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a class="card-footer-item has-text-hover-z" href="/s/<%= @video.id %>">
+          查看訂單
+        </a>
+        <a class="card-footer-item has-text-hover-z" href=<%= @video.permalink_url %> target="_blank">
+          Facebook 連結
+        </a>
+      </footer>
+    </div>
+  </div>
+<% end %>

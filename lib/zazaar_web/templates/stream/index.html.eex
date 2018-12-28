@@ -3,80 +3,51 @@
   <div class="container">
 
     <!-- 正在直播 -->
-    <div class="currently-streamming box has-margin-bottom-md">
-      <a class="has-text-dark" href="/s/current">
-        <h1 class="title is-3 has-text-z">Currently Streamming</h1>
-        <div class="columns">
-          <div class="column">
-            <figure class="image is-4by3">
-              <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-            </figure>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <header class="card-header">
-                <p class="card-header-title">即時留言</p>
-              </header>
-
-              <div class="card-content comments">
-
-                <%= for _ <- 0..8 do %>
-                  <div class="media">
-                    <figure class="media-left image is-32x32 is-avatar">
-                      <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
-                    </figure>
-                    <div class="media-content comment has-background-light">
-                      <span class="is-username has-text-primary has-text-weight-semibold">FB User</span>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
-                    </div>
-                  </div>
-                <% end %>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </a>
-    </div>
-
-    <!-- 過去直播 -->
-    <div class="columns is-flex-wrap">
-
-      <%= for x <- 1..10 do %>
-        <div class="column is-half is-one-third-desktop">
-          <div class="card">
-            <div class="card-image">
+    <%= if @first_video.fb_status == :live do %>
+      <div class="currently-streamming box has-margin-bottom-md">
+        <a class="has-text-dark" href="/s/current">
+          <h1 class="title is-3 has-text-z">
+            <%= @first_video.title || @first_video.creation_time |> NaiveDateTime.to_iso8601 %>
+          </h1>
+          <div class="columns">
+            <div class="column">
               <figure class="image is-4by3">
-                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                <%= raw @first_video.embed_html %>
               </figure>
             </div>
-            <div class="card-content">
-              <div class="media">
-                <div class="media-content">
-                  <p class="title is-4">12月16日下午<%= x %>:06 (直播時間)</p>
-                  <div class="tags has-addons">
-                    <span class="tag is-medium">訂單狀態</span>
-                    <span class="tag is-danger is-medium">待處理</span>
-                    <!-- 已確認狀態
-                      <span class="tag is-success is-medium">已確認</span>
-                    -->
-                    <!-- 已完成狀態
-                      <span class="tag is-primary is-medium">已完成</span>
-                    -->
-                  </div>
+
+            <div class="column">
+              <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">即時留言</p>
+                </header>
+
+                <div class="card-content comments">
+
+                  <%= for _ <- 0..8 do %>
+                    <div class="media">
+                      <figure class="media-left image is-32x32 is-avatar">
+                        <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
+                      </figure>
+                      <div class="media-content comment has-background-light">
+                        <span class="is-username has-text-primary has-text-weight-semibold">FB User</span>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
+                      </div>
+                    </div>
+                  <% end %>
+
                 </div>
               </div>
             </div>
-            <footer class="card-footer">
-              <a class="card-footer-item has-text-hover-z" href="/s/1">查看訂單</a>
-              <a class="card-footer-item has-text-hover-z" href="#">Facebook 連結</a>
-            </footer>
-          </div>
-        </div>
-      <% end %>
 
+          </div>
+        </a>
+      </div>
+    <% end %>
+
+    <!-- 過去直播 -->
+    <div class="columns is-flex-wrap">
+      <%= render_many(@videos, @view_module, "_past_video.html", as: :video) %>
     </div>
 
   </div>

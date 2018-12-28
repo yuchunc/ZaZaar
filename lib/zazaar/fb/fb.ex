@@ -17,6 +17,7 @@ defmodule ZaZaar.Fb do
     "creation_time",
     "video",
     "description",
+    "status",
     "title"
   ]
 
@@ -188,7 +189,7 @@ defmodule ZaZaar.Fb do
       creation_time: video["creation_time"],
       description: video["description"],
       embed_html: video["embed_html"],
-      permalink_url: video["permalink_url"],
+      permalink_url: "https://facebook.com/" <> video["permalink_url"],
       post_id: page_id <> "_" <> video_id,
       title: video["title"],
       fb_video_id: video_id,
