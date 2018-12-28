@@ -178,6 +178,12 @@ defmodule ZaZaar.Fb do
   defp format_video_map(video) do
     [_, page_id, _, video_id, _] = String.split(video["permalink_url"], "/")
 
+    status =
+      case video["status"] do
+        "LIVE" -> :live
+        _ -> :vod
+      end
+
     %{
       creation_time: video["creation_time"],
       description: video["description"],
@@ -185,7 +191,8 @@ defmodule ZaZaar.Fb do
       permalink_url: video["permalink_url"],
       post_id: page_id <> "_" <> video_id,
       title: video["title"],
-      fb_video_id: video_id
+      fb_video_id: video_id,
+      fb_status: status
     }
   end
 end

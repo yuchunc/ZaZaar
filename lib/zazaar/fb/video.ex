@@ -1,6 +1,7 @@
 defmodule ZaZaar.Fb.Video do
   use ZaZaar, :schema
 
+  alias ZaZaar
   alias ZaZaar.Fb
 
   @type t :: %__MODULE__{
@@ -9,6 +10,7 @@ defmodule ZaZaar.Fb.Video do
           embed_html: String.t(),
           image_url: String.t(),
           fb_page_id: String.t(),
+          fb_status: FbLiveVideoStatus.__enum_map__(),
           permalink_url: String.t(),
           fb_video_id: String.t(),
           title: nil | String.t()
@@ -21,8 +23,9 @@ defmodule ZaZaar.Fb.Video do
     field :description, :string
     field :embed_html, :string
     field :image_url, :string
-    field :fb_page_id, :string
     field :permalink_url, :string
+    field :fb_status, FbLiveVideoStatus
+    field :fb_page_id, :string
     field :fb_video_id, :string
     field :post_obj_id, :string, virtual: true
     field :title, :string
@@ -38,7 +41,8 @@ defmodule ZaZaar.Fb.Video do
     |> cast(attrs, [
       :creation_time,
       :description,
-      :title
+      :title,
+      :fb_status
     ])
     |> cast_embed(:comments)
     |> validate_required([
@@ -47,7 +51,8 @@ defmodule ZaZaar.Fb.Video do
       :creation_time,
       :image_url,
       :fb_video_id,
-      :fb_page_id
+      :fb_page_id,
+      :fb_status
     ])
   end
 end
