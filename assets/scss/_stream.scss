@@ -11,12 +11,8 @@
       position: relative;
     }
 
-    .comment-area {
-      position: absolute;
-      bottom: 0.75em;
-      left: 0.75em;
-      width: calc( 100% - 1.5rem );
-      height: calc( 100% - 4.5rem );
+    .comments {
+      height: calc(100vh - 25.5rem);
     }
   }
 

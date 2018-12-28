@@ -12,28 +12,31 @@
               <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
             </figure>
           </div>
+
           <div class="column is-sidebar">
-            <p class="has-text-weight-bold has-text-grey-light has-margin-bottom-sm">即時留言</p>
-            <div class="comment-area">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">即時留言</p>
+              </header>
 
-              <%= for _ <- 0..5 do %>
-                <article class="media">
-                  <figure class="media-left">
-                    <p class="image is-32x32">
+              <div class="card-content comments">
+
+                <%= for _ <- 0..8 do %>
+                  <div class="media">
+                    <figure class="media-left image is-32x32 is-avatar">
                       <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
-                    </p>
-                  </figure>
-                  <div class="media-content">
-                    <strong>FB User</strong>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-                    </p>
+                    </figure>
+                    <div class="media-content comment has-background-light">
+                      <span class="is-username has-text-primary has-text-weight-semibold">FB User</span>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
+                    </div>
                   </div>
-                </article>
-              <% end %>
+                <% end %>
 
+              </div>
             </div>
           </div>
+
         </div>
       </a>
     </div>
