@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "base/styleguide";
+@import "./fontawesome-pro-5.5.0-web/scss/fontawesome.scss";
 
 // Import the initial variables
 @import "node_modules/bulma//sass/utilities/initial-variables";
@@ -22,3 +23,4 @@ $navbar-breakpoint: $tablet;
 @import "base/shared";
 
 @import "stream";
+@import "streaming";

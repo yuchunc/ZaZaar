@@ -16,6 +16,9 @@ import "phoenix_html"
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
+//import "@fortawesome/fontawesome-free/js/all.js";
+import "../fontawesome-pro-5.5.0-web/js/all.js";
+
 import loadView from './views/loader';
 
 function handleDOMContentLoaded() {
