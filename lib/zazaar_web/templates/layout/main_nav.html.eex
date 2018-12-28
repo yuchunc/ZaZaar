@@ -25,7 +25,7 @@
         <% else %>
 
           <%= link(to: "/auth/facebook", class: "navbar-item") do %>
-            <div class="button is-outlined"><%= gettext "Sign In" %></div>
+            <div class="button is-primary is-inverted is-outlined"><%= gettext "Sign In" %></div>
           <% end %>
 
         <% end %>
