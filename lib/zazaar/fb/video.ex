@@ -54,5 +54,6 @@ defmodule ZaZaar.Fb.Video do
       :fb_page_id,
       :fb_status
     ])
+    |> validate_within(:fb_status, FbLiveVideoStatus.__valid_values__())
   end
 end
