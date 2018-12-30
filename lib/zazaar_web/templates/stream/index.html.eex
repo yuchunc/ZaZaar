@@ -13,7 +13,7 @@
             </figure>
           </div>
 
-          <div class="column is-sidebar">
+          <div class="column">
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">即時留言</p>

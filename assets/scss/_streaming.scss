@@ -31,4 +31,21 @@
      }
    }
  }
+
+ &__merchandises {
+
+  .card-content {
+    height: calc(100vh - 10.5rem);
+    padding: 0;
+    margin: 1.5rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .is-name {
+    flex-basis: auto;
+    flex-grow: 0;
+    text-align: left;
+  }
+ }
 }
