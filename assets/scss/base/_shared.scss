@@ -3,6 +3,26 @@
   margin-top: -52px;
 }
 
+.fans-page {
+
+  .hero-body {
+    align-items: center;
+  }
+
+  .panel {
+    max-width: 600px;
+    margin: 0 auto;
+
+    .panel-heading {
+      border-color: $c-zazaar;
+    }
+
+    .panel-block {
+      justify-content: center;
+    }
+  }
+}
+
 .navbar .navbar-brand .main-logo {
   width: 114px;
 }
