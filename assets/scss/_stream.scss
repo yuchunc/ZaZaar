@@ -2,21 +2,12 @@
 
   .currently-streamming {
 
-
     &:hover {
       box-shadow: 0 2px 3px rgba($c-z-light, 1), 0 0 0 1px rgba($c-z-light, 1);
     }
 
-    .column.is-sidebar {
-      position: relative;
-    }
-
-    .comment-area {
-      position: absolute;
-      bottom: 0.75em;
-      left: 0.75em;
-      width: calc( 100% - 1.5rem );
-      height: calc( 100% - 4.5rem );
+    .comments {
+      max-height: 19.75rem;
     }
   }
 
@@ -32,6 +23,18 @@
 
     &__order {
       margin-left: 3rem;
+    }
+  }
+
+  @media (min-width: $desktop) {
+    .currently-streamming .comments {
+      max-height: 22.5rem;
+    }
+  }
+
+  @media (min-width: $fullhd) {
+    .currently-streamming .comments {
+      max-height: 27rem;
     }
   }
 }

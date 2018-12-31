@@ -7,8 +7,22 @@
   width: 114px;
 }
 
-.comment-area {
+.comments {
   overflow-y: scroll;
+
+  .media + .media {
+    border-width: 0;
+    padding-top: 0;
+  }
+  
+  .comment {
+    border-radius: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .is-username {
+    padding-right: 0.5rem;
+  }
 }
 
 .main-table {
