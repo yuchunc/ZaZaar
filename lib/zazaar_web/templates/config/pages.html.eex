@@ -1,22 +1,29 @@
-<div class="hero">
-  <div class="hero-head">
-  </div>
+<section class="hero is-fullheight is-fullheight-with-navbar fans-page">
   <div class="hero-body">
-    <div class="container has-text-centered">
-      <h1> <%= gettext "Select Facebook Fan Page" %></h1>
+    <div class="container">
 
-      <div class="buttons are-medium" id="pages-select">
-        <%= for page <- @pages do %>
-          <a class="button is-fullwidth is-text" href="/config/pages/<%= page.id %>"> <%= page.name %> </a>
-        <% end %>
-      </div>
+      <nav class="panel has-text-centered">
+        <h1 class="panel-heading has-text-weight-semibold has-text-white"><%= gettext "Select Facebook Fan Page" %></h1>
 
-      <%= link to: "/config/pages/refetch", method: :delete, class: "button is-primary is-outlined" do %>
-        <%= gettext "Refetch Pages from Facebook" %>
-      <% end %>
+        <div id="pages-select">
+
+          <%= for page <- @pages do %>
+
+            <a class="panel-block" href="/config/pages/<%= page.id %>"> <%= page.name %> </a>
+
+          <% end %>
+
+        </div>
+
+        <div class="panel-block">
+
+          <%= link to: "/config/pages/refetch", method: :delete, class: "button is-primary is-outlined is-fullwidth" do %>
+            <%= gettext "Refetch Pages from Facebook" %>
+          <% end %>
+
+        </div>
+      </nav>
+
     </div>
   </div>
-  <div class="hero-footer">
-
-  </div>
-</div>
+</section>

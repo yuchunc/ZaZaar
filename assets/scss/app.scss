@@ -17,6 +17,9 @@ $navbar-item-hover-color: rgba($white, 0.8);
 $navbar-item-hover-background-color: !important;
 $navbar-breakpoint: $tablet;
 
+/* Panel */
+$panel-heading-background-color: $c-zazaar;
+
 //  Import the rest of Bulma
 @import "./node_modules/bulma/bulma.sass";
 
