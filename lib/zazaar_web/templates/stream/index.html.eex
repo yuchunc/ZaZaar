@@ -11,9 +11,7 @@
           </h1>
           <div class="columns">
             <div class="column">
-              <figure class="image is-4by3">
-                <%= raw @first_video.embed_html %>
-              </figure>
+              <div class="fb-video" data-href=<%= @first_video.permalink_url %> data-width="500" data-autopaly="true"></div>
             </div>
 
             <div class="column">
