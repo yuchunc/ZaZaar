@@ -1,16 +1,25 @@
 <section class="section stream">
 
-  <div class="container">
-
-    <!-- 正在直播 -->
-    <%= if @first_video.fb_status == :live do %>
-      <%= render @view_module, "current_video.html", live_stream: @first_video %>
-    <% end %>
-
-    <!-- 過去直播 -->
-    <div class="columns is-flex-wrap">
-      <%= render_many(@videos, @view_module, "past_video.html", as: :video) %>
+  <%= if Enum.empty?(@videos) do %>
+    <div class="container has-text-centered">
+      <h2 class="title">
+        <%= gettext "Didn't find any live stream in %{page_name}",
+            page_name: current_page(@conn) |> Map.get(:name) %>
+      </h2>
+      <h2 class="title"> = ( </h2>
     </div>
+  <% else %>
+    <div class="container">
+      <!-- 正在直播 -->
+      <%= if @first_video.fb_status == :live do %>
+        <%= render @view_module, "current_video.html", live_stream: @first_video %>
+      <% end %>
 
-  </div>
+      <!-- 過去直播 -->
+      <div class="columns is-flex-wrap">
+        <%= render_many(@videos, @view_module, "past_video.html", as: :video) %>
+      </div>
+
+    </div>
+  <% end %>
 </section>
