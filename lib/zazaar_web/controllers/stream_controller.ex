@@ -4,7 +4,7 @@ defmodule ZaZaarWeb.StreamController do
   def index(conn, _params) do
     with page <- current_page(conn),
          videos <- fetch_and_get_videos(:default, page) do
-      render(conn, "index.html", videos: videos, first_video: List.first(videos))
+      render(conn, "index.html", videos: videos, first_video: first_video(videos))
     end
   end
 
@@ -17,10 +17,12 @@ defmodule ZaZaarWeb.StreamController do
   # pagination option
   # fetch all option
   defp fetch_and_get_videos(:default, page) do
-    with {:ok, fb_vids} <- Fb.fetch_videos(page),
-         db_vids <- Fb.get_videos(page),
-         vids <- (fb_vids ++ db_vids) |> Enum.uniq() do
-      Enum.sort_by(vids, & &1.creation_time, &>/2)
+    with {:ok, _fb_vids} <- Fb.fetch_videos(page),
+         db_vids <- Fb.get_videos(page, order_by: [asc: :fb_status]) do
+      db_vids
     end
   end
+
+  defp first_video([]), do: %Video{}
+  defp first_video(videos), do: List.first(videos)
 end

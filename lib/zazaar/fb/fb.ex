@@ -129,13 +129,21 @@ defmodule ZaZaar.Fb do
   Gets a list of videos from DB
   """
   @spec get_videos(attrs :: Video.t() | keyword) :: [Video.t()]
-  def get_videos(%Page{} = page), do: get_videos(fb_page_id: page.fb_page_id)
+  def get_videos(attrs), do: get_videos(attrs, [])
 
-  def get_videos(attrs) do
+  @spec get_videos(attrs :: Video.t() | keyword, opts :: keyword) :: [Video.t()]
+  def get_videos(%Page{} = page, opts), do: get_videos([fb_page_id: page.fb_page_id], opts)
+
+  def get_videos(attrs, opts) do
+    order_by = Keyword.get(opts, :order_by, [])
+
     Video
     |> get_many_query(attrs)
+    |> order_by(^order_by)
     |> Repo.all()
   end
+
+  defp append_images(_, []), do: {:ok, []}
 
   defp append_images(access_token, videos) do
     with post_obj_ids <- Enum.map(videos, & &1.post_id),
