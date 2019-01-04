@@ -51,32 +51,24 @@ defmodule ZaZaar.FbTest do
       page = insert(:page)
 
       ApiMock
-      |> expect(:get_object_edge, fn "live_videos", page_id, _, _ ->
+      |> expect(:get_object_edge, fn "live_videos", page_id, _, opts ->
+        fields =
+          "embed_html,permalink_url,creation_time,video{picture},description,status,title" =
+          Keyword.get(opts, :fields)
+
         resp = %{
           "data" =>
-            Enum.map(1..11, fn c ->
-              ["embed_html", "permalink_url", "creation_time", "video", "description", "title"]
+            Enum.map(1..25, fn c ->
+              fields
+              |> String.split(",")
               |> RespMock.video(
                 description: to_string(c),
                 title: "Stream ##{c}",
                 page_id: page_id
               )
-            end) ++
-              Enum.map(12..25, fn c ->
-                ["embed_html", "permalink_url", "creation_time", "video", "description"]
-                |> RespMock.video(description: to_string(c), page_id: page_id)
-              end),
+            end),
           "paging" => RespMock.paging()
         }
-
-        {:ok, resp}
-      end)
-      |> expect(:get_edge_objects, fn "", obj_ids, _, [fields: "picture"] ->
-        resp =
-          Enum.reduce(obj_ids, %{}, fn obj_id, acc ->
-            {k, data} = RespMock.image_media(object_id: obj_id)
-            Map.put_new(acc, k, data)
-          end)
 
         {:ok, resp}
       end)

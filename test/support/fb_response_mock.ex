@@ -35,10 +35,13 @@ defmodule ZaZaar.FbResponseMock do
       |> Enum.random()
 
     opts = Enum.into(list_opts, %{})
-    page_id = opts[:page_id] || random_obj_id
-    video_id = opts[:video_id] || random_obj_id
+    page_id = opts[:page_id] || random_obj_id()
+    video_id = opts[:video_id] || random_obj_id()
 
-    Enum.reduce(fields, [{"id", random_obj_id}], fn f, acc ->
+    image_url =
+      Keyword.get(list_opts, :image_url, "https://fbcdn.net/#{page_id}_#{video_id}_n.jpg")
+
+    Enum.reduce(fields, [{"id", random_obj_id()}], fn f, acc ->
       gen =
         case f do
           "embed_html" ->
@@ -46,6 +49,9 @@ defmodule ZaZaar.FbResponseMock do
 
           "permalink_url" ->
             opts[:permalink_url] || ~s(/#{page_id}/videos/#{video_id}/)
+
+          "video{picture}" ->
+            %{"id" => video_id, "picture" => image_url}
 
           "video" ->
             %{"id" => video_id}
@@ -66,18 +72,15 @@ defmodule ZaZaar.FbResponseMock do
             Map.get(opts, String.to_atom(f)) || Faker.String.base64(20)
         end
 
-      if gen do
-        [{f, gen} | acc]
-      else
-        acc
-      end
+      key = f |> String.split("{") |> List.first()
+      [{key, gen} | acc]
     end)
     |> Enum.into(%{})
   end
 
   def comment(opts \\ []) do
-    parent_id = Keyword.get(opts, :parent_id, random_obj_id)
-    comment_id = Keyword.get(opts, :comment_id, random_obj_id)
+    parent_id = Keyword.get(opts, :parent_id, random_obj_id())
+    comment_id = Keyword.get(opts, :comment_id, random_obj_id())
 
     opts1 = Enum.into(opts, %{})
 
@@ -85,7 +88,7 @@ defmodule ZaZaar.FbResponseMock do
       "created_time" => opts1[:created_time] || current_time,
       "from" => %{
         "name" => opts1[:name] || Faker.Name.name(),
-        "id" => random_obj_id
+        "id" => random_obj_id()
       },
       "message" => opts1[:message] || Faker.Lorem.sentence(),
       "id" => "#{parent_id}_#{comment_id}"
@@ -93,15 +96,15 @@ defmodule ZaZaar.FbResponseMock do
   end
 
   def image_media(opts \\ []) do
-    obj_id = Keyword.get(opts, :object_id, random_obj_id <> "_" <> random_obj_id)
-    src = Keyword.get(opts, :src, "https://fbcdn.net/_n.jpg")
+    obj_id = Keyword.get(opts, :object_id, random_obj_id() <> "_" <> random_obj_id())
+    src = Keyword.get(opts, :src, "https://fbcdn.net/#{obj_id}_n.jpg")
 
-    {
-      obj_id,
-      %{
-        "id" => obj_id,
-        "picture" => src
-      }
+    %{
+      "height" => 284,
+      "is_silhouette" => false,
+      "url" =>
+        "https://scontent.xx.fbcdn.net/v/t15.5256-10/p160x160/49245593_221143812138691_47797174913728512_n.jpg?_nc_cat=106&_nc_ht=scontent.xx&oh=fa8e46b785591ce0cee4798c103a6365&oe=5CBF98BB",
+      "width" => 160
     }
   end
 
@@ -122,7 +125,7 @@ defmodule ZaZaar.FbResponseMock do
     }
   end
 
-  def random_obj_id do
+  def random_obj_id() do
     Enum.random(100_000_000_000_000..599_999_999_999_999) |> to_string
   end
 

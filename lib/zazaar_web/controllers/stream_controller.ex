@@ -1,9 +1,16 @@
 defmodule ZaZaarWeb.StreamController do
   use ZaZaarWeb, :controller
 
-  def index(conn, _params) do
+  @doc """
+  Stream Index
+
+  takes the following params:
+  "strategy" : `default`, `fetcht_all`
+  """
+  def index(conn, params) do
     with page <- current_page(conn),
-         videos <- fetch_and_get_videos(:default, page) do
+         strategy <- Map.get(params, "strategy", "default"),
+         {:ok, videos} <- fetch_and_get_videos(strategy, page) do
       render(conn, "index.html", videos: videos, first_video: first_video(videos))
     end
   end
@@ -13,15 +20,9 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   # TODO
-  # default option
   # pagination option
-  # fetch all option
-  defp fetch_and_get_videos(:default, page) do
-    with {:ok, _fb_vids} <- Fb.fetch_videos(page),
-         db_vids <- Fb.get_videos(page, order_by: [asc: :fb_status]) do
-      db_vids
-    end
-  end
+  defp fetch_and_get_videos("default", page), do: Fb.fetch_videos(page)
+  defp fetch_and_get_videos("fetch_all", page), do: Fb.fetch_videos(page, strategy: :all)
 
   defp first_video([]), do: %Video{}
   defp first_video(videos), do: List.first(videos)

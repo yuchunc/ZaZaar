@@ -15,7 +15,7 @@ defmodule ZaZaar.Fb do
     "embed_html",
     "permalink_url",
     "creation_time",
-    "video",
+    "video{picture}",
     "description",
     "status",
     "title"
@@ -49,29 +49,19 @@ defmodule ZaZaar.Fb do
   Options:
   - `:fields` fields to fetch from Facebook
   - `:limit` limit per request
+  - `:strategy` can be :default or :all, :default will fetch only 25, :all will attempt to get all videos
 
   NOTE possibly use tags for identify 團購
   """
   @spec fetch_videos(Page.t(), keyword) :: {:ok, [Video.t()]} | {:error, String.t()}
   def fetch_videos(%Page{} = page, opts \\ []) do
-    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
-
     fields =
       Keyword.get(opts, :fields, @video_default_fields)
       |> Enum.join(",")
 
-    limit = Keyword.get(opts, :limit, 25)
+    strategy = Keyword.get(opts, :strategy, :default)
 
-    with {:ok, result} <-
-           @api.get_object_edge("live_videos", fb_page_id, access_token,
-             fields: fields,
-             limit: limit
-           ),
-         %{"data" => videos0} <- result,
-         videos1 <- Enum.map(videos0, &format_video_map/1),
-         {:ok, video2} <- append_images(access_token, videos1) do
-      upsert_videos(page.fb_page_id, video2)
-    end
+    do_fetch_video(strategy, page, fields)
   end
 
   @doc """
@@ -102,6 +92,9 @@ defmodule ZaZaar.Fb do
     end
   end
 
+  # NOTE This function probably should be rewrite using Ecto.Repo.insert_all
+  # with upsert option
+  # https://hexdocs.pm/ecto/Ecto.Repo.html#c:insert_all/3-upserts
   defp upsert_videos(fb_page_id, video_maps) do
     fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
     current_videos = get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
@@ -143,20 +136,28 @@ defmodule ZaZaar.Fb do
     |> Repo.all()
   end
 
-  defp append_images(_, []), do: {:ok, []}
+  defp do_fetch_video(:default, page, fields) do
+    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
-  defp append_images(access_token, videos) do
-    with post_obj_ids <- Enum.map(videos, & &1.post_id),
-         {:ok, datum} <- @api.get_edge_objects("", post_obj_ids, access_token, fields: "picture"),
-         image_list <- Enum.map(datum, fn {k, %{"picture" => img_url}} -> {k, img_url} end) do
-      videos1 =
-        Enum.map(videos, fn v ->
-          {_k, img_url} = Enum.find(image_list, fn {k, _} -> v.post_id == k end)
-          Map.put(v, :image_url, img_url)
-        end)
-
-      {:ok, videos1}
+    with {:ok, %{"data" => videos0}} <-
+           @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
+         videos1 <- Enum.map(videos0, &format_video_map/1) do
+      upsert_videos(fb_page_id, videos1)
     end
+  end
+
+  defp do_fetch_video(:all, page, fields) do
+    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
+
+    result =
+      @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields)
+      |> @api.stream
+      |> Stream.map(&format_video_map/1)
+      |> Stream.map(&upsert_videos(fb_page_id, [&1]))
+      |> Enum.map(fn {_, v} -> v end)
+      |> List.flatten()
+
+    {:ok, result}
   end
 
   defp format_page_map(raw) do
@@ -185,7 +186,8 @@ defmodule ZaZaar.Fb do
   end
 
   defp format_video_map(video) do
-    [_, page_id, _, video_id, _] = String.split(video["permalink_url"], "/")
+    video_id = video["video"]["id"]
+    [_, page_id, _, _, _] = String.split(video["permalink_url"], "/")
 
     status =
       case video["status"] do
@@ -194,11 +196,13 @@ defmodule ZaZaar.Fb do
       end
 
     %{
-      creation_time: video["creation_time"],
+      creation_time:
+        video["creation_time"] |> NaiveDateTime.from_iso8601!() |> NaiveDateTime.truncate(:second),
       description: video["description"],
       embed_html: video["embed_html"],
+      image_url: video["video"]["picture"],
       permalink_url: "https://www.facebook.com" <> video["permalink_url"],
-      post_id: page_id <> "_" <> video_id,
+      post_id: "#{page_id}_#{video_id}",
       title: video["title"],
       fb_video_id: video_id,
       fb_status: status
