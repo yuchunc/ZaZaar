@@ -1,6 +1,8 @@
 defmodule ZaZaar.Fb do
   use ZaZaar, :context
 
+  import ZaZaar.EctoUtil
+
   alias ZaZaar.Fb
   alias Fb.Video
 
@@ -13,13 +15,18 @@ defmodule ZaZaar.Fb do
     "embed_html",
     "permalink_url",
     "creation_time",
-    "video",
+    "video{picture}",
     "description",
+    "status",
     "title"
   ]
 
   @comment_default_fields ["created_time", "from", "message", "parent{id}"]
 
+  @doc """
+  fetches and stores Facebook Pages
+  uses user access token
+  """
   @spec set_pages(User.t()) :: {:ok, [Page.t()]} | {:error, String.t()}
   def set_pages(user) do
     with {:ok, %{"accounts" => accounts}} <- @api.me("accounts", user.fb_access_token),
@@ -32,34 +39,29 @@ defmodule ZaZaar.Fb do
   end
 
   @doc """
-  Fetches and stores Facebook feeds that is a video.
-  Uses User Access Token.
+  fetches and stores Facebook live videos
+  Uses pages access token.
+
+  Please refer to
+  https://developers.facebook.com/docs/graph-api/reference/live-video/
+  for more details on how to use the endpoint
 
   Options:
-  - Field:
-    fields to fetch from Facebook
-    https://developers.facebook.com/docs/graph-api/reference/user/accounts/
-
-  - strategy:
-    strategy to perform on existing data
-    :update(defualt), :flush
+  - `:fields` fields to fetch from Facebook
+  - `:limit` limit per request
+  - `:strategy` can be :default or :all, :default will fetch only 25, :all will attempt to get all videos
 
   NOTE possibly use tags for identify 團購
   """
   @spec fetch_videos(Page.t(), keyword) :: {:ok, [Video.t()]} | {:error, String.t()}
   def fetch_videos(%Page{} = page, opts \\ []) do
-    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
-
     fields =
       Keyword.get(opts, :fields, @video_default_fields)
       |> Enum.join(",")
 
-    with {:ok, %{"data" => videos0}} <-
-           @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
-         videos1 <- Enum.map(videos0, &format_video_map/1),
-         {:ok, video2} <- append_images(access_token, videos1) do
-      upsert_videos(page.fb_page_id, video2)
-    end
+    strategy = Keyword.get(opts, :strategy, :default)
+
+    do_fetch_video(strategy, page, fields)
   end
 
   @doc """
@@ -90,6 +92,9 @@ defmodule ZaZaar.Fb do
     end
   end
 
+  # NOTE This function probably should be rewrite using Ecto.Repo.insert_all
+  # with upsert option
+  # https://hexdocs.pm/ecto/Ecto.Repo.html#c:insert_all/3-upserts
   defp upsert_videos(fb_page_id, video_maps) do
     fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
     current_videos = get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
@@ -113,34 +118,46 @@ defmodule ZaZaar.Fb do
     {:ok, videos}
   end
 
-  defp get_videos(attrs), do: get_videos(Video, attrs)
+  @doc """
+  Gets a list of videos from DB
+  """
+  @spec get_videos(attrs :: Video.t() | keyword) :: [Video.t()]
+  def get_videos(attrs), do: get_videos(attrs, [])
 
-  defp get_videos(query, []), do: Repo.all(query)
+  @spec get_videos(attrs :: Video.t() | keyword, opts :: keyword) :: [Video.t()]
+  def get_videos(%Page{} = page, opts), do: get_videos([fb_page_id: page.fb_page_id], opts)
 
-  defp get_videos(query, [{k, values} | t]) when is_list(values) do
-    query
-    |> where([v], field(v, ^k) in ^values)
-    |> get_videos(t)
+  def get_videos(attrs, opts) do
+    order_by = Keyword.get(opts, :order_by, [])
+
+    Video
+    |> get_many_query(attrs)
+    |> order_by(^order_by)
+    |> Repo.all()
   end
 
-  defp get_videos(query, [{k, value} | t]) do
-    query
-    |> where([v], field(v, ^k) == ^value)
-    |> get_videos(t)
-  end
+  defp do_fetch_video(:default, page, fields) do
+    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
-  defp append_images(access_token, videos) do
-    with post_obj_ids <- Enum.map(videos, & &1.post_id),
-         {:ok, datum} <- @api.get_edge_objects("", post_obj_ids, access_token, fields: "picture"),
-         image_list <- Enum.map(datum, fn {k, %{"picture" => img_url}} -> {k, img_url} end) do
-      videos1 =
-        Enum.map(videos, fn v ->
-          {_k, img_url} = Enum.find(image_list, fn {k, _} -> v.post_id == k end)
-          Map.put(v, :image_url, img_url)
-        end)
-
-      {:ok, videos1}
+    with {:ok, %{"data" => videos0}} <-
+           @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
+         videos1 <- Enum.map(videos0, &format_video_map/1) do
+      upsert_videos(fb_page_id, videos1)
     end
+  end
+
+  defp do_fetch_video(:all, page, fields) do
+    %Page{access_token: access_token, fb_page_id: fb_page_id} = page
+
+    result =
+      @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields)
+      |> @api.stream
+      |> Stream.map(&format_video_map/1)
+      |> Stream.map(&upsert_videos(fb_page_id, [&1]))
+      |> Enum.map(fn {_, v} -> v end)
+      |> List.flatten()
+
+    {:ok, result}
   end
 
   defp format_page_map(raw) do
@@ -169,16 +186,26 @@ defmodule ZaZaar.Fb do
   end
 
   defp format_video_map(video) do
-    [_, page_id, _, video_id, _] = String.split(video["permalink_url"], "/")
+    video_id = video["video"]["id"]
+    [_, page_id, _, _, _] = String.split(video["permalink_url"], "/")
+
+    status =
+      case video["status"] do
+        "LIVE" -> :live
+        _ -> :vod
+      end
 
     %{
-      creation_time: video["creation_time"],
+      creation_time:
+        video["creation_time"] |> NaiveDateTime.from_iso8601!() |> NaiveDateTime.truncate(:second),
       description: video["description"],
       embed_html: video["embed_html"],
-      permalink_url: video["permalink_url"],
-      post_id: page_id <> "_" <> video_id,
+      image_url: video["video"]["picture"],
+      permalink_url: "https://www.facebook.com" <> video["permalink_url"],
+      post_id: "#{page_id}_#{video_id}",
       title: video["title"],
-      fb_video_id: video_id
+      fb_video_id: video_id,
+      fb_status: status
     }
   end
 end

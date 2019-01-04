@@ -44,4 +44,15 @@ defmodule ZaZaarWeb.LayoutView do
   end
 
   def flash_html(_), do: nil
+
+  def nav_logo_path(conn) do
+    user = current_user(conn)
+    page = current_page(conn)
+
+    case {user, page} do
+      {%User{}, %Page{}} -> "/m"
+      {%User{}, _} -> "/config/pages"
+      _ -> "/"
+    end
+  end
 end

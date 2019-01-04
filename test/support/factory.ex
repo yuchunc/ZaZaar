@@ -33,7 +33,8 @@ defmodule Factory do
       image_url: Faker.Internet.url(),
       fb_page_id: random_obj_id(),
       permalink_url: Faker.Internet.url(),
-      fb_video_id: random_obj_id()
+      fb_video_id: random_obj_id(),
+      fb_status: :vod
     }
   end
 
