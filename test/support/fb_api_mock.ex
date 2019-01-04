@@ -6,4 +6,6 @@ defmodule ZaZaar.FbApiMock do
   def get_object_edge(_, _, _, _), do: {:error, %{}}
 
   def get_edge_objects(_, _, _, _), do: {:error, %{}}
+
+  def stream(_, _, _, _), do: []
 end
