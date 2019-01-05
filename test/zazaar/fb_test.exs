@@ -4,7 +4,9 @@ defmodule ZaZaar.FbTest do
   import Mox
 
   alias ZaZaar.Fb
-  alias Fb.{Video, Comment}
+
+  alias ZaZaar.Transcript
+  alias Transcript.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.Page

@@ -1,8 +1,7 @@
-defmodule ZaZaar.Fb.Video do
+defmodule ZaZaar.Transcript.Video do
   use ZaZaar, :schema
 
-  alias ZaZaar
-  alias ZaZaar.Fb
+  alias ZaZaar.Transcript
 
   @type t :: %__MODULE__{
           creation_time: NaiveDateTime.t(),
@@ -31,7 +30,7 @@ defmodule ZaZaar.Fb.Video do
     field :title, :string
     field :completed_at, :naive_datetime
 
-    embeds_many :comments, Fb.Comment
+    embeds_many :comments, Transcript.Comment
 
     timestamps()
   end
