@@ -18,12 +18,12 @@
 
       <!-- Filters -->
       <div class="column is-one-third is-one-quarter-desktop is-paddingless">
-        <div class="card">
+        <div class="card order__filters">
           <header class="card-header">
             <p class="card-header-title">篩選條件</p>
             <div class="card-header-icon">
               <span class="icon has-text-grey-lighter">
-                <i class="fas fa-filter" aria-hidden="true"></i>
+                <i class="fas fa-xs fa-filter" aria-hidden="true"></i>
               </span>
             </div>
           </header>
@@ -100,10 +100,30 @@
         <table class="table main-table is-striped is-hoverable has-margin-left">
           <thead class="main-table__header">
             <tr>
-              <th width="20%"><%= gettext "Stream Date" %></th>
-              <th width="25%"><%= gettext "Name" %></th>
-              <th width="15%"><%= gettext "Amount" %></th>
-              <th width="15%"><%= gettext "Status" %></th>
+              <th width="20%">
+                <%= gettext "Stream Date" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="25%">
+                <%= gettext "Name" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="15%">
+                <%= gettext "Amount" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="15%">
+                <%= gettext "Status" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
               <th width="25%"></th>
             </tr>
           </thead>
