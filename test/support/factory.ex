@@ -1,7 +1,7 @@
 defmodule Factory do
   use ExMachina.Ecto, repo: ZaZaar.Repo
 
-  alias ZaZaar.{Account, Fb}
+  alias ZaZaar.{Account, Transcript}
 
   # ====== Account =========
   @valid_tasks ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
@@ -25,9 +25,9 @@ defmodule Factory do
     }
   end
 
-  # ====== Account =========
+  # ====== Transcript =========
   def video_factory do
-    %Fb.Video{
+    %Transcript.Video{
       creation_time: NaiveDateTime.utc_now(),
       embed_html: "<iframe src=#{Faker.Internet.url()}></iframe>",
       image_url: Faker.Internet.url(),

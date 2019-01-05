@@ -1,4 +1,4 @@
-defmodule ZaZaar.Fb.Comment do
+defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
   @primary_key false

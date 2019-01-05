@@ -4,7 +4,9 @@ defmodule ZaZaar.Fb do
   import ZaZaar.EctoUtil
 
   alias ZaZaar.Fb
-  alias Fb.Video
+
+  alias ZaZaar.Transcript
+  alias Transcript.Video
 
   alias ZaZaar.Account
   alias Account.{User, Page}
