@@ -1,3 +1,214 @@
-<h1>Order List</h1>
+<section class="section order">
 
-<%= render ZaZaarWeb.OrderView, "_order_list.html" %>
+  <div class="container">
+
+    <header class="has-margin-bottom-sm">
+
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="/m">首頁</a></li>
+          <li class="is-active"><a href="#" aria-current="page">訂單管理</a></li>
+        </ul>
+      </nav>
+
+      <h1 class="title">訂單管理</h1>
+    </header>
+
+    <div class="columns is-marginless">
+
+      <!-- Filters -->
+      <div class="column is-one-third is-one-quarter-desktop is-paddingless">
+        <div class="card order__filters">
+          <header class="card-header">
+            <p class="card-header-title">篩選條件</p>
+            <div class="card-header-icon">
+              <span class="icon has-text-grey-lighter">
+                <i class="fas fa-xs fa-filter" aria-hidden="true"></i>
+              </span>
+            </div>
+          </header>
+          <div class="card-content">
+
+            <!-- By Name -->
+            <label class="label has-text-grey-light">搜尋買家</label>
+            <div class="field has-addons is-fullwidth">
+              <div class="control is-expanded">
+                <input class="input" type="text" placeholder="輸入買家名稱">
+              </div>
+              <div class="control">
+                <a class="button">搜尋</a>
+              </div>
+            </div>
+
+            <hr>
+
+            <!-- By Stream Date Range -->
+            <label class="label has-text-grey-light">直播時間</label>
+            <div class="field">
+              <div class="control has-icons-left">
+                <span class="select is-fullwidth">
+                  <select>
+                    <option selected>未選擇</option>
+                    <option>Today</option>
+                    <option>Yesterday</option>
+                    <option>This week</option>
+                    <option>Last week</option>
+                    <option>This month</option>
+                    <option>Last month</option>
+                    <option>This year</option>
+                    <option>Last year</option>
+                  </select>
+                </span>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+              </div>
+            </div>
+
+            <hr>
+
+            <!-- By Order Status -->
+            <label class="label has-text-grey-light">訂單狀態</label>
+            <div class="field">
+              <div class="control">
+                <label class="radio is-block is-marginless">
+                  <input type="radio" name="answer" checked="checked">
+                  全部
+                </label>
+                <label class="radio is-block is-marginless">
+                  <input type="radio" name="answer">
+                  已通知買家
+                </label>
+                <label class="radio is-block is-marginless">
+                  <input type="radio" name="answer">
+                  已完成
+                </label>
+                <label class="radio is-block is-marginless">
+                  <input type="radio" name="answer">
+                  已取消
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Table -->
+      <div class="column is-paddingless">
+
+        <table class="table main-table is-striped is-hoverable has-margin-left">
+          <thead class="main-table__header">
+            <tr>
+              <th width="20%">
+                <%= gettext "Stream Date" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="25%">
+                <%= gettext "Name" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="15%">
+                <%= gettext "Amount" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="15%">
+                <%= gettext "Status" %>
+                <span class="icon">
+                  <i class="fas fa-caret-down" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th width="25%"></th>
+            </tr>
+          </thead>
+
+          <tbody class="main-table__body" id="items-table-body">
+
+            <!-- 示意：不同狀態的樣式 -->
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <!-- 買家 Facebook 個人頁連結？ -->
+              <td><a class="is-link" href="#">Statuse: Notified</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已通知買家</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button is-hover-success">完成</a>
+                <a class="button is-hover-danger">作廢</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <td><a class="is-link" href="#">Statuse: Completed</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已完成</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button" disabled>完成</a>
+                <a class="button" disabled>作廢</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <td><a class="is-link" href="#">Statuse: Void</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已取消</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button" disabled>完成</a>
+                <a class="button is-hover-success">恢復</a>
+              </td>
+            </tr>
+            <!-- 示意：不同狀態的樣式 -->
+
+            <%= for x <- 4..15 do %>
+            <tr>
+              <td>2018年12月26日下午<%= x %>:33</td>
+              <td><a class="is-link" href="#">Buyer Name <%= x %></a></td>
+              <td><%= x %>000</td>
+              <td>
+                <span class="tag is-medium">已通知買家</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href=<%= "/o/#{x}" %>>檢視明細</a>
+                <a class="button is-hover-success">完成</a>
+                <a class="button is-hover-danger">作廢</a>
+              </td>
+            </tr>
+
+            <% end %>
+
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <nav class="pagination is-centered has-margin-top-md" role="navigation" aria-label="pagination">
+      <a class="pagination-previous" disabled>Previous</a>
+      <a class="pagination-next">Next page</a>
+      <ul class="pagination-list">
+        <li><a class="pagination-link is-current" aria-label="Goto page 1" aria-current="page">1</a></li>
+        <li><a class="pagination-link" aria-label="Goto page 2">2</a></li>
+        <li><a class="pagination-link" aria-label="Goto page 3">3</a></li>
+        <li><a class="pagination-link" aria-label="Goto page 4">4</a></li>
+        <li><a class="pagination-link" aria-label="Goto page 5">5</a></li>
+      </ul>
+    </nav>
+
+  </div>
+</section>

@@ -6,7 +6,7 @@
 
       <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
-          <li><a href="/m">直播列表</a></li>
+          <li><a href="/m">首頁</a></li>
           <li class="is-active"><a href="#" aria-current="page">12月16日下午<%= @id %>:06 (直播時間)</a></a></li>
         </ul>
       </nav>
@@ -80,7 +80,7 @@
         </div>
         <!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
 
-        <table class="table main-table is-striped is-hoverable">
+        <table class="table main-table is-striped is-hoverable has-margin-left">
           <thead class="main-table__header">
             <tr>
               <th width="10%"><%= gettext "Time" %></th>
