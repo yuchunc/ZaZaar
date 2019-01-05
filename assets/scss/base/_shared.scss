@@ -36,6 +36,9 @@ a {
   }
 }
 
+.checkbox, .radio {
+  line-height: 1.8;
+}
 
 .landing {
   z-index: 31;
@@ -86,6 +89,10 @@ a {
 
 .main-table {
   width: 100%;
+
+  &.has-margin-left {
+    margin-left: 2rem;
+  }
 
   &__body {
     td {
