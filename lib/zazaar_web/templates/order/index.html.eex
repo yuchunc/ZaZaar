@@ -1,3 +1,107 @@
-<h1>Order List</h1>
+<section class="section order">
 
-<%= render ZaZaarWeb.OrderView, "_order_list.html" %>
+  <div class="container">
+
+    <header class="has-margin-bottom-md">
+      <h1 class="title">訂單管理</h1>
+    </header>
+
+    <div class="columns is-marginless">
+
+      <!-- Stream Table -->
+      <div class="column is-paddingless">
+
+        <table class="table main-table is-striped is-hoverable">
+          <thead class="main-table__header">
+            <tr>
+              <th width="20%"><%= gettext "Stream Date" %></th>
+              <th width="25%"><%= gettext "Name" %></th>
+              <th width="15%"><%= gettext "Amount" %></th>
+              <th width="15%"><%= gettext "Status" %></th>
+              <th width="25%"></th>
+            </tr>
+          </thead>
+
+          <tbody class="main-table__body" id="items-table-body">
+
+            <!-- 示意：不同狀態的樣式 -->
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <!-- 買家 Facebook 個人頁連結？ -->
+              <td><a class="is-link" href="#">Statuse: Notified</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已通知買家</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button is-hover-success">完成</a>
+                <a class="button is-hover-danger">作廢</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <td><a class="is-link" href="#">Statuse: Completed</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已完成</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button" disabled>完成</a>
+                <a class="button" disabled>作廢</a>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2018年12月26日下午3:33</td>
+              <td><a class="is-link" href="#">Statuse: Void</a></td>
+              <td>3000</td>
+              <td>
+                <span class="tag is-medium">已取消</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button" disabled>完成</a>
+                <a class="button is-hover-success">恢復</a>
+              </td>
+            </tr>
+            <!-- 示意：不同狀態的樣式 -->
+
+            <%= for x <- 4..15 do %>
+            <tr>
+              <td>2018年12月26日下午<%= x %>:33</td>
+              <td><a class="is-link" href="#">Buyer Name <%= x %></a></td>
+              <td><%= x %>000</td>
+              <td>
+                <span class="tag is-medium">已通知買家</span>
+              </td>
+              <td>
+                <a class="button is-hover-primary" href=<%= "/o/#{x}" %>>檢視明細</a>
+                <a class="button is-hover-success">完成</a>
+                <a class="button is-hover-danger">作廢</a>
+              </td>
+            </tr>
+
+            <% end %>
+
+          </tbody>
+        </table>
+
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+          <a class="pagination-previous" disabled>Previous</a>
+          <a class="pagination-next">Next page</a>
+          <ul class="pagination-list">
+            <li><a class="pagination-link is-current" aria-label="Goto page 1" aria-current="page">1</a></li>
+            <li><a class="pagination-link" aria-label="Goto page 2">2</a></li>
+            <li><a class="pagination-link" aria-label="Goto page 3">3</a></li>
+            <li><a class="pagination-link" aria-label="Goto page 4">4</a></li>
+            <li><a class="pagination-link" aria-label="Goto page 5">5</a></li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+</section>
