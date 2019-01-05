@@ -22,8 +22,6 @@ defmodule ZaZaar.Repo.Migrations.CreateVideos do
 
     create index(:videos, [:fb_page_id])
 
-    create unique_index(:videos, [:fb_page_id, :fb_video_id],
-             name: :videos_page_id_fb_video_id_index
-           )
+    create unique_index(:videos, [:fb_video_id])
   end
 end

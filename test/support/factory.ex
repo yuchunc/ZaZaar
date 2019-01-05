@@ -27,13 +27,16 @@ defmodule Factory do
 
   # ====== Transcript =========
   def video_factory do
+    page_id = random_obj_id()
+    vid_id = random_obj_id()
+
     %Transcript.Video{
-      creation_time: NaiveDateTime.utc_now(),
+      creation_time: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       embed_html: "<iframe src=#{Faker.Internet.url()}></iframe>",
-      image_url: Faker.Internet.url(),
-      fb_page_id: random_obj_id(),
-      permalink_url: Faker.Internet.url(),
-      fb_video_id: random_obj_id(),
+      image_url: "https://fbcdn.net/#{page_id}_#{vid_id}_n.jpg",
+      fb_page_id: page_id,
+      permalink_url: "/" <> page_id <> "/videos/" <> vid_id,
+      fb_video_id: vid_id,
       fb_status: :vod
     }
   end

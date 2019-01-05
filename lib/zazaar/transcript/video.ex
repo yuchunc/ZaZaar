@@ -26,7 +26,6 @@ defmodule ZaZaar.Transcript.Video do
     field :fb_status, FbLiveVideoStatus
     field :fb_page_id, :string
     field :fb_video_id, :string
-    field :post_obj_id, :string, virtual: true
     field :title, :string
     field :completed_at, :naive_datetime
 
@@ -56,5 +55,6 @@ defmodule ZaZaar.Transcript.Video do
       :fb_status
     ])
     |> validate_inclusion(:fb_status, FbLiveVideoStatus.__valid_values__())
+    |> unique_constraint(:fb_video_id)
   end
 end
