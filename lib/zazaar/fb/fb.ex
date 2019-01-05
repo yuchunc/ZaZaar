@@ -99,7 +99,7 @@ defmodule ZaZaar.Fb do
   # https://hexdocs.pm/ecto/Ecto.Repo.html#c:insert_all/3-upserts
   defp upsert_videos(fb_page_id, video_maps) do
     fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
-    current_videos = get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
+    current_videos = Transcript.get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
 
     videos =
       Enum.map(video_maps, fn vm ->
@@ -118,24 +118,6 @@ defmodule ZaZaar.Fb do
       end)
 
     {:ok, videos}
-  end
-
-  @doc """
-  Gets a list of videos from DB
-  """
-  @spec get_videos(attrs :: Video.t() | keyword) :: [Video.t()]
-  def get_videos(attrs), do: get_videos(attrs, [])
-
-  @spec get_videos(attrs :: Video.t() | keyword, opts :: keyword) :: [Video.t()]
-  def get_videos(%Page{} = page, opts), do: get_videos([fb_page_id: page.fb_page_id], opts)
-
-  def get_videos(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
-    Video
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
-    |> Repo.all()
   end
 
   defp do_fetch_video(:default, page, fields) do
