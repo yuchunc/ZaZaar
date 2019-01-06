@@ -3,7 +3,7 @@
 @import "./fontawesome-pro-5.5.0-web/scss/fontawesome.scss";
 
 // Import the initial variables
-@import "node_modules/bulma//sass/utilities/initial-variables";
+@import "node_modules/bulma/sass/utilities/initial-variables";
 
 // Overwrite Bulma variables
 
@@ -21,7 +21,7 @@ $navbar-breakpoint: $tablet;
 $panel-heading-background-color: $c-zazaar;
 
 //  Import the rest of Bulma
-@import "./node_modules/bulma/bulma.sass";
+@import "bulma";
 
 @import "base/shared";
 
