@@ -15,8 +15,8 @@ defmodule ZaZaarWeb.StreamController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    render(conn, "show.html", id: id)
+  def show(conn, %{"id" => fb_video_id}) do
+    render(conn, "show.html", id: fb_video_id)
   end
 
   # TODO
