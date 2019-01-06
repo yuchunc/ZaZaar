@@ -28,7 +28,7 @@
         </div>
       </div>
       <footer class="card-footer">
-        <a class="card-footer-item has-text-hover-z" href="/s/<%= @video.id %>">
+        <a class="card-footer-item has-text-hover-z" href="/s/<%= @video.fb_video_id %>">
           查看訂單
         </a>
         <a class="card-footer-item has-text-hover-z" href=<%= @video.permalink_url %> target="_blank">
