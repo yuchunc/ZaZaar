@@ -19,7 +19,7 @@ defmodule ZaZaar.Fb do
     "title"
   ]
 
-  @comment_default_fields ["created_time", "from", "message", "parent{id}"]
+  @comment_default_fields ["created_time", "from{picture,name}", "message", "parent{id}"]
 
   @doc """
   fetches and stores Facebook Pages
@@ -134,6 +134,7 @@ defmodule ZaZaar.Fb do
         object_id: c["id"],
         parent_object_id: c["parent"]["id"],
         commenter_fb_id: c["from"]["id"],
+        commenter_picture: c["from"]["picture"]["data"]["url"],
         commenter_fb_name: c["from"]["name"]
       }
     end)

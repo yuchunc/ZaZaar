@@ -13,6 +13,7 @@ defmodule ZaZaar.Transcript.Comment do
 
     # Commenter Info
     field :commenter_fb_id, :string
+    field :commenter_picture, :string
     field :commenter_fb_name, :string
 
     timestamps()
@@ -26,6 +27,7 @@ defmodule ZaZaar.Transcript.Comment do
       :object_id,
       :parent_object_id,
       :commenter_fb_id,
+      :commenter_picture,
       :commenter_fb_name
     ])
     |> validate_required([
