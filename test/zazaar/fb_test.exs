@@ -104,12 +104,18 @@ defmodule ZaZaar.FbTest do
 
         {:ok, resp}
       end)
+      |> expect(:stream, fn {:ok, %{"data" => comments}} ->
+        comments ++ comments
+      end)
 
       assert {:ok, result} = Fb.fetch_comments(video, access_token)
       assert result.__struct__ == Video
+
       comments = result.comments
-      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count)
-      assert comments |> Enum.map(& &1.message) == Enum.map(1..count, &to_string/1)
+      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count * 2)
+
+      assert comments |> Enum.map(& &1.message) ==
+               Enum.map(1..count, &to_string/1) |> List.duplicate(2) |> List.flatten()
     end
   end
 end
