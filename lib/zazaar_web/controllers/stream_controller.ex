@@ -16,7 +16,8 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   def show(conn, %{"id" => fb_video_id}) do
-    render(conn, "show.html", id: fb_video_id)
+    video = %Video{} = Transcript.get_video(fb_video_id)
+    render(conn, "show.html", video: video)
   end
 
   # TODO
