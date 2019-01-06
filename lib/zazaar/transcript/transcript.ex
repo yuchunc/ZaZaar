@@ -7,6 +7,18 @@ defmodule ZaZaar.Transcript do
   alias Transcript.Video
 
   @doc """
+  Get video by id or fb_video_id
+  """
+  @spec get_video(id_or_fb_video_id :: String.t()) :: nil | %Video{}
+  def get_video(<<_::288>> = id), do: Repo.get(Video, id)
+
+  def get_video(fb_vid_id) do
+    Video
+    |> where(fb_video_id: ^fb_vid_id)
+    |> Repo.one()
+  end
+
+  @doc """
   Gets a list of videos from DB
   """
   @spec get_videos(attrs :: %{fb_page_id: String.t()} | keyword) :: [Video.t()]
@@ -70,4 +82,6 @@ defmodule ZaZaar.Transcript do
         input_map[:updated_at] || NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
   end
+
+  # TODO Add update video here
 end
