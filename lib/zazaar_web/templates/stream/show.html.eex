@@ -49,6 +49,7 @@
         <p class="has-text-weight-bold has-text-grey-light has-margin-bottom-sm">
           <%= gettext "Comments" %>
         </p>
+
         <div class="comment-area">
           <%= render_many @video.comments, @view_module, "comment.html", as: :comment %>
         </div>
