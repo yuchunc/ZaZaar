@@ -59,7 +59,7 @@ defmodule ZaZaar.Fb do
 
     strategy = Keyword.get(opts, :strategy, :default)
 
-    do_fetch_video(strategy, page, fields)
+    do_fetch_videos(strategy, page, fields)
   end
 
   @doc """
@@ -78,17 +78,16 @@ defmodule ZaZaar.Fb do
 
     filter = Keyword.get(opts, :filter, :stream)
     summary = Keyword.get(opts, :summary, false)
-    limit = Keyword.get(opts, :limit, 9_999_999)
+    limit = Keyword.get(opts, :limit, 300)
 
     with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
-         {:ok, result} <-
-           @api.get_object_edge("comments", video.fb_video_id, access_token, req_opts),
-         comments <- Map.get(result, "data", []) |> cast_comments do
+         fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
+         comments <- cast_comments(fb_comments) do
       Transcript.update_video(video, comments: comments)
     end
   end
 
-  defp do_fetch_video(:default, page, fields) do
+  defp do_fetch_videos(:default, page, fields) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
     with {:ok, %{"data" => videos0}} <-
@@ -98,18 +97,21 @@ defmodule ZaZaar.Fb do
     end
   end
 
-  defp do_fetch_video(:all, page, fields) do
+  defp do_fetch_videos(:all, page, fields) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
-    result =
+    result_maps =
       @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields)
       |> @api.stream
-      |> Stream.map(&format_video_map/1)
-      |> Stream.map(&Transcript.upsert_videos(fb_page_id, [&1]))
-      |> Enum.map(fn {_, v} -> v end)
-      |> List.flatten()
+      |> Enum.map(&format_video_map/1)
 
-    {:ok, result}
+    Transcript.upsert_videos(fb_page_id, result_maps)
+  end
+
+  defp do_fetch_comments(vid_id, access_token, opts \\ []) do
+    @api.get_object_edge("comments", vid_id, access_token, opts)
+    |> @api.stream
+    |> Enum.into([])
   end
 
   defp format_page_map(raw) do
