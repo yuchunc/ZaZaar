@@ -73,6 +73,20 @@ defmodule ZaZaar.Transcript do
     {:ok, get_videos(fb_video_id: video_ids)}
   end
 
+  @doc """
+  Update a Video
+  """
+  @spec update_video(video :: %Video{}, params :: keyword | map) ::
+          {:ok, %Video{}} | {:error, any}
+  def update_video(video, params) when is_list(params),
+    do: update_video(video, Enum.into(params, %{}))
+
+  def update_video(%Video{} = video, params) do
+    video
+    |> Video.changeset(params)
+    |> Repo.update()
+  end
+
   defp prep_video_upsert_map(input_map) do
     Map.merge(input_map, %{
       id: input_map[:id] || Ecto.UUID.generate(),

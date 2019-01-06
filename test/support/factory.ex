@@ -41,6 +41,17 @@ defmodule Factory do
     }
   end
 
+  def comment_factory do
+    %Transcript.Comment{
+      message: Faker.Lorem.sentence(),
+      created_time: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+      object_id: random_obj_id() <> "_" <> random_obj_id(),
+      commenter_fb_id: random_obj_id(),
+      commenter_fb_name: Faker.Name.name()
+    }
+  end
+
+  # ====== Helper =========
   def random_obj_id() do
     Enum.random(100_000_000_000_000..599_999_999_999_999) |> to_string
   end
