@@ -10,7 +10,7 @@ defmodule ZaZaar.Fb.Api do
 
   defdelegate get_object_edge(edge, object_id, access_token, params \\ []), to: Facebook
 
-  defdelegate stream(api_request), to: ZaZaar.Fb.Stream, as: :new
+  defdelegate stream(api_request), to: Facebook.Stream, as: :new
 
   @spec get_object_edge(String.t(), object_ids, String.t()) :: resp
   def get_edge_objects(edge, object_ids, access_token) do
