@@ -63,9 +63,7 @@
                 <%= gettext "This comments has not been loaded." %>
               </div>
 
-              <a class="button is-primary is-large">
-                <%= gettext "Click Here to get Comments" %>
-              </a>
+              <%= link gettext("Click Here to get Comments"), to: "/s/#{@video.fb_video_id}", class: "button is-primary is-large", method: :patch %>
             </div>
           </div>
         <% else %>

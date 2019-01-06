@@ -15,6 +15,14 @@ defmodule ZaZaarWeb.StreamController do
     end
   end
 
+  def update(conn, %{"id" => fb_video_id}) do
+    with %Video{} = video <- Transcript.get_video(fb_video_id),
+         page <- current_page(conn),
+         {:ok, _} <- Fb.fetch_comments(video, page.access_token) do
+      redirect(conn, to: "/s/#{fb_video_id}")
+    end
+  end
+
   def show(conn, %{"id" => fb_video_id}) do
     video = %Video{} = Transcript.get_video(fb_video_id)
     render(conn, "show.html", video: video)
