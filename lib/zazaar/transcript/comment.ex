@@ -29,7 +29,6 @@ defmodule ZaZaar.Transcript.Comment do
       :commenter_fb_name
     ])
     |> validate_required([
-      :message,
       :created_time,
       :object_id,
       :commenter_fb_id,

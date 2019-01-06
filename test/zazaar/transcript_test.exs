@@ -52,9 +52,24 @@ defmodule ZaZaar.TranscriptTest do
         |> Map.from_struct()
         |> Map.delete(:__meta__)
 
-      vid_maps = [curr_vid_map, new_vid_map]
+      vid_maps = [Map.put(curr_vid_map, :id, nil), new_vid_map]
 
       assert {:ok, videos} = Transcript.upsert_videos(fb_page_id, vid_maps)
+      assert curr_vid_map.id in Enum.map(videos, & &1.id)
+    end
+  end
+
+  describe "update_video/2" do
+    test "update a video" do
+      vid = insert(:video)
+
+      comments =
+        build_list(5, :comment)
+        |> Enum.map(&Map.from_struct/1)
+
+      assert {:ok, res} = Transcript.update_video(vid, comments: comments)
+      refute Enum.empty?(res.comments)
+      assert res.comments |> Enum.count() == 5
     end
   end
 end
