@@ -22,6 +22,22 @@ defmodule ZaZaar.TranscriptTest do
     end
   end
 
+  describe "get_video/1" do
+    test "get video by id" do
+      vid = insert(:video)
+
+      assert result = %Video{} = Transcript.get_video(vid.id)
+      assert result.id == vid.id
+    end
+
+    test "get video by fb_video_id" do
+      vid = insert(:video)
+
+      assert result = %Video{} = Transcript.get_video(vid.fb_video_id)
+      assert result.id == vid.id
+    end
+  end
+
   describe "upsert_videos/2" do
     test "update or insert video accordingly" do
       fb_page_id = "foofoobarbar"
