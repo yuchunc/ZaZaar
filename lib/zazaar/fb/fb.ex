@@ -83,7 +83,7 @@ defmodule ZaZaar.Fb do
     with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
          fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
          comments <- cast_comments(fb_comments) do
-      Transcript.update_video(video, comments: comments)
+      Transcript.update_video(video, fetched_comments: comments)
     end
   end
 

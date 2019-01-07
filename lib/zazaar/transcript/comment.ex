@@ -4,9 +4,9 @@ defmodule ZaZaar.Transcript.Comment do
   @primary_key false
   embedded_schema do
     # Comment Info
+    field :object_id, :string, primary_key: true
     field :message, :string
     field :created_time, :naive_datetime
-    field :object_id, :string
 
     # Toplevel comment ID
     field :parent_object_id, :string
