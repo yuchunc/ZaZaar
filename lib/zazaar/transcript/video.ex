@@ -44,7 +44,6 @@ defmodule ZaZaar.Transcript.Video do
       :fb_status,
       :completed_at
     ])
-    |> cast_embed(:comments)
     |> validate_required([
       :embed_html,
       :permalink_url,

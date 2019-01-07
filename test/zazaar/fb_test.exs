@@ -105,7 +105,13 @@ defmodule ZaZaar.FbTest do
         {:ok, resp}
       end)
       |> expect(:stream, fn {:ok, %{"data" => comments}} ->
-        comments ++ comments
+        obj_id = comments |> List.first() |> Map.get("parent_id")
+
+        comments ++
+          Enum.map(1..count, fn msg ->
+            opts = [message: to_string(msg), parent_id: obj_id]
+            RespMock.comment(opts)
+          end)
       end)
 
       assert {:ok, result} = Fb.fetch_comments(video, access_token)

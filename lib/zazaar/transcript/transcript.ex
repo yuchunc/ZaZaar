@@ -4,7 +4,7 @@ defmodule ZaZaar.Transcript do
   import ZaZaar.EctoUtil
 
   alias ZaZaar.Transcript
-  alias Transcript.Video
+  alias Transcript.{Video, Comment}
 
   @doc """
   Get video by id or fb_video_id
@@ -81,9 +81,29 @@ defmodule ZaZaar.Transcript do
   def update_video(video, params) when is_list(params),
     do: update_video(video, Enum.into(params, %{}))
 
+  def update_video(video, %{fetched_comments: comment_maps} = params) do
+    new_comments =
+      Enum.reduce(comment_maps, [], fn cm, acc ->
+        case Enum.find(video.comments, &(&1.object_id == cm.object_id)) do
+          nil -> acc ++ [struct(Comment, cm)]
+          true -> acc
+        end
+      end)
+
+    params1 =
+      params
+      |> Map.delete(:fetched_comments)
+      |> Map.put(:new_comments, new_comments)
+
+    update_video(video, params1)
+  end
+
   def update_video(%Video{} = video, params) do
+    new_comments = Map.get(params, :new_comments, [])
+
     video
     |> Video.changeset(params)
+    |> Ecto.Changeset.put_embed(:comments, new_comments)
     |> Repo.update()
   end
 
@@ -96,6 +116,4 @@ defmodule ZaZaar.Transcript do
         input_map[:updated_at] || NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
   end
-
-  # TODO Add update video here
 end
