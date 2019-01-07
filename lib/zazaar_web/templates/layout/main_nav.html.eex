@@ -9,7 +9,12 @@
     <div id="main-navbar" class="navbar-menu is-marginless">
       <div class="navbar-start">
         <%= if page = current_page(@conn) do %>
-          <a href="/config/pages" class="navbar-item"> <%= page.name %> </a>
+          <%= link(to: "/config/pages", class: "navbar-item") do %>
+            <div class="button is-primary">
+              <span class="icon"><i class="fab fa-trello"></i></span>
+              <span>正在管理：<%= page.name %></span>
+            </div>
+          <% end %>
         <% end %>
       </div>
 
@@ -19,13 +24,13 @@
           <a class="navbar-item" href="/o"><%= gettext "Orders" %> (訂單管理)</a>
 
           <%= link(to: "/logout", class: "navbar-item", method: :delete) do %>
-            <div class="button is-primary is-inverted is-outlined"><%= gettext "Sign Out" %></div>
+            <span class="button is-primary is-inverted is-outlined"><%= gettext "Sign Out" %></span>
           <% end %>
 
         <% else %>
 
           <%= link(to: "/auth/facebook", class: "navbar-item") do %>
-            <div class="button is-primary is-inverted is-outlined"><%= gettext "Sign In" %></div>
+            <span class="button is-primary is-inverted is-outlined"><%= gettext "Sign In" %></span>
           <% end %>
 
         <% end %>
