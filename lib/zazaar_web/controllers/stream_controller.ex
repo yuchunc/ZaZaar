@@ -10,8 +10,9 @@ defmodule ZaZaarWeb.StreamController do
   def index(conn, params) do
     with page <- current_page(conn),
          strategy <- Map.get(params, "strategy", "default"),
-         {:ok, videos} <- fetch_and_get_videos(strategy, page) do
-      render(conn, "index.html", videos: videos, first_video: first_video(videos))
+         {:ok, videos} <- fetch_and_get_videos(strategy, page),
+         live_video <- Enum.find(videos, &(&1.fb_status == :live)) do
+      render(conn, "index.html", videos: videos, live_video: live_video)
     end
   end
 
