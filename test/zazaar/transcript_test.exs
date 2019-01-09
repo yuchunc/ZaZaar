@@ -112,4 +112,15 @@ defmodule ZaZaar.TranscriptTest do
       assert merch.title == new_title
     end
   end
+
+  describe "get_merchandises/1" do
+    test "gets a list of merchandise for the video" do
+      video = insert(:video)
+      insert_list(5, :merchandise, video: video)
+
+      assert merchs = Transcript.get_merchandises(video)
+      assert Enum.count(merchs) == 5
+      assert Enum.map(merchs, & &1.video_id) == List.duplicate(video.id, 5)
+    end
+  end
 end

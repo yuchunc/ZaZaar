@@ -108,6 +108,24 @@ defmodule ZaZaar.Transcript do
   end
 
   @doc """
+  gets a list of merchandises for video
+  """
+  @spec get_merchandises(attrs :: Video.t() | keyword | Ecto.UUID.t()) :: [Merchandise.t()]
+  def get_merchandises(attrs), do: get_merchandises(attrs, [])
+
+  @spec get_merchandises(attrs :: Video.t() | keyword | Ecto.UUID.t()) :: [Merchandise.t()]
+  def get_merchandises(video_id, opts) when is_binary(video_id),
+    do: get_merchandises(%{video_id: video_id}, opts)
+
+  def get_merchandises(%Video{} = video, opts), do: get_merchandises(%{video_id: video.id}, opts)
+
+  def get_merchandises(attrs, _opts) do
+    Merchandise
+    |> get_many_query(attrs)
+    |> Repo.all()
+  end
+
+  @doc """
   Update or Insert a Merchandise
   """
   @spec upsert_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
