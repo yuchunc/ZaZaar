@@ -1,8 +1,7 @@
-defmodule ZaZaar.Fb.Video do
+defmodule ZaZaar.Transcript.Video do
   use ZaZaar, :schema
 
-  alias ZaZaar
-  alias ZaZaar.Fb
+  alias ZaZaar.Transcript
 
   @type t :: %__MODULE__{
           creation_time: NaiveDateTime.t(),
@@ -27,11 +26,10 @@ defmodule ZaZaar.Fb.Video do
     field :fb_status, FbLiveVideoStatus
     field :fb_page_id, :string
     field :fb_video_id, :string
-    field :post_obj_id, :string, virtual: true
     field :title, :string
     field :completed_at, :naive_datetime
 
-    embeds_many :comments, Fb.Comment
+    embeds_many :comments, Transcript.Comment
 
     timestamps()
   end
@@ -46,7 +44,6 @@ defmodule ZaZaar.Fb.Video do
       :fb_status,
       :completed_at
     ])
-    |> cast_embed(:comments)
     |> validate_required([
       :embed_html,
       :permalink_url,
@@ -57,5 +54,6 @@ defmodule ZaZaar.Fb.Video do
       :fb_status
     ])
     |> validate_inclusion(:fb_status, FbLiveVideoStatus.__valid_values__())
+    |> unique_constraint(:fb_video_id)
   end
 end

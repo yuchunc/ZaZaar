@@ -95,7 +95,9 @@ defmodule ZaZaarWeb do
       alias ZaZaar.Auth
 
       alias ZaZaar.Fb
-      alias Fb.Video
+
+      alias ZaZaar.Transcript
+      alias Transcript.Video
 
       alias ZaZaar.Account
       alias Account.{User, Page}

@@ -1,10 +1,8 @@
 defmodule ZaZaar.Fb do
   use ZaZaar, :context
 
-  import ZaZaar.EctoUtil
-
-  alias ZaZaar.Fb
-  alias Fb.Video
+  alias ZaZaar.Transcript
+  alias Transcript.Video
 
   alias ZaZaar.Account
   alias Account.{User, Page}
@@ -21,7 +19,7 @@ defmodule ZaZaar.Fb do
     "title"
   ]
 
-  @comment_default_fields ["created_time", "from", "message", "parent{id}"]
+  @comment_default_fields ["created_time", "from{picture,name}", "message", "parent{id}"]
 
   @doc """
   fetches and stores Facebook Pages
@@ -61,7 +59,7 @@ defmodule ZaZaar.Fb do
 
     strategy = Keyword.get(opts, :strategy, :default)
 
-    do_fetch_video(strategy, page, fields)
+    do_fetch_videos(strategy, page, fields)
   end
 
   @doc """
@@ -80,84 +78,40 @@ defmodule ZaZaar.Fb do
 
     filter = Keyword.get(opts, :filter, :stream)
     summary = Keyword.get(opts, :summary, false)
-    limit = Keyword.get(opts, :limit, 9_999_999)
+    limit = Keyword.get(opts, :limit, 300)
 
     with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
-         {:ok, result} <-
-           @api.get_object_edge("comments", video.fb_video_id, access_token, req_opts),
-         comments <- Map.get(result, "data", []) |> cast_comments,
-         video_map <- Map.from_struct(video) |> Map.put(:comments, comments),
-         {:ok, [video1]} <- upsert_videos(video.fb_page_id, [video_map]) do
-      {:ok, video1}
+         fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
+         comments <- cast_comments(fb_comments) do
+      Transcript.update_video(video, fetched_comments: comments)
     end
   end
 
-  # NOTE This function probably should be rewrite using Ecto.Repo.insert_all
-  # with upsert option
-  # https://hexdocs.pm/ecto/Ecto.Repo.html#c:insert_all/3-upserts
-  defp upsert_videos(fb_page_id, video_maps) do
-    fb_video_ids = Enum.map(video_maps, & &1.fb_video_id)
-    current_videos = get_videos(fb_page_id: fb_page_id, fb_video_id: fb_video_ids)
-
-    videos =
-      Enum.map(video_maps, fn vm ->
-        video_struct = %Video{
-          embed_html: vm.embed_html,
-          image_url: vm.image_url,
-          fb_page_id: fb_page_id,
-          permalink_url: vm.permalink_url,
-          fb_video_id: vm.fb_video_id
-        }
-
-        current_videos
-        |> Enum.find(video_struct, &(&1.fb_video_id == vm.fb_video_id))
-        |> Video.changeset(vm)
-        |> Repo.insert_or_update!()
-      end)
-
-    {:ok, videos}
-  end
-
-  @doc """
-  Gets a list of videos from DB
-  """
-  @spec get_videos(attrs :: Video.t() | keyword) :: [Video.t()]
-  def get_videos(attrs), do: get_videos(attrs, [])
-
-  @spec get_videos(attrs :: Video.t() | keyword, opts :: keyword) :: [Video.t()]
-  def get_videos(%Page{} = page, opts), do: get_videos([fb_page_id: page.fb_page_id], opts)
-
-  def get_videos(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
-    Video
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
-    |> Repo.all()
-  end
-
-  defp do_fetch_video(:default, page, fields) do
+  defp do_fetch_videos(:default, page, fields) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
     with {:ok, %{"data" => videos0}} <-
            @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields),
          videos1 <- Enum.map(videos0, &format_video_map/1) do
-      upsert_videos(fb_page_id, videos1)
+      Transcript.upsert_videos(fb_page_id, videos1)
     end
   end
 
-  defp do_fetch_video(:all, page, fields) do
+  defp do_fetch_videos(:all, page, fields) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 
-    result =
+    result_maps =
       @api.get_object_edge("live_videos", fb_page_id, access_token, fields: fields)
       |> @api.stream
-      |> Stream.map(&format_video_map/1)
-      |> Stream.map(&upsert_videos(fb_page_id, [&1]))
-      |> Enum.map(fn {_, v} -> v end)
-      |> List.flatten()
+      |> Enum.map(&format_video_map/1)
 
-    {:ok, result}
+    Transcript.upsert_videos(fb_page_id, result_maps)
+  end
+
+  defp do_fetch_comments(vid_id, access_token, opts \\ []) do
+    @api.get_object_edge("comments", vid_id, access_token, opts)
+    |> @api.stream
+    |> Enum.into([])
   end
 
   defp format_page_map(raw) do
@@ -180,6 +134,7 @@ defmodule ZaZaar.Fb do
         object_id: c["id"],
         parent_object_id: c["parent"]["id"],
         commenter_fb_id: c["from"]["id"],
+        commenter_picture: c["from"]["picture"]["data"]["url"],
         commenter_fb_name: c["from"]["name"]
       }
     end)
@@ -187,7 +142,7 @@ defmodule ZaZaar.Fb do
 
   defp format_video_map(video) do
     video_id = video["video"]["id"]
-    [_, page_id, _, _, _] = String.split(video["permalink_url"], "/")
+    # [_, page_id, _, _, _] = String.split(video["permalink_url"], "/")
 
     status =
       case video["status"] do
@@ -202,7 +157,7 @@ defmodule ZaZaar.Fb do
       embed_html: video["embed_html"],
       image_url: video["video"]["picture"],
       permalink_url: "https://www.facebook.com" <> video["permalink_url"],
-      post_id: "#{page_id}_#{video_id}",
+      # post_id: "#{page_id}_#{video_id}",
       title: video["title"],
       fb_video_id: video_id,
       fb_status: status

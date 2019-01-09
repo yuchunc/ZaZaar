@@ -1,6 +1,9 @@
 defmodule ZaZaar.EctoUtil do
   import Ecto.Query
 
+  def get_many_query(queriable, attrs) when is_map(attrs),
+    do: get_many_query(queriable, Enum.into(attrs, []))
+
   def get_many_query(queriable, []), do: queriable
 
   def get_many_query(queriable, [{k, v} | t]) when is_list(v) do

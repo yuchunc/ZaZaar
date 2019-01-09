@@ -1,18 +1,19 @@
-defmodule ZaZaar.Fb.Comment do
+defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
   @primary_key false
   embedded_schema do
     # Comment Info
+    field :object_id, :string, primary_key: true
     field :message, :string
     field :created_time, :naive_datetime
-    field :object_id, :string
 
     # Toplevel comment ID
     field :parent_object_id, :string
 
     # Commenter Info
     field :commenter_fb_id, :string
+    field :commenter_picture, :string
     field :commenter_fb_name, :string
 
     timestamps()
@@ -26,10 +27,10 @@ defmodule ZaZaar.Fb.Comment do
       :object_id,
       :parent_object_id,
       :commenter_fb_id,
+      :commenter_picture,
       :commenter_fb_name
     ])
     |> validate_required([
-      :message,
       :created_time,
       :object_id,
       :commenter_fb_id,

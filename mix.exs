@@ -53,7 +53,7 @@ defmodule ZaZaar.MixProject do
       {:ueberauth_facebook, "~> 0.7"},
       # Utils
       {:ecto_enum, "~> 1.0"},
-      {:facebook, "~> 0.20.0"},
+      {:facebook, "~> 0.22.0"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},

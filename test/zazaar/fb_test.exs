@@ -4,7 +4,9 @@ defmodule ZaZaar.FbTest do
   import Mox
 
   alias ZaZaar.Fb
-  alias Fb.{Video, Comment}
+
+  alias ZaZaar.Transcript
+  alias Transcript.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.Page
@@ -102,30 +104,24 @@ defmodule ZaZaar.FbTest do
 
         {:ok, resp}
       end)
+      |> expect(:stream, fn {:ok, %{"data" => comments}} ->
+        obj_id = comments |> List.first() |> Map.get("parent_id")
+
+        comments ++
+          Enum.map(1..count, fn msg ->
+            opts = [message: to_string(msg), parent_id: obj_id]
+            RespMock.comment(opts)
+          end)
+      end)
 
       assert {:ok, result} = Fb.fetch_comments(video, access_token)
       assert result.__struct__ == Video
+
       comments = result.comments
-      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count)
-      assert comments |> Enum.map(& &1.message) == Enum.map(1..count, &to_string/1)
-    end
-  end
+      assert comments |> Enum.map(& &1.__struct__) == List.duplicate(Comment, count * 2)
 
-  describe "get_videos/1" do
-    test "get videos by an attribute" do
-      attr = [title: "foobar"]
-      insert_list(3, :video, attr)
-      insert(:video)
-
-      assert Fb.get_videos(attr) |> Enum.count() == 3
-    end
-
-    test "get videos by attributes" do
-      attr = [title: "bangbang", fb_page_id: "102301301103103201203"]
-      insert_list(3, :video, attr)
-      insert(:video)
-
-      assert Fb.get_videos(attr) |> Enum.count() == 3
+      assert comments |> Enum.map(& &1.message) ==
+               Enum.map(1..count, &to_string/1) |> List.duplicate(2) |> List.flatten()
     end
   end
 end
