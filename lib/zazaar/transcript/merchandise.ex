@@ -30,7 +30,7 @@ defmodule ZaZaar.Transcript.Merchandise do
   @doc false
   def changeset(merchandise, attrs) do
     merchandise
-    |> cast(attrs, [:title, :snapshot_url, :price, :buyer_name, :buyer_fb_id])
+    |> cast(attrs, [:title, :snapshot_url, :price])
     |> validate_required([:price])
   end
 end

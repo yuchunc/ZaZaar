@@ -51,6 +51,17 @@ defmodule Factory do
     }
   end
 
+  def merchandise_factory do
+    %Transcript.Merchandise{
+      buyer_fb_id: random_obj_id(),
+      buyer_name: Faker.Name.name(),
+      price: Enum.random(0..20_000),
+      snapshot_url: Faker.Internet.url(),
+      title: Faker.Pizza.pizza(),
+      video: build(:video)
+    }
+  end
+
   # ====== Helper =========
   def random_obj_id() do
     Enum.random(100_000_000_000_000..599_999_999_999_999) |> to_string

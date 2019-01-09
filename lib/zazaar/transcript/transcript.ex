@@ -4,12 +4,12 @@ defmodule ZaZaar.Transcript do
   import ZaZaar.EctoUtil
 
   alias ZaZaar.Transcript
-  alias Transcript.{Video, Comment}
+  alias Transcript.{Video, Comment, Merchandise}
 
   @doc """
   Get video by id or fb_video_id
   """
-  @spec get_video(id_or_fb_video_id :: String.t()) :: nil | %Video{}
+  @spec get_video(id_or_fb_video_id :: String.t()) :: nil | Video.t()
   def get_video(<<_::288>> = id), do: Repo.get(Video, id)
 
   def get_video(fb_vid_id) do
@@ -40,7 +40,7 @@ defmodule ZaZaar.Transcript do
   Insert of Update a list of videos
   """
   @spec upsert_videos(fb_page_id :: String.t(), video_maps :: [map]) ::
-          {:ok, [%Video{}]} | {:error, any}
+          {:ok, [Video.t()]} | {:error, any}
   def upsert_videos(fb_page_id, video_maps) do
     video_maps
     |> Enum.map(&Map.put(&1, :fb_page_id, fb_page_id))
@@ -48,7 +48,7 @@ defmodule ZaZaar.Transcript do
   end
 
   @spec upsert_videos(video_maps :: [%{fb_page_id: String.t()}]) ::
-          {:ok, [%Video{}]} | {:error, any}
+          {:ok, [Video.t()]} | {:error, any}
   def upsert_videos(video_maps) do
     replace_fields = [:description, :image_url, :fb_status, :title]
     conflict_target = [:fb_video_id]
@@ -76,8 +76,8 @@ defmodule ZaZaar.Transcript do
   @doc """
   Update a Video
   """
-  @spec update_video(video :: %Video{}, params :: keyword | map) ::
-          {:ok, %Video{}} | {:error, any}
+  @spec update_video(video :: Video.t(), params :: keyword | map) ::
+          {:ok, Video.t()} | {:error, any}
   def update_video(video, params) when is_list(params),
     do: update_video(video, Enum.into(params, %{}))
 
@@ -105,6 +105,18 @@ defmodule ZaZaar.Transcript do
     |> Video.changeset(params)
     |> Ecto.Changeset.put_embed(:comments, new_comments)
     |> Repo.update()
+  end
+
+  @doc """
+  Update or Insert a Merchandise
+  """
+  @spec upsert_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
+  def upsert_merchandise(attrs) do
+    upsert_fields = [:title, :snapshot_url, :price]
+
+    %Merchandise{id: attrs[:id], video_id: attrs[:video_id]}
+    |> Merchandise.changeset(attrs)
+    |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
 
   defp prep_video_upsert_map(input_map) do
