@@ -68,87 +68,14 @@
             </div>
           </div>
         <% else %>
-          <!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
-          <div class="columns">
-            <div class="column">
-              <article class="message is-primary">
-                <div class="message-body">
-                  請確認本次直播售出的商品與得標者，確認後系統將產生每位得標者的明細。<strong>總訂單一經確認即無法修改。</strong>
-                </div>
-              </article>
-            </div>
-            <div class="column is-flex is-narrow is-aligned-center">
-              <a class="button is-primary is-medium">
-                <%= gettext "Create Orders" %>
-              </a>
-            </div>
-          </div>
-          <!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
-
-          <table class="table main-table is-striped is-hoverable has-margin-left">
-            <thead class="main-table__header">
-              <tr>
-                <th width="10%"><%= gettext "Time" %></th>
-                <th width="20%"><%= gettext "Snapshot" %></th>
-                <th width="22%"><%= gettext "Product Name" %></th>
-                <th width="22%"><%= gettext "Buyer" %></th>
-                <th width="10%"><%= gettext "Amount" %></th>
-                <th width="16%"></th>
-              </tr>
-            </thead>
-
-            <tbody class="main-table__body" id="items-table-body">
-
-              <!-- 訂單建立後，移除編輯按鈕，改為單筆訂單連結 -->
-              <tr>
-                <td>15:10:54</td>
-                <td>
-                  <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
-                    <img class="merch-snapshot"src="https://bulma.io/images/placeholders/1280x960.png">
-                  </figure>
-                </td>
-                <td class="merch-name editable">Product 1</td>
-                <td>Buyer 1</td>
-                <td class="editable">1000</td>
-                <td class="has-text-centered">
-                  <a class="button is-primary is-outlined is-centered">查看訂單</a>
-                </td>
-              </tr>
-              <!-- 訂單建立後，移除編輯按鈕，改為單筆訂單連結 -->
-
-              <%= for x <- 2..15 do %>
-                <tr>
-                  <td>15:<%= x %>0:54</td>
-                  <td>
-                    <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
-                      <img class="merch-snapshot"src="https://bulma.io/images/placeholders/1280x960.png">
-                    </figure>
-                  </td>
-                  <td class="merch-name editable">Product <%= x %></td>
-                  <td>Buyer <%= x %></td>
-                  <td class="editable"><%= 1000 * x %></td>
-                  <td>
-                    <div class="field is-grouped is-centered merch-actions editable">
-                      <div class="control">
-                        <a class="button is-primary is-outlined edit-merch">編輯</a>
-                      </div>
-                      <div class="control">
-                        <a class="button">刪除</a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              <% end %>
-
-            </tbody>
-          </table>
-
+          <%= render @view_module, "merchandises_table.html", products: [] %>
         <% end %>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Product Edit Modal -->
 <div class="modal" id="merch-snapshot-modal"> <!-- Image Pop-up -->
   <div class="modal-background"></div>
   <div class="modal-content">
