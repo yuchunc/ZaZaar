@@ -89,4 +89,27 @@ defmodule ZaZaar.TranscriptTest do
       assert res1.comments |> Enum.count() == 10
     end
   end
+
+  describe "upsert_merchandise/2" do
+    test "inserts merchandise if doesn't exist" do
+      merch_map = params_with_assocs(:merchandise)
+
+      assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
+      assert Ecto.get_meta(merch, :state) == :loaded
+      assert merch.video_id == merch_map.video_id
+    end
+
+    test "udpates merchandise if exist" do
+      new_title = "Gaga oooo lala"
+
+      merch_map =
+        insert(:merchandise)
+        |> Map.from_struct()
+        |> Map.put(:title, new_title)
+
+      assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
+      assert merch.id == merch_map.id
+      assert merch.title == new_title
+    end
+  end
 end
