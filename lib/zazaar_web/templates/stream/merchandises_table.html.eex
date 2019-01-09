@@ -1,0 +1,33 @@
+<!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
+<div class="columns">
+  <div class="column">
+    <article class="message is-primary">
+      <div class="message-body">
+        請確認本次直播售出的商品與得標者，確認後系統將產生每位得標者的明細。<strong>總訂單一經確認即無法修改。</strong>
+      </div>
+    </article>
+  </div>
+  <div class="column is-flex is-narrow is-aligned-center">
+    <a class="button is-primary is-medium">
+      <%= gettext "Create Orders" %>
+    </a>
+  </div>
+</div>
+<!-- 未確認提醒＋建立訂單按鈕 / 建立後移除 -->
+
+<table class="table main-table is-striped is-hoverable">
+  <thead class="main-table__header">
+    <tr>
+      <th width="10%"><%= gettext "Time" %></th>
+      <th width="20%"><%= gettext "Snapshot" %></th>
+      <th width="22%"><%= gettext "Product Name" %></th>
+      <th width="22%"><%= gettext "Buyer" %></th>
+      <th width="10%"><%= gettext "Amount" %></th>
+      <th width="16%"></th>
+    </tr>
+  </thead>
+
+  <tbody class="main-table__body" id="items-table-body">
+    <%= render_many @products, @view_module, "merchandise_tr.html", as: :product %>
+  </tbody>
+</table>

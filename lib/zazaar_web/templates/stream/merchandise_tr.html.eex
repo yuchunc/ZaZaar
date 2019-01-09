@@ -1,0 +1,27 @@
+<tr>
+  <td><%= @product.inserted_at |> to_string %></td>
+  <td>
+    <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
+      <img class="merch-snapshot" src=<%= @product.snapshot_url %>>
+    </figure>
+  </td>
+  <td class="merch-name editable"><%= @product.title %></td>
+  <td><%= @product.bidder_name %></td>
+  <td class="editable"> <%= @product.total_amount %></td>
+  <td class="has-text-centered">
+    <%= if @product.completed_at do %>
+      <a class="button is-primary is-outlined is-centered">
+        <%= gettext "Check Order" %>
+      </a>
+    <% else %>
+      <div class="field is-grouped is-centered merch-actions editable">
+        <div class="control">
+          <a class="button is-primary is-outlined edit-merch">編輯</a>
+        </div>
+        <div class="control">
+          <a class="button">刪除</a>
+        </div>
+      </div>
+    <% end %>
+  </td>
+</tr>
