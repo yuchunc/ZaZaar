@@ -21,6 +21,13 @@ defmodule ZaZaar.Fb do
 
   @comment_default_fields ["created_time", "from{picture,name}", "message", "parent{id}"]
 
+  def webhook_url do
+    case Mix.env() do
+      :dev -> Ngrok.public_url()
+      _ -> ZaZaaWeb.Endpoint.url()
+    end
+  end
+
   @doc """
   fetches and stores Facebook Pages
   uses user access token

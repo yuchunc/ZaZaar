@@ -45,6 +45,11 @@ defmodule ZaZaarWeb.Router do
     resources "/i", InvoiceController, only: [:show]
   end
 
+  scope "/webhook", ZaZaarWeb.Webhook do
+    pipe_through [:api]
+    resources "/facebook", FacebookController, singleton: true, only: [:show, :create]
+  end
+
   scope "/", ZaZaarWeb, as: :config do
     pipe_through [:browser, :user_authed]
 
