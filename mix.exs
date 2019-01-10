@@ -59,6 +59,7 @@ defmodule ZaZaar.MixProject do
       {:faker, "~> 0.11", only: [:test, :dev]},
       {:stream_data, "~> 0.1", only: [:test, :dev]},
       {:mox, "~> 0.4", only: :test},
+      {:ex_ngrok, "~> 0.3.0", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
     ]

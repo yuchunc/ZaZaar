@@ -34,7 +34,4 @@ defmodule ZaZaarWeb.StreamController do
   # pagination option
   defp fetch_and_get_videos("default", page), do: Fb.fetch_videos(page)
   defp fetch_and_get_videos("fetch_all", page), do: Fb.fetch_videos(page, strategy: :all)
-
-  defp first_video([]), do: %Video{}
-  defp first_video(videos), do: List.first(videos)
 end
