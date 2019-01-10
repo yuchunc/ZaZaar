@@ -1,0 +1,21 @@
+<div class="media">
+  <figure class="media-left image is-32x32 is-avatar">
+    <img class="is-rounded" src=<%= @comment.commenter_picture %>>
+  </figure>
+  <div class="media-content">
+    <div class="comment has-background-light is-marginless">
+      <p>
+        <span class="is-username has-text-primary has-text-weight-semibold">
+          <%= @comment.commenter_fb_name %>
+        </span>
+        <%= @comment.message %>
+      </p>
+    </div>
+
+    <div class="level is-mobile"> <small class="has-text-grey-light">
+        15 小時
+      </small>
+      <button class="button is-small is-outlined has-text-grey is-hover-primary">新增訂單</button>
+    </div>
+  </div>
+</div>
