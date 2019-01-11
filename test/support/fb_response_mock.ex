@@ -8,7 +8,7 @@ defmodule ZaZaar.FbResponseMock do
     "id"
   ]
 
-  @comment_default_fields ["created_time", "from", "message"]
+  # @comment_default_fields ["created_time", "from", "message"]
 
   def page(opts0 \\ []) do
     opts1 = Enum.into(opts0, %{})
@@ -57,7 +57,7 @@ defmodule ZaZaar.FbResponseMock do
             %{"id" => video_id}
 
           "creation_time" ->
-            opts[:creation_time] || current_time
+            opts[:creation_time] || current_time()
 
           "live_views" ->
             Enum.random(0..100)
@@ -85,7 +85,7 @@ defmodule ZaZaar.FbResponseMock do
     opts1 = Enum.into(opts, %{})
 
     %{
-      "created_time" => opts1[:created_time] || current_time,
+      "created_time" => opts1[:created_time] || current_time(),
       "from" => %{
         "name" => opts1[:name] || Faker.Name.name(),
         "id" => random_obj_id()
@@ -102,8 +102,7 @@ defmodule ZaZaar.FbResponseMock do
     %{
       "height" => 284,
       "is_silhouette" => false,
-      "url" =>
-        "https://scontent.xx.fbcdn.net/v/t15.5256-10/p160x160/49245593_221143812138691_47797174913728512_n.jpg?_nc_cat=106&_nc_ht=scontent.xx&oh=fa8e46b785591ce0cee4798c103a6365&oe=5CBF98BB",
+      "url" => src,
       "width" => 160
     }
   end

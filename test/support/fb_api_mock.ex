@@ -10,4 +10,6 @@ defmodule ZaZaar.FbApiMock do
   def stream(_), do: []
 
   def publish(_, _, _, _), do: {:error, :from_api_mock}
+
+  def remove(_, _, _), do: {:error, :from_api_mock}
 end
