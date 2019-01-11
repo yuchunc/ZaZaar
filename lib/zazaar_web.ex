@@ -5,8 +5,8 @@ defmodule ZaZaarWeb do
 
   This can be used in your application as:
 
-      use ZaZaarWeb, :controller
-      use ZaZaarWeb, :view
+  use ZaZaarWeb, :controller
+  use ZaZaarWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -23,12 +23,11 @@ defmodule ZaZaarWeb do
 
       import Plug.Conn
       import ZaZaarWeb.Gettext
+      import ZaZaarWeb, only: [current_user: 1, current_page: 1]
+
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
       ZaZaarWeb.aliases()
-
-      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
-      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
     end
   end
 
@@ -46,12 +45,11 @@ defmodule ZaZaarWeb do
 
       import ZaZaarWeb.ErrorHelpers
       import ZaZaarWeb.Gettext
+      import ZaZaarWeb, only: [current_user: 1, current_page: 1]
+
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
       ZaZaarWeb.aliases()
-
-      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
-      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
     end
   end
 
@@ -72,8 +70,8 @@ defmodule ZaZaarWeb do
 
       ZaZaarWeb.aliases()
 
-      def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
-      def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
+      def current_user(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :user)
+      def current_page(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :page)
     end
   end
 
@@ -103,4 +101,7 @@ defmodule ZaZaarWeb do
       alias Account.{User, Page}
     end
   end
+
+  def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
+  def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
 end

@@ -14,11 +14,18 @@ defmodule ZaZaarWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+  use Phoenix.ChannelTest
+
+  @endpoint ZaZaarWeb.Endpoint
 
   using do
     quote do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
+      import ZaZaar.Factory
+      import ZaZaarWeb.ChannelCase
+
+      alias ZaZaarWeb.UserSocket
 
       # The default endpoint for testing
       @endpoint ZaZaarWeb.Endpoint
@@ -33,5 +40,12 @@ defmodule ZaZaarWeb.ChannelCase do
     end
 
     :ok
+  end
+
+  def sign_socket(%ZaZaar.Account.User{} = user) do
+    connect(UserSocket, %{})
+    {:ok, jwt, _} = ZaZaar.Auth.Guardian.encode_and_sign(user)
+    {:ok, socket} = connect(UserSocket, %{token: jwt})
+    socket
   end
 end

@@ -1,8 +1,11 @@
 defmodule ZaZaarWeb.UserSocket do
   use Phoenix.Socket
 
-  ## Channels
-  # channel "room:*", ZaZaarWeb.RoomChannel
+  require Logger
+
+  alias ZaZaar.Auth
+
+  channel "page:*", ZaZaarWeb.PageChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -15,8 +18,19 @@ defmodule ZaZaarWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  @spec connect(params :: map, socket :: Phoenix.Socket.t()) :: {:ok, Phoenix.Socket.t()} | :error
+  def connect(params, socket0) do
+    with %{"user_token" => user_token} <- params,
+         {:ok, socket1} <-
+           Guardian.Phoenix.Socket.authenticate(socket0, Auth.Guardian, user_token, %{},
+             key: :user
+           ) do
+      {:ok, socket1}
+    else
+      err ->
+        Logger.debug(err)
+        :error
+    end
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

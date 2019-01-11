@@ -22,7 +22,7 @@ defmodule ZaZaar.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import ZaZaar.DataCase
-      import Factory
+      import ZaZaar.Factory
 
       require ZaZaarWeb
 
