@@ -8,4 +8,6 @@ defmodule ZaZaar.FbApiMock do
   def get_edge_objects(_, _, _, _), do: {:error, %{}}
 
   def stream(_), do: []
+
+  def publish(_, _, _, _), do: {:error, :from_api_mock}
 end

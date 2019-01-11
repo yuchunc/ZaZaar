@@ -13,6 +13,7 @@ defmodule ZaZaarWeb.Webhook.FacebookController do
   end
 
   def create(conn, params) do
+    params |> IO.inspect(label: "webhook params")
     send_resp(conn, :ok, "")
   end
 end

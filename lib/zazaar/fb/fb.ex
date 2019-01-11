@@ -21,13 +21,6 @@ defmodule ZaZaar.Fb do
 
   @comment_default_fields ["created_time", "from{picture,name}", "message", "parent{id}"]
 
-  def webhook_url do
-    case Mix.env() do
-      :dev -> Ngrok.public_url()
-      _ -> ZaZaaWeb.Endpoint.url()
-    end
-  end
-
   @doc """
   fetches and stores Facebook Pages
   uses user access token
@@ -92,6 +85,22 @@ defmodule ZaZaar.Fb do
          comments <- cast_comments(fb_comments) do
       Transcript.update_video(video, fetched_comments: comments)
     end
+  end
+
+  @doc """
+  Start subscribe to page
+  """
+  @spec start_subscribe(page :: Page.t()) :: {:ok, map} | {:error, map}
+  def start_subscribe(%{fb_page_id: fb_page_id, access_token: access_token}) do
+    @api.publish(:subscribed_apps, fb_page_id, [], access_token)
+  end
+
+  @doc """
+  Stop subscribe to page
+  """
+  @spec stop_subscribe(page :: Page.t()) :: {:ok, map} | {:error, map}
+  def stop_subscribe(%{fb_page_id: fb_page_id, access_token: access_token}) do
+    @api.remove(:subscribed_apps, fb_page_id, access_token)
   end
 
   defp do_fetch_videos(:default, page, fields) do

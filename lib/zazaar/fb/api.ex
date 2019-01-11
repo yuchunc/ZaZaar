@@ -4,13 +4,27 @@ defmodule ZaZaar.Fb.Api do
   alias Facebook.{GraphAPI, Config, ResponseFormatter}
 
   @type object_ids :: list | String.t()
-  @type resp :: {:ok, map} | {:error, map}
+  @type resp :: Facebook.resp()
 
   defdelegate me(fields, access_token), to: Facebook
 
   defdelegate get_object_edge(edge, object_id, access_token, params \\ []), to: Facebook
 
   defdelegate stream(api_request), to: Facebook.Stream, as: :new
+
+  defdelegate publish(edge, object_id, inputs, access_token), to: Facebook
+
+  @spec remove(edge :: atom, object_id :: String.t(), access_token :: String.t()) :: resp
+  def remove(edge, object_id, access_token) do
+    params1 =
+      []
+      |> add_app_secret(access_token)
+      |> add_access_token(access_token)
+
+    ~s(/#{object_id}/#{edge})
+    |> GraphAPI.delete([], params: params1)
+    |> ResponseFormatter.format_response()
+  end
 
   @spec get_object_edge(String.t(), object_ids, String.t()) :: resp
   def get_edge_objects(edge, object_ids, access_token) do

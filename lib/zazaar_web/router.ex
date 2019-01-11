@@ -41,7 +41,6 @@ defmodule ZaZaarWeb.Router do
       get("/:provider/callback", SessionController, :create)
     end
 
-    # NOTE user invoice path
     resources "/i", InvoiceController, only: [:show]
   end
 
