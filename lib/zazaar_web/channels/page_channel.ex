@@ -23,17 +23,35 @@ defmodule ZaZaarWeb.PageChannel do
     {:noreply, socket}
   end
 
+  def handle_info({:broadcast_new_comments, video_id, comments}, socket) do
+    broadcast(socket, "video:new_comments", %{video_id: video_id, comments: comments})
+    {:noreply, socket}
+  end
+
   def handle_in("merchandise:save", payload, socket) do
     merch_map = map_merchandise(payload)
 
-    case Transcript.upsert_merchandise(merch_map) do
-      {:ok, merch} ->
-        broadcast(socket, "merchandise:updated", merch)
-        {:reply, :ok, socket}
+    reply =
+      case Transcript.upsert_merchandise(merch_map) do
+        {:ok, merch} ->
+          broadcast(socket, "merchandise:updated", merch)
+          :ok
 
-      _ ->
-        {:reply, {:error, "can't create merchandise"}, socket}
-    end
+        _ ->
+          {:error, "can't create merchandise"}
+      end
+
+    {:reply, reply, socket}
+  end
+
+  def handle_in("comment:save", payload, socket) do
+    %{"object_id" => fb_video_id, "message" => message} = payload
+    page = current_page(socket)
+
+    {:ok, comment} = Fb.publish_comment(fb_video_id, message, page.access_token)
+
+    send(self(), {:broadcast_new_comments, fb_video_id, []})
+    {:noreply, socket}
   end
 
   defp map_merchandise(merch) do
@@ -45,7 +63,8 @@ defmodule ZaZaarWeb.PageChannel do
       price: merch["price"],
       snapshot_url: merch["snapshot_url"],
       title: merch["title"],
-      invalidated_at: merch["invalidated_at"]
+      invalidated_at: merch["invalidated_at"],
+      live_timestamp: merch["live_broadcast_timestamp"]
     }
   end
 end

@@ -90,13 +90,13 @@ defmodule ZaZaar.Fb do
   @doc """
   Publish to Facebook object's comments edge
   """
-  @spec publish_commnet(
+  @spec publish_comment(
           fb_video_id :: String.t(),
           message :: String.t(),
           access_token :: String.t(),
           opts :: keyword
         ) :: {:ok, map} | {:error, map}
-  def publish_commnet(fb_video_id, message, access_token, opts \\ []) do
+  def publish_comment(fb_video_id, message, access_token, opts \\ []) do
     with fields <- Keyword.get(opts, :fields, @comment_default_fields),
          params <- [fields: fields, message: message],
          {:ok, comment_raw} <- @api.publish(:comments, fb_video_id, params, access_token),

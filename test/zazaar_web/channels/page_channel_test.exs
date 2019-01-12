@@ -4,6 +4,7 @@ defmodule ZaZaarWeb.PageChannelTest do
   import Mox
 
   alias ZaZaar.FbApiMock, as: ApiMock
+  alias ZaZaar.FbResponseMock, as: RespMock
 
   setup :set_mox_global
   setup :verify_on_exit!
@@ -62,6 +63,36 @@ defmodule ZaZaarWeb.PageChannelTest do
       assert Repo.get(Merchandise, merch.id)
       assert_broadcast("merchandise:updated", payload)
       assert payload.title == new_title
+    end
+  end
+
+  describe "comment:save event" do
+    test "save a new comment, publish to Facebook, and broadcast", ctx do
+      %{page: page, user: user} = ctx
+      socket = joined_page_socket(user, page)
+      video = insert(:video)
+
+      message = "oheiohei"
+
+      expect(ApiMock, :publish, fn :comments, _, _, _ ->
+        resp = RespMock.comment(message: message, parent_id: video.fb_video_id)
+        {:ok, resp}
+      end)
+
+      push(socket, "comment:save", %{object_id: video.fb_video_id, message: message})
+
+      assert_broadcast "video:new_comments", payload
+
+      comment_ids =
+        Repo.get(Video, video.id)
+        |> Map.get(:comments)
+        |> Enum.map(& &1.object_id)
+
+      result_ids =
+        payload.comments
+        |> Enum.map(& &1.object_id)
+
+      assert result_ids -- comment_ids == []
     end
   end
 end
