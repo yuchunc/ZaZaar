@@ -148,4 +148,31 @@ defmodule ZaZaar.FbTest do
       assert {:ok, _} = Fb.stop_subscribe(page)
     end
   end
+
+  describe "publish_commnet/4" do
+    test "push comment to facebook, with fields to get comments back" do
+      video = insert(:video)
+      access_token = "Imthealmightyaccesstoken"
+      message = "foofoobarbar"
+
+      expect(ApiMock, :publish, fn :comments,
+                                   _,
+                                   [
+                                     fields: [
+                                       "created_time",
+                                       "from{picture,name}",
+                                       "message",
+                                       "parent{id}"
+                                     ],
+                                     message: msg
+                                   ],
+                                   _ ->
+        resp = RespMock.comment(message: msg, parent_id: video.fb_video_id)
+        {:ok, resp}
+      end)
+
+      assert {:ok, %Comment{} = comment} =
+               Fb.publish_commnet(video.fb_video_id, message, access_token)
+    end
+  end
 end

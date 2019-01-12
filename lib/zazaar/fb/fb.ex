@@ -2,7 +2,7 @@ defmodule ZaZaar.Fb do
   use ZaZaar, :context
 
   alias ZaZaar.Transcript
-  alias Transcript.Video
+  alias Transcript.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.{User, Page}
@@ -84,6 +84,26 @@ defmodule ZaZaar.Fb do
          fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
          comments <- cast_comments(fb_comments) do
       Transcript.update_video(video, fetched_comments: comments)
+    end
+  end
+
+  @doc """
+  Publish to Facebook object's comments edge
+  """
+  @spec publish_commnet(
+          fb_video_id :: String.t(),
+          message :: String.t(),
+          access_token :: String.t(),
+          opts :: keyword
+        ) :: {:ok, map} | {:error, map}
+  def publish_commnet(fb_video_id, message, access_token, opts \\ []) do
+    with fields <- Keyword.get(opts, :fields, @comment_default_fields),
+         params <- [fields: fields, message: message],
+         {:ok, comment_raw} <- @api.publish(:comments, fb_video_id, params, access_token),
+         comment_maps <- cast_comments([comment_raw]),
+         {:ok, video} <- Transcript.update_video(fb_video_id, fetched_comments: comment_maps),
+         %Comment{} = comment <- Enum.find(video.comments, &(&1.object_id == comment_raw["id"])) do
+      {:ok, comment}
     end
   end
 
