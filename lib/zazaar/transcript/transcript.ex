@@ -76,18 +76,18 @@ defmodule ZaZaar.Transcript do
   @doc """
   Update a Video
   """
-  @spec update_video(video :: Video.t(), params :: keyword | map) ::
+  @spec update_video(video :: Video.t() | String.t(), params :: keyword | map) ::
           {:ok, Video.t()} | {:error, any}
+  def update_video(video_id, params) when is_binary(video_id),
+    do: get_video(video_id) |> update_video(params)
+
   def update_video(video, params) when is_list(params),
     do: update_video(video, Enum.into(params, %{}))
 
   def update_video(video, %{fetched_comments: comment_maps} = params) do
     new_comments =
-      Enum.reduce(comment_maps, [], fn cm, acc ->
-        case Enum.find(video.comments, &(&1.object_id == cm.object_id)) do
-          nil -> acc ++ [struct(Comment, cm)]
-          true -> acc
-        end
+      Enum.reject(comment_maps, fn cm ->
+        Enum.find(video.comments, &(&1.object_id == cm.object_id))
       end)
 
     params1 =
@@ -99,7 +99,9 @@ defmodule ZaZaar.Transcript do
   end
 
   def update_video(%Video{} = video, params) do
-    new_comments = Map.get(params, :new_comments, [])
+    new_comments =
+      Map.get(params, :new_comments, [])
+      |> Enum.map(&Comment.changeset(%Comment{}, &1))
 
     video
     |> Video.changeset(params)

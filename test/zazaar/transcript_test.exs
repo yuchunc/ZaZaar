@@ -79,7 +79,8 @@ defmodule ZaZaar.TranscriptTest do
         build_list(5, :comment)
         |> Enum.map(&Map.from_struct/1)
 
-      assert {:ok, _res0} = Transcript.update_video(vid, fetched_comments: comments)
+      assert {:ok, res0} = Transcript.update_video(vid, fetched_comments: comments)
+      refute Enum.empty?(res0.comments)
 
       comments1 =
         build_list(5, :comment)
