@@ -13,11 +13,19 @@
 
   &__page {
 
-    .columns {
+    .main-columns {
+      height: calc( 100% - 7.815rem);
 
       .comment-container {
         overflow-y: scroll;
-        height: calc( 100vh - 18rem);
+
+        .card {
+          height: 100%;
+
+          .comments {
+            height: calc( 100% - 3rem);
+          }
+        }  
       }
     }
   }

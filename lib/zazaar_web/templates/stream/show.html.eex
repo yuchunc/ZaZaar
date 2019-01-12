@@ -1,4 +1,4 @@
-<section class="section stream__page">
+<section class="section is-fullheight stream__page">
 
   <div class="container">
 
@@ -73,7 +73,7 @@
       </div>
     <% end %>
 
-    <div class="columns is-marginless">
+    <div class="columns main-columns is-marginless">
       <!-- Comment Area-->
       <div class="column comment-container is-one-third-desktop">
         <div class="card">

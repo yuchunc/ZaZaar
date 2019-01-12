@@ -1,5 +1,4 @@
 /* Extend Bulma Elements */
-
 .button {
 
   &.is-hover-primary {
@@ -40,11 +39,22 @@ a {
   line-height: 1.8;
 }
 
-.landing {
-  z-index: 31;
-  margin-top: -52px;
+.navbar .navbar-brand .main-logo {
+  width: 114px;
 }
 
+.section {
+
+  &.is-fullheight {
+    height: calc( 100vh - 3rem);
+
+    > .container {
+      height: 100%;
+    }
+  }
+}
+
+// Fans Page
 .fans-page {
 
   .hero-body {
@@ -65,10 +75,7 @@ a {
   }
 }
 
-.navbar .navbar-brand .main-logo {
-  width: 114px;
-}
-
+// Comments Model
 .comments {
   overflow-y: scroll;
 
@@ -91,6 +98,7 @@ a {
   }
 }
 
+// Merchandises Table
 .main-table {
   width: 100%;
 
