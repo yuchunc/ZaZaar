@@ -39,8 +39,15 @@ $size: (
 );
 
 @each $key, $val in $size {
+  .has-margin-#{$key} {margin: $val !important;}
   .has-margin-top-#{$key} {margin-top: $val !important;}
   .has-margin-bottom-#{$key} {margin-bottom: $val !important;}
+  .has-margin-left-#{$key} {margin-left: $val !important;}
+  .has-margin-right-#{$key} {margin-right: $val !important;}
+
   .has-padding-#{$key} {padding: $val !important;}
-  .has-padding-width-#{$key} {padding: 0 $val !important;}
+  .has-padding-top-#{$key} {padding-top: $val !important;}
+  .has-padding-bottom-#{$key} {padding-bottom: $val !important;}
+  .has-padding-left-#{$key} {padding-left: $val !important;}
+  .has-padding-right-#{$key} {padding-right: $val !important;}
 }

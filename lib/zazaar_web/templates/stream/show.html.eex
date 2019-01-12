@@ -4,26 +4,22 @@
 
     <header class="has-margin-bottom-md">
 
-      <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-          <li><a href="/m"><%= gettext "Video List" %></a></li>
-          <li class="is-active">
-            <a href="#" aria-current="page">
-              <%= video_display_name(@video) %>
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <nav class="level">
+      <div class="level">
+        <!-- Breadcrumb -->
         <div class="level-left">
           <div class="level-item">
-            <h1 class="title">
-              <%= video_display_name(@video) %>
-            </h1>
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+              <ul>
+                <li><a href="/m"><%= gettext "Video List" %></a></li>
+                <li class="is-active">
+                  <a href="#" aria-current="page">
+                    <%= video_display_name(@video) %>
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
-
         <!-- Stream State -->
         <div class="level-right">
           <div class="level-item">
@@ -39,9 +35,43 @@
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
+      <div class="level">
+        <!-- Title -->
+        <div class="level-left">
+          <div class="level-item">
+            <h1 class="title">
+              <%= video_display_name(@video) %>
+            </h1>
+          </div>
+        </div>
+        <!-- Create Order Button-->
+        <div class="level-right">
+          <%= if @video.comments != [] do %>
+            <a class="button is-primary is-medium">
+              <%= gettext "Create Orders" %>
+            </a>
+          <% end %>
+        </div>
+      </div>
     </header>
+
+    <!-- Fetch Comments Button-->
+    <%= if @video.comments == [] do %>
+      <div class="columns">
+        <div class="column">
+          <article class="message is-danger is-medium">
+            <div class="message-body">
+              <%= gettext "This comments has not been loaded." %>
+            </div>
+          </article>
+        </div>
+        <div class="column is-flex is-narrow is-aligned-center">
+          <%= link gettext("Click Here to get Comments"), to: "/s/#{@video.fb_video_id}", class: "button is-primary is-large", method: :patch %>
+        </div>
+      </div>
+    <% end %>
 
     <div class="columns is-marginless">
       <!-- Comment Area-->
@@ -56,27 +86,15 @@
       </div>
 
       <!-- Stream Table -->
-      <div class="column is-paddingless stream__page__order">
-        <%= if @video.comments == [] do %>
-          <div class="card">
-            <div class="card-content has-text-centered">
-              <div class="is-size-3 has-text-centered">
-                <%= gettext "This comments has not been loaded." %>
-              </div>
-
-              <%= link gettext("Click Here to get Comments"), to: "/s/#{@video.fb_video_id}", class: "button is-primary is-large", method: :patch %>
-            </div>
-          </div>
-        <% else %>
-          <%= render @view_module, "merchandises_table.html", products: [] %>
-        <% end %>
+      <div class="column stream__page__order">
+        <%= render @view_module, "merchandises_table.html", products: [] %>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Product Edit Modal -->
-<div class="modal" id="merch-snapshot-modal"> <!-- Image Pop-up -->
+<!-- Product Image Preview -->
+<div class="modal" id="merch-snapshot-modal">
   <div class="modal-background"></div>
   <div class="modal-content">
     <p class="image is-4by3">
