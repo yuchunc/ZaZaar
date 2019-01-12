@@ -14,7 +14,7 @@ $c-marble: #fafafa;
 .is-flex-column       {flex-direction: column;}
 .is-justified-center  {justify-content: center;}
 .is-justified-start   {justify-content: flex-start;}
-.is-justified-end     {justify-content: flex-end;}
+.is-justified-end     {justify-content: flex-end !important;}
 .is-justified-around  {justify-content: space-around;}
 .is-justified-between {justify-content: space-between;}
 .is-aligned-start     {align-items: flex-start;}
