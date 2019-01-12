@@ -6,7 +6,7 @@
     background: transparent;
     &:hover {
       border: 1px solid $primary;
-      color: $primary;
+      color: $primary !important;
     }
   }
 
@@ -14,7 +14,7 @@
     background: transparent;
     &:hover {
       border: 1px solid $danger;
-      color: $danger;
+      color: $danger !important;
     }
   }
 
@@ -22,7 +22,7 @@
     background: transparent;
     &:hover {
       border: 1px solid $success;
-      color: $success;
+      color: $success !important;
     }
   }
 }
@@ -84,6 +84,10 @@ a {
 
   .is-username {
     padding-right: 0.5rem;
+  }
+
+  .level {
+    padding: 0.25rem 0.5rem;
   }
 }
 
