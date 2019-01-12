@@ -130,7 +130,7 @@ defmodule ZaZaar.Transcript do
   """
   @spec upsert_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
   def upsert_merchandise(attrs) do
-    upsert_fields = [:title, :snapshot_url, :price]
+    upsert_fields = [:title, :snapshot_url, :price, :invalidated_at]
 
     %Merchandise{id: attrs[:id], video_id: attrs[:video_id]}
     |> Merchandise.changeset(attrs)

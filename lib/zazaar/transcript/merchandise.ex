@@ -9,6 +9,7 @@ defmodule ZaZaar.Transcript.Merchandise do
           price: integer,
           snapshot_url: String.t(),
           title: String.t(),
+          invalidated_at: nil | NaiveDateTime.t(),
           video_id: Ecto.UUID.t(),
           video: Transcript.Video.t()
         }
@@ -21,6 +22,7 @@ defmodule ZaZaar.Transcript.Merchandise do
     field :price, :integer
     field :snapshot_url, :string
     field :title, :string
+    field :invalidated_at, :naive_datetime
 
     belongs_to :video, Transcript.Video
 
@@ -30,7 +32,7 @@ defmodule ZaZaar.Transcript.Merchandise do
   @doc false
   def changeset(merchandise, attrs) do
     merchandise
-    |> cast(attrs, [:title, :snapshot_url, :price])
+    |> cast(attrs, [:title, :snapshot_url, :price, :invalidated_at])
     |> validate_required([:price])
   end
 end

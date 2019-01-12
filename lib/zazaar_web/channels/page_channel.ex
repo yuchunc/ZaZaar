@@ -44,7 +44,8 @@ defmodule ZaZaarWeb.PageChannel do
       buyer_name: merch["buyer_name"],
       price: merch["price"],
       snapshot_url: merch["snapshot_url"],
-      title: merch["title"]
+      title: merch["title"],
+      invalidated_at: merch["invalidated_at"]
     }
   end
 end

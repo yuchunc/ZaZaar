@@ -106,6 +106,7 @@ defmodule ZaZaar.TranscriptTest do
         insert(:merchandise)
         |> Map.from_struct()
         |> Map.put(:title, new_title)
+        |> Map.put(:invalidated_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
 
       assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
       assert merch.id == merch_map.id
