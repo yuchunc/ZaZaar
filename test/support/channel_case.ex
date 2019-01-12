@@ -25,10 +25,15 @@ defmodule ZaZaarWeb.ChannelCase do
       import ZaZaar.Factory
       import ZaZaarWeb.ChannelCase
 
+      require ZaZaarWeb
+
+      alias ZaZaar.Repo
       alias ZaZaarWeb.UserSocket
 
       # The default endpoint for testing
       @endpoint ZaZaarWeb.Endpoint
+
+      ZaZaarWeb.aliases()
     end
   end
 
@@ -42,10 +47,15 @@ defmodule ZaZaarWeb.ChannelCase do
     :ok
   end
 
-  def sign_socket(%ZaZaar.Account.User{} = user) do
-    connect(UserSocket, %{})
-    {:ok, jwt, _} = ZaZaar.Auth.Guardian.encode_and_sign(user)
-    {:ok, socket} = connect(UserSocket, %{token: jwt})
-    socket
+  def joined_page_socket(%ZaZaar.Account.User{} = user, %ZaZaar.Account.Page{} = page) do
+    {:ok, user_token, _} = ZaZaar.Auth.Guardian.encode_and_sign(user)
+    {:ok, page_token, _} = ZaZaar.Auth.Guardian.encode_and_sign(page)
+
+    Mox.expect(ZaZaar.FbApiMock, :publish, fn :subscribed_apps, _obj_id, _, _access_token ->
+      {:ok, %{"success" => true}}
+    end)
+
+    {:ok, socket} = connect(ZaZaarWeb.UserSocket, %{user_token: user_token})
+    subscribe_and_join!(socket, "page:" <> page.fb_page_id, %{page_token: page_token})
   end
 end

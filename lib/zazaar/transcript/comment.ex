@@ -7,6 +7,7 @@ defmodule ZaZaar.Transcript.Comment do
     field :object_id, :string, primary_key: true
     field :message, :string
     field :created_time, :naive_datetime
+    field :live_timestamp, :integer, default: 0
 
     # Toplevel comment ID
     field :parent_object_id, :string
@@ -22,6 +23,7 @@ defmodule ZaZaar.Transcript.Comment do
   def changeset(comment, attrs) do
     comment
     |> cast(attrs, [
+      :live_timestamp,
       :message,
       :created_time,
       :object_id,

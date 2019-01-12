@@ -145,6 +145,7 @@ defmodule ZaZaar.Fb do
         c["created_time"] |> NaiveDateTime.from_iso8601!() |> NaiveDateTime.truncate(:second)
 
       %{
+        live_timestamp: c["live_broadcast_timestamp"],
         message: c["message"],
         created_time: created_time,
         object_id: c["id"],
