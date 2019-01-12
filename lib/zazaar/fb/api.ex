@@ -3,7 +3,12 @@ defmodule ZaZaar.Fb.Api do
 
   alias Facebook.{GraphAPI, Config, ResponseFormatter}
 
+  @type access_token :: String.t()
+  @type edge :: atom
+  @type inputs :: keyword
+  @type object_id :: atom
   @type object_ids :: list | String.t()
+  @type params :: keyword
   @type resp :: Facebook.resp()
 
   defdelegate me(fields, access_token), to: Facebook
@@ -14,7 +19,7 @@ defmodule ZaZaar.Fb.Api do
 
   defdelegate publish(edge, object_id, inputs, access_token), to: Facebook
 
-  @spec remove(edge :: atom, object_id :: String.t(), access_token :: String.t()) :: resp
+  @spec remove(edge, object_id, access_token) :: resp
   def remove(edge, object_id, access_token) do
     params1 =
       []
@@ -26,12 +31,12 @@ defmodule ZaZaar.Fb.Api do
     |> ResponseFormatter.format_response()
   end
 
-  @spec get_object_edge(String.t(), object_ids, String.t()) :: resp
+  @spec get_object_edge(edge, object_ids, access_token) :: resp
   def get_edge_objects(edge, object_ids, access_token) do
     get_edge_objects(edge, object_ids, access_token, [])
   end
 
-  @spec get_object_edge(String.t(), object_ids, String.t(), keyword) :: resp
+  @spec get_object_edge(edge, object_ids, access_token, params) :: resp
   def get_edge_objects(edge, object_ids, access_token, params) when is_list(object_ids) do
     get_edge_objects(edge, Enum.join(object_ids, ","), access_token, params)
   end

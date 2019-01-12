@@ -10,6 +10,7 @@ defmodule ZaZaar.Transcript.Comment do
     field :live_timestamp, :integer, default: 0
 
     # Toplevel comment ID
+    # it is the parent field on Facebook Graph
     field :parent_object_id, :string
 
     # Commenter Info
