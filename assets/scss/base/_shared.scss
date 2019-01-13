@@ -1,12 +1,11 @@
 /* Extend Bulma Elements */
-
 .button {
 
   &.is-hover-primary {
     background: transparent;
     &:hover {
       border: 1px solid $primary;
-      color: $primary;
+      color: $primary !important;
     }
   }
 
@@ -14,7 +13,7 @@
     background: transparent;
     &:hover {
       border: 1px solid $danger;
-      color: $danger;
+      color: $danger !important;
     }
   }
 
@@ -22,7 +21,7 @@
     background: transparent;
     &:hover {
       border: 1px solid $success;
-      color: $success;
+      color: $success !important;
     }
   }
 }
@@ -40,11 +39,22 @@ a {
   line-height: 1.8;
 }
 
-.landing {
-  z-index: 31;
-  margin-top: -52px;
+.navbar .navbar-brand .main-logo {
+  width: 114px;
 }
 
+.section {
+
+  &.is-fullheight {
+    height: calc( 100vh - 3rem);
+
+    > .container {
+      height: 100%;
+    }
+  }
+}
+
+// Fans Page
 .fans-page {
 
   .hero-body {
@@ -65,10 +75,7 @@ a {
   }
 }
 
-.navbar .navbar-brand .main-logo {
-  width: 114px;
-}
-
+// Comments Model
 .comments {
   overflow-y: scroll;
 
@@ -85,14 +92,15 @@ a {
   .is-username {
     padding-right: 0.5rem;
   }
+
+  .level {
+    padding: 0.25rem 0.5rem;
+  }
 }
 
+// Merchandises Table
 .main-table {
   width: 100%;
-
-  &.has-margin-left {
-    margin-left: 2rem;
-  }
 
   &__body {
     td {
