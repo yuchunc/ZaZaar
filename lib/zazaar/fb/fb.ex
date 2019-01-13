@@ -79,9 +79,10 @@ defmodule ZaZaar.Fb do
     filter = Keyword.get(opts, :filter, :stream)
     summary = Keyword.get(opts, :summary, false)
     limit = Keyword.get(opts, :limit, 300)
+    strategy = Keyword.get(opts, :strategy, :once)
 
     with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
-         fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
+         fb_comments <- do_fetch_comments(strategy, video.fb_video_id, access_token, req_opts),
          comments <- cast_comments(fb_comments) do
       Transcript.update_video(video, fetched_comments: comments)
     end
@@ -144,7 +145,12 @@ defmodule ZaZaar.Fb do
     Transcript.upsert_videos(fb_page_id, result_maps)
   end
 
-  defp do_fetch_comments(vid_id, access_token, opts \\ []) do
+  defp do_fetch_comments(:once, vid_id, access_token, opts) do
+    {:ok, %{"data" => comments}} = @api.get_object_edge("comments", vid_id, access_token, opts)
+    comments
+  end
+
+  defp do_fetch_comments(:all, vid_id, access_token, opts) do
     @api.get_object_edge("comments", vid_id, access_token, opts)
     |> @api.stream
     |> Enum.into([])

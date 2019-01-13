@@ -23,7 +23,8 @@ defmodule ZaZaarWeb.PageChannel do
     {:noreply, socket}
   end
 
-  def handle_info({:broadcast_new_comments, video_id, comments}, socket) do
+  def handle_in("internal:new_comments", payload, socket) do
+    %{"video_id" => video_id, "comments" => comments} = payload
     broadcast(socket, "video:new_comments", %{video_id: video_id, comments: comments})
     {:noreply, socket}
   end
@@ -47,10 +48,11 @@ defmodule ZaZaarWeb.PageChannel do
   def handle_in("comment:save", payload, socket) do
     %{"object_id" => fb_video_id, "message" => message} = payload
     page = current_page(socket)
+    video = Transcript.get_video(fb_video_id)
 
     {:ok, comment} = Fb.publish_comment(fb_video_id, message, page.access_token)
 
-    send(self(), {:broadcast_new_comments, fb_video_id, []})
+    push(socket, "internal:new_comments", %{video_id: video.id, comments: [comment]})
     {:noreply, socket}
   end
 

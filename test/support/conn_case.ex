@@ -19,7 +19,15 @@ defmodule ZaZaarWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
+
+      require ZaZaarWeb
+
+      import ZaZaar.Factory
+
       alias ZaZaarWeb.Router.Helpers, as: Routes
+      alias ZaZaar.Repo
+
+      ZaZaarWeb.aliases()
 
       # The default endpoint for testing
       @endpoint ZaZaarWeb.Endpoint

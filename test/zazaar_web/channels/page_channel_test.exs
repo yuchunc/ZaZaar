@@ -70,7 +70,7 @@ defmodule ZaZaarWeb.PageChannelTest do
     test "save a new comment, publish to Facebook, and broadcast", ctx do
       %{page: page, user: user} = ctx
       socket = joined_page_socket(user, page)
-      video = insert(:video)
+      %{id: video_id} = video = insert(:video)
 
       message = "oheiohei"
 
@@ -81,7 +81,13 @@ defmodule ZaZaarWeb.PageChannelTest do
 
       push(socket, "comment:save", %{object_id: video.fb_video_id, message: message})
 
-      assert_broadcast "video:new_comments", payload
+      assert_receive(
+        %Phoenix.Socket.Message{
+          event: "internal:new_comments",
+          payload: %{video_id: ^video_id, comments: comments}
+        },
+        100
+      )
 
       comment_ids =
         Repo.get(Video, video.id)
@@ -89,10 +95,22 @@ defmodule ZaZaarWeb.PageChannelTest do
         |> Enum.map(& &1.object_id)
 
       result_ids =
-        payload.comments
+        comments
         |> Enum.map(& &1.object_id)
 
       assert result_ids -- comment_ids == []
+    end
+  end
+
+  describe "internal:new_comments event" do
+    test "broadcast new comments to channel", ctx do
+      %{page: page, user: user} = ctx
+      socket = joined_page_socket(user, page)
+      video_id = Ecto.UUID.generate()
+
+      push(socket, "internal:new_comments", %{video_id: video_id, comments: []})
+
+      assert_broadcast "video:new_comments", %{video_id: video_id, comments: []}
     end
   end
 end

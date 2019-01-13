@@ -114,7 +114,7 @@ defmodule ZaZaar.FbTest do
           end)
       end)
 
-      assert {:ok, result} = Fb.fetch_comments(video, access_token)
+      assert {:ok, result} = Fb.fetch_comments(video, access_token, strategy: :all)
       assert result.__struct__ == Video
 
       comments = result.comments
