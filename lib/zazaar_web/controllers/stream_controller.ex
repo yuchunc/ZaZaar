@@ -25,9 +25,12 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   def show(conn, %{"id" => fb_video_id}) do
-    video = %Video{} = Transcript.get_video(fb_video_id)
     # TODO append video completed_at for all products
-    render(conn, "show.html", video: video)
+    case Transcript.get_video(fb_video_id) do
+      %{fb_status: :live, id: id} -> conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
+      %Video{} = video -> render(conn, "show.html", video: video)
+      _ -> {:error, :not_found}
+    end
   end
 
   # TODO
