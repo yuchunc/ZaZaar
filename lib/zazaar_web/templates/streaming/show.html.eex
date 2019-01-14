@@ -27,8 +27,21 @@
             </header>
             <div class="card-content">
               <ul>
-                <li><span class="icon"><i class="fas fa-user"></i></span>666 人正在觀看</li><!-- 觀看人數 -->
-                <li><span class="icon"><i class="fas fa-clock"></i></span>1:12</li><!-- 直播時間 -->
+                <li><!-- 觀看人數 -->
+                  <span class="icon is-medium"><i class="fas fa-user"></i></span>
+                  目前觀看人數
+                  <span class="tag is-medium">666</span>
+                </li>
+                <li><!-- 已直播時間 -->
+                  <span class="icon is-medium"><i class="fas fa-clock"></i></span>
+                  已直播時間
+                  <span class="tag is-medium">0:36</span>
+                </li>
+                <li><!-- 直播剩餘時間 -->
+                  <span class="icon is-medium"><i class="fas fa-hourglass-half"></i></span>
+                  直播剩餘時間
+                  <span class="tag is-medium">1:35</span>
+                </li>
                 <li></li><!-- 可以再往下新增 -->
               </ul>
             </div>
