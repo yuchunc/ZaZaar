@@ -45,7 +45,7 @@ defmodule ZaZaarWeb do
 
       import ZaZaarWeb.ErrorHelpers
       import ZaZaarWeb.Gettext
-      import ZaZaarWeb, only: [current_user: 1, current_page: 1]
+      import ZaZaarWeb, only: :functions
 
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
@@ -103,5 +103,7 @@ defmodule ZaZaarWeb do
   end
 
   def current_user(conn), do: Guardian.Plug.current_resource(conn, key: :user)
+  def current_user(conn, :token), do: Guardian.Plug.current_token(conn, key: :user)
   def current_page(conn), do: Guardian.Plug.current_resource(conn, key: :page)
+  def current_page(conn, :token), do: Guardian.Plug.current_token(conn, key: :page)
 end

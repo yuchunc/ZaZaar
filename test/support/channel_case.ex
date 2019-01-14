@@ -55,7 +55,7 @@ defmodule ZaZaarWeb.ChannelCase do
       {:ok, %{"success" => true}}
     end)
 
-    {:ok, socket} = connect(ZaZaarWeb.UserSocket, %{user_token: user_token})
-    subscribe_and_join!(socket, "page:" <> page.fb_page_id, %{page_token: page_token})
+    {:ok, socket} = connect(ZaZaarWeb.UserSocket, %{userToken: user_token})
+    subscribe_and_join!(socket, "page:" <> page.fb_page_id, %{pageToken: page_token})
   end
 end

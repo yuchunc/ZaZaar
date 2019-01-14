@@ -20,7 +20,7 @@ defmodule ZaZaarWeb.UserSocket do
   # performing token verification on connect.
   @spec connect(params :: map, socket :: Phoenix.Socket.t()) :: {:ok, Phoenix.Socket.t()} | :error
   def connect(params, socket0) do
-    with %{"user_token" => user_token} <- params,
+    with %{"userToken" => user_token} <- params,
          {:ok, socket1} <-
            Guardian.Phoenix.Socket.authenticate(socket0, Auth.Guardian, user_token, %{},
              key: :user
@@ -28,7 +28,7 @@ defmodule ZaZaarWeb.UserSocket do
       {:ok, socket1}
     else
       err ->
-        Logger.debug(err)
+        Logger.info("UserSocket failed attempt:" <> inspect(err))
         :error
     end
   end

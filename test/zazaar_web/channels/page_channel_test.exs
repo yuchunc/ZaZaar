@@ -27,10 +27,10 @@ defmodule ZaZaarWeb.PageChannelTest do
       {:ok, user_token, _} = ZaZaar.Auth.Guardian.encode_and_sign(user)
       {:ok, page_token, _} = ZaZaar.Auth.Guardian.encode_and_sign(page)
 
-      assert {:ok, socket} = connect(UserSocket, %{user_token: user_token})
+      assert {:ok, socket} = connect(UserSocket, %{userToken: user_token})
 
       assert {:ok, _reply, _socket} =
-               join(socket, "page:" <> page.fb_page_id, %{page_token: page_token})
+               join(socket, "page:" <> page.fb_page_id, %{pageToken: page_token})
     end
   end
 

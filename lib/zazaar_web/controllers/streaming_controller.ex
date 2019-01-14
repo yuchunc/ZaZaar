@@ -2,9 +2,10 @@ defmodule ZaZaarWeb.StreamingController do
   use ZaZaarWeb, :controller
 
   def show(conn, _) do
-    video = conn
-    |> get_session(:video_id)
-    |> Transcript.get_video
+    video =
+      conn
+      |> get_session(:video_id)
+      |> Transcript.get_video()
 
     case video do
       %{fb_status: :live} -> render(conn, "show.html", video: video)

@@ -58,7 +58,6 @@
           </header>
 
           <div class="card-content comments">
-            <!-- 這邊之後可以直接 render partial: comment.html -->
             <%= render_many(@video.comments, @view_module, "comment.html", as: :comment) %>
           </div>
 
@@ -70,7 +69,7 @@
               <div class="media-content">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" placeholder="留言⋯⋯">
+                    <textarea class="input" id="comment-input" type="text" placeholder="<%= gettext("Comment Here...") %>"></textarea>
                   </div>
                 </div>
             </div>
@@ -336,3 +335,12 @@
     </footer>
   </div>
 </div>
+
+<script charset="utf-8">
+  window.appConfig = {
+    pageObjId: "<%= current_page(@conn) |> Map.get(:fb_page_id) %>",
+    videoObjId: "<%= @video.fb_video_id %>",
+    userToken: "<%= current_user(@conn, :token) %>",
+    pageToken: "<%= current_page(@conn, :token) %>"
+  }
+</script>

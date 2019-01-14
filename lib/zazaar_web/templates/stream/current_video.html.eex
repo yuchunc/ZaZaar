@@ -1,5 +1,5 @@
 <div class="currently-streamming box has-margin-bottom-md">
-  <a class="has-text-dark" href="/s/current">
+  <a class="has-text-dark" href="/s/<%= @live_stream.fb_video_id %>">
     <h1 class="title is-3 has-text-z">
       <%= @live_stream.title || @live_stream.creation_time |> NaiveDateTime.to_iso8601 %>
     </h1>

@@ -1,5 +1,3 @@
-import main from '../main';
-
 let merchSnapshotModal = document.getElementById("merch-snapshot-modal");
 
 const tbodyOnclickHandler = (e) => {
