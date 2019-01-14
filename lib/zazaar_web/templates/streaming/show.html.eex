@@ -46,17 +46,33 @@
 
           <div class="card-content comments">
 
+            <!-- 這邊之後可以直接 render partial: comment.html -->
             <%= for _ <- 0..8 do %>
               <div class="media">
                 <figure class="media-left image is-32x32 is-avatar">
                   <img class="is-rounded" src="https://bulma.io/images/placeholders/32x32.png">
                 </figure>
-                <div class="media-content comment has-background-light">
-                  <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
+
+                <div class="media-content">
+                  <div class="content comment has-background-light is-marginless">
+                    <p>
+                      <span class="is-username has-text-primary has-text-weight-semibold">
+                        FB User
+                      </span>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non.
+                    </p>
+                  </div>
+
+                  <div class="level is-mobile">
+                    <small class="has-text-grey-light">
+                      15 小時
+                    </small>
+                    <button class="button is-small is-outlined has-text-grey is-hover-primary">新增訂單</button>
+                  </div>
                 </div>
               </div>
             <% end %>
+            <!-- 這邊之後可以直接 render partial: comment.html -->
 
           </div>
 
@@ -85,53 +101,184 @@
 
           <div class="card-content">
 
-            <%= for _ <- 0..8 do %>
+              <!-- A Merchandise Component : Viewing -->
+              <div class="media is-flex-column">
 
-              <div class="media">
-                <div class="columns is-flex-wrap">
-
-                  <!-- 商品名稱 -->
-                  <div class="column is-full">
-                    <div class="field is-horizontal">
-                      <div class="field-label is-normal is-name">
-                        <label class="label" for="name">商品名稱</label>
-                      </div>
-                      <div class="field-body">
-                        <div class="field">
-                        <div class="control">
-                            <input class="input" type="text" name="name" placeholder="商品名稱" value="商品編號 234M8">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="column">
-                    <!-- 商品截圖 -->
-                    <figure class="image is-4by3">
+                <!-- 商品截圖 -->
+                <div class="level">
+                  <div class="level-item">
+                    <figure class="image is-snapshot">
                       <img src="https://bulma.io/images/placeholders/640x480.png">
                     </figure>
                   </div>
+                </div>
 
-                  <div class="column">
-                    <!-- 得標主 -->
-                    <div class="field">
-                      <label class="has-text-weight-semibold">得標主：</label>
-                      <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
+                <!-- 得標主 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label">得標主：</label>
                     </div>
-                    <!-- 得標金額 -->
-                    <div class="field">
-                      <label class="label" for="price">得標金額：</label>
-                      <div class="control">
-                        <input class="input" type="text" name="price" placeholder="商品名稱" value="3000">
-                      </div>
+                    <div class="level-item">
+                      <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
                     </div>
                   </div>
                 </div>
+
+                <!-- 商品名稱 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="name">商品名稱：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <p>商品編號 234M8</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 得標金額 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="price">得標金額：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <p>3000</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="level is-justified-end">
+                  <div class="buttons">
+                    <a class="button is-small is-outlined is-hover-success has-text-grey"><%= gettext "Edit" %></a>
+                    <a class="button is-small is-outlined is-hover-danger has-text-grey"><%= gettext "Invalidate" %></a>
+                  </div>
+                </div>
+
               </div>
-            <% end %>
+              <!-- A Merchandise Component : Viewing -->
+
+              <!-- A Merchandise Component : Editing -->
+              <div class="media is-flex-column">
+
+                <!-- 商品截圖 -->
+                <div class="level">
+                  <div class="level-item">
+                    <figure class="image is-snapshot">
+                      <img src="https://bulma.io/images/placeholders/640x480.png">
+                    </figure>
+                  </div>
+                </div>
+
+                <!-- 得標主 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label">得標主：</label>
+                    </div>
+                    <div class="level-item">
+                      <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 商品名稱 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="name">商品名稱：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <input class="input" type="text" name="name" placeholder="商品名稱" value="商品編號 234M8">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 得標金額 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="price">得標金額：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <input class="input" type="text" name="price" placeholder="得標金額" value="3000">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="level is-justified-end">
+                  <div class="buttons">
+                    <a class="button is-small is-outlined is-hover-success has-text-grey"><%= gettext "Save" %></a>
+                    <a class="button is-small is-outlined is-hover-danger has-text-grey"><%= gettext "Cancel" %></a>
+                  </div>
+                </div>
+
+              </div>
+              <!-- A Merchandise Component : Editing -->
+
+              <!-- A Merchandise Component : Invalidated -->
+              <div class="media is-flex-column is-invalidate">
+
+                <!-- 商品截圖 -->
+                <div class="level">
+                  <div class="level-item">
+                    <figure class="image is-snapshot">
+                      <img src="https://bulma.io/images/placeholders/640x480.png">
+                    </figure>
+                  </div>
+                </div>
+
+                <!-- 得標主 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label">得標主：</label>
+                    </div>
+                    <div class="level-item">
+                      <a class="is-username has-text-primary has-text-weight-semibold is-link">FB User</a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 商品名稱 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="name">商品名稱：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <p>商品編號 234M8</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 得標金額 -->
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <label class="label" for="price">得標金額：</label>
+                    </div>
+                    <div class="level-item is-flex-grow is-shrinkable">
+                      <p>3000</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="level is-justified-end">
+                  <div class="buttons">
+                    <a class="button is-small is-outlined is-hover-success has-text-grey"><%= gettext "Reactivate" %></a>
+                  </div>
+                </div>
+
+              </div>
+              <!-- A Merchandise Component : Invalidated -->
 
           </div>
+
         </div>
       </div>
     </div>

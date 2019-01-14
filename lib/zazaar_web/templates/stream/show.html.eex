@@ -118,7 +118,7 @@
 
       <!-- 得標主 -->
       <div class="field is-horizontal">
-        <div class="field-label is-normal is-name is-paddingless">
+        <div class="field-label is-normal is-paddingless">
           <label class="has-text-weight-semibold">得標主：</label>
         </div>
         <div class="field-body">
@@ -129,7 +129,7 @@
       <!-- 商品名稱 -->
       <div class="field is-horizontal">
         <div class="field-label is-normal">
-          <label class="label" for="name">商品名稱</label>
+          <label class="label" for="name">商品名稱：</label>
         </div>
         <div class="field-body">
           <div class="field">
@@ -143,7 +143,7 @@
       <!-- 得標金額 -->
       <div class="field is-horizontal">
         <div class="field-label is-normal">
-          <label class="label" for="price">得標金額</label>
+          <label class="label" for="price">得標金額：</label>
         </div>
         <div class="field-body">
           <div class="field">
