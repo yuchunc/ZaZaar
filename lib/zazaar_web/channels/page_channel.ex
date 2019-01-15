@@ -25,16 +25,14 @@ defmodule ZaZaarWeb.PageChannel do
 
   # NOTE find a way to unify both this events
   def handle_info({:new_comments, payload}, socket) do
-    payload
-    |> Map.take([:video_id, :comments])
-    |> do_new_comments(socket)
-
+    payload1 = Map.take(payload, [:video_id, :comments])
+    broadcast(socket, "video:new_comments", payload1)
     {:noreply, socket}
   end
 
   def handle_in("internal:new_comments", payload, socket) do
     %{"video_id" => video_id, "comments" => comments} = payload
-    do_new_comments(%{video_id: video_id, comments: comments}, socket)
+    broadcast(socket, "video:new_comments", %{video_id: video_id, comments: comments})
     {:noreply, socket}
   end
 
@@ -80,6 +78,5 @@ defmodule ZaZaarWeb.PageChannel do
   end
 
   defp do_new_comments(payload, socket) do
-    broadcast(socket, "video:new_comments", payload)
   end
 end

@@ -1,4 +1,4 @@
-<div class="media">
+<div class="media comment-panel" data-object-id="<%= @comment.object_id %>">
   <figure class="media-left image is-32x32 is-avatar">
     <img class="is-rounded" src=<%= @comment.commenter_picture %>>
   </figure>

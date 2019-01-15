@@ -34,7 +34,7 @@ const tbodyOnclickHandler = (e) => {
       }
     }
     // TODO Websocket the update to server, and failed
-      // Flashes error message
+    // Flashes error message
   };
 };
 
@@ -47,8 +47,8 @@ const replaceInputWithText = (td) => {
 };
 
 const el = ( domstring ) => {
-    const html = new DOMParser().parseFromString( domstring , 'text/html');
-    return html.body.firstChild;
+  const html = new DOMParser().parseFromString( domstring , 'text/html');
+  return html.body.firstChild;
 };
 
 const closeModal = () => {

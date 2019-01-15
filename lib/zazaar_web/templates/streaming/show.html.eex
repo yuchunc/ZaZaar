@@ -57,7 +57,7 @@
             </p>
           </header>
 
-          <div class="card-content comments">
+          <div class="card-content comments" id="streaming-comments-list">
             <%= render_many(@video.comments, @view_module, "comment.html", as: :comment) %>
           </div>
 
@@ -340,6 +340,7 @@
   window.appConfig = {
     pageObjId: "<%= current_page(@conn) |> Map.get(:fb_page_id) %>",
     videoObjId: "<%= @video.fb_video_id %>",
+    videoId: "<%= @video.id %>",
     userToken: "<%= current_user(@conn, :token) %>",
     pageToken: "<%= current_page(@conn, :token) %>"
   }

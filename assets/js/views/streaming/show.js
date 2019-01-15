@@ -1,4 +1,10 @@
 import socket from '../../socket';
+import * as R from 'ramda';
+
+const el = ( domstring ) => {
+  const html = new DOMParser().parseFromString( domstring , 'text/html');
+  return html.body.firstChild;
+};
 
 const publishComment = (channel) => {
   let commentInput = document.getElementById("comment-input");
@@ -21,15 +27,38 @@ const publishComment = (channel) => {
 
 const appendComments = (channel) => {
   channel.on("video:new_comments", (resp) => {
-    console.log("resp", resp);
+    if(resp.video_id === window.appConfig.videoId) {
+      let commentsListDom = document.getElementById("streaming-comments-list");
+      let currentCommentIds = R.map((elem) => {
+        return elem.dataset.objectId;
+      }, document.getElementsByClassName("comment-panel"));
+
+      R.forEach((newCom) => {
+        if(!R.contains(newCom.object_id, currentCommentIds)) {
+          let newComElem =
+            el(`<div class="media comment-panel" data-object-id="${newCom.object_id}">
+                  <figure class="media-left image is-32x32 is-avatar">
+                    <img class="is-rounded" src="${newCom.commenter_picture}">
+                  </figure>
+                  <div class="media-content comment has-background-light">
+                    <a class="is-username has-text-primary has-text-weight-semibold is-link">
+                      ${newCom.commenter_fb_name}
+                    </a>
+                    ${newCom.message}
+                  </div>
+                </div>`)
+
+          commentsListDom.appendChild(newComElem);
+        };
+      }, resp.comments)
+    };
   });
 };
+
 
 const mount = () => {
   let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
   pageChannel.join();
-
-  console.log("channel", pageChannel);
 
   publishComment(pageChannel);
 
