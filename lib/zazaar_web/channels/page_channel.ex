@@ -23,9 +23,18 @@ defmodule ZaZaarWeb.PageChannel do
     {:noreply, socket}
   end
 
+  # NOTE find a way to unify both this events
+  def handle_info({:new_comments, payload}, socket) do
+    payload
+    |> Map.take([:video_id, :comments])
+    |> do_new_comments(socket)
+
+    {:noreply, socket}
+  end
+
   def handle_in("internal:new_comments", payload, socket) do
     %{"video_id" => video_id, "comments" => comments} = payload
-    broadcast(socket, "video:new_comments", %{video_id: video_id, comments: comments})
+    do_new_comments(%{video_id: video_id, comments: comments}, socket)
     {:noreply, socket}
   end
 
@@ -52,7 +61,7 @@ defmodule ZaZaarWeb.PageChannel do
 
     {:ok, comment} = Fb.publish_comment(fb_video_id, message, page.access_token)
 
-    push(socket, "internal:new_comments", %{video_id: video.id, comments: [comment]})
+    send(self(), {:new_comments, %{video_id: video.id, comments: [comment]}})
     {:noreply, socket}
   end
 
@@ -68,5 +77,9 @@ defmodule ZaZaarWeb.PageChannel do
       invalidated_at: merch["invalidated_at"],
       live_timestamp: merch["live_broadcast_timestamp"]
     }
+  end
+
+  defp do_new_comments(payload, socket) do
+    broadcast(socket, "video:new_comments", payload)
   end
 end

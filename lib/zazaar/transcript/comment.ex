@@ -1,6 +1,8 @@
 defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
+  @derive {Jason.Encoder, except: [:parent_object_id]}
+
   @primary_key false
   embedded_schema do
     # Comment Info

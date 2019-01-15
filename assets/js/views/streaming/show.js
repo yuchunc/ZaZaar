@@ -10,30 +10,30 @@ const publishComment = (channel) => {
 
       if(e.shiftKey) {
         commentInput.value += "\n";
-        console.log("shift", commentInput.value);
       } else if(message != "") {
         let payload = {object_id: window.appConfig.videoObjId, message: message};
-        console.log("channel", channel);
         channel.push("comment:save", payload)
-
-        console.log("submit", message);
         commentInput.value = "";
       };
     }
   });
 };
 
-const appendComment = (channel) => {
-  // Appends comments from channel
+const appendComments = (channel) => {
+  channel.on("video:new_comments", (resp) => {
+    console.log("resp", resp);
+  });
 };
 
 const mount = () => {
   let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
   pageChannel.join();
 
+  console.log("channel", pageChannel);
+
   publishComment(pageChannel);
 
-  appendComment(pageChannel);
+  appendComments(pageChannel);
 
   console.log("Streaming show unmounted");
 };
