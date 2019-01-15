@@ -81,13 +81,7 @@ defmodule ZaZaarWeb.PageChannelTest do
 
       push(socket, "comment:save", %{object_id: video.fb_video_id, message: message})
 
-      assert_receive(
-        %Phoenix.Socket.Message{
-          event: "internal:new_comments",
-          payload: %{video_id: ^video_id, comments: comments}
-        },
-        100
-      )
+      assert_broadcast "video:new_comments", %{video_id: ^video_id, comments: comments}
 
       comment_ids =
         Repo.get(Video, video.id)
