@@ -156,18 +156,7 @@ defmodule ZaZaar.FbTest do
       message = "foofoobarbar"
 
       ApiMock
-      |> expect(:publish, fn :comments,
-                             _,
-                             [
-                               fields: [
-                                 "created_time",
-                                 "from{picture,name}",
-                                 "message",
-                                 "parent{id}"
-                               ],
-                               message: msg
-                             ],
-                             _ ->
+      |> expect(:publish, fn :comments, _, [fields: _, message: msg], _ ->
         resp = RespMock.comment(message: msg, parent_id: video.fb_video_id)
         {:ok, resp}
       end)

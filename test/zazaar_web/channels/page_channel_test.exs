@@ -30,7 +30,7 @@ defmodule ZaZaarWeb.PageChannelTest do
       assert {:ok, socket} = connect(UserSocket, %{userToken: user_token})
 
       assert {:ok, _reply, _socket} =
-               join(socket, "page:" <> page.fb_page_id, %{pageToken: page_token})
+               join(socket, "page:" <> page.fb_page_id, %{"pageToken" => page_token})
     end
   end
 

@@ -1,7 +1,7 @@
 defmodule ZaZaarWeb.PageChannel do
   use ZaZaarWeb, :channel
 
-  def join("page:" <> fb_page_id, %{pageToken: page_token}, socket0) do
+  def join("page:" <> fb_page_id, %{"pageToken" => page_token}, socket0) do
     with {:ok, socket1} <-
            Guardian.Phoenix.Socket.authenticate(socket0, Auth.Guardian, page_token, %{},
              key: :page

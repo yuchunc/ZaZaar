@@ -99,7 +99,7 @@ defmodule ZaZaar.Fb do
         ) :: {:ok, map} | {:error, map}
   def publish_comment(fb_video_id, message, access_token, opts \\ []) do
     with fields <- Keyword.get(opts, :fields, @comment_default_fields),
-         params <- [fields: fields, message: message],
+         params <- [fields: Enum.join(fields, ","), message: message],
          {:ok, comment_raw} <- @api.publish(:comments, fb_video_id, params, access_token),
          comment_maps <- cast_comments([comment_raw]),
          {:ok, video} <- Transcript.update_video(fb_video_id, fetched_comments: comment_maps),

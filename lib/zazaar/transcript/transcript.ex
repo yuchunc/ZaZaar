@@ -1,6 +1,7 @@
 defmodule ZaZaar.Transcript do
   use ZaZaar, :context
 
+  import Ecto.Changeset
   import ZaZaar.EctoUtil
 
   alias ZaZaar.Transcript
@@ -100,12 +101,13 @@ defmodule ZaZaar.Transcript do
 
   def update_video(%Video{} = video, params) do
     new_comments =
-      Map.get(params, :new_comments, [])
-      |> Enum.map(&Comment.changeset(%Comment{}, &1))
+      params
+      |> Map.get(:new_comments, [])
+      |> Enum.map(&struct(Comment, &1))
 
     video
     |> Video.changeset(params)
-    |> Ecto.Changeset.put_embed(:comments, new_comments)
+    |> put_embed(:comments, video.comments ++ new_comments)
     |> Repo.update()
   end
 
