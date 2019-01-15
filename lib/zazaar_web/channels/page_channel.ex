@@ -76,7 +76,4 @@ defmodule ZaZaarWeb.PageChannel do
       live_timestamp: merch["live_broadcast_timestamp"]
     }
   end
-
-  defp do_new_comments(payload, socket) do
-  end
 end

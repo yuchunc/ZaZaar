@@ -35,6 +35,7 @@ const appendComments = (channel) => {
 
       R.forEach((newCom) => {
         if(!R.contains(newCom.object_id, currentCommentIds)) {
+          let toBottom = commentsListDom.scrollTop >= (commentsListDom.scrollHeight - 600)
           let newComElem =
             el(`<div class="media comment-panel" data-object-id="${newCom.object_id}">
                   <figure class="media-left image is-32x32 is-avatar">
@@ -49,6 +50,9 @@ const appendComments = (channel) => {
                 </div>`)
 
           commentsListDom.appendChild(newComElem);
+
+          console.log(toBottom);
+          if(toBottom) {commentsListDom.scrollTop = commentsListDom.scrollHeight};
         };
       }, resp.comments)
     };
@@ -57,6 +61,10 @@ const appendComments = (channel) => {
 
 
 const mount = () => {
+  let commentsListDom = document.getElementById("streaming-comments-list");
+
+  commentsListDom.scrollTop = commentsListDom.scrollHeight;
+
   let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
   pageChannel.join();
 
