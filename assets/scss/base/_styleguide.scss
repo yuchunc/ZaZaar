@@ -17,13 +17,14 @@ $c-marble: #fafafa;
 .is-justified-end     {justify-content: flex-end !important;}
 .is-justified-around  {justify-content: space-around;}
 .is-justified-between {justify-content: space-between;}
-.is-aligned-start     {align-items: flex-start;}
+.is-aligned-start     {align-items: flex-start !important;}
 .is-aligned-center    {align-items: center;}
 .is-aligned-end       {align-items: flex-end;}
 .is-aligned-stretch   {align-items: stretch;}
 .is-aligned-around    {align-items: space-around;}
 .is-aligned-between   {align-items: space-between;}
 .is-aligned-self-end  {align-self: flex-end;}
+.is-flex-grow         {flex-grow: 1 !important;}
 .is-shrinkable        {flex-shrink: 1 !important;}
 
 .is-centered {margin: auto;}

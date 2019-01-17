@@ -40,12 +40,39 @@
     margin: 1.5rem;
     overflow-x: hidden;
     overflow-y: scroll;
-  }
 
-  .is-name {
-    flex-basis: auto;
-    flex-grow: 0;
-    text-align: left;
+    .media {
+
+      &.is-invalidate {
+        
+        .level:not(:last-child) {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+
+        .button {
+          pointer-events: all;
+        }
+      }
+
+      .level {
+        width: 100%;
+
+        &:not(:last-child) {
+          margin-bottom: 0.75rem;
+        }
+
+        .level-left, p {
+          width: 100%;
+        }
+      }
+
+      .is-snapshot {
+        img{
+          max-width: 160px;
+        }
+      }
+    }
   }
  }
 }
