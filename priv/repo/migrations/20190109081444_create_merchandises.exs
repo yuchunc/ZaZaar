@@ -9,6 +9,7 @@ defmodule ZaZaar.Repo.Migrations.CreateMerchandises do
       add :snapshot_url, :string
       add :buyer_name, :string
       add :buyer_fb_id, :string
+      add :invalidated_at, :naive_datetime
 
       add :video_id, references(:videos, type: :uuid), null: false
 

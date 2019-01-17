@@ -123,7 +123,7 @@ defmodule ZaZaar.AccountTest do
     test "gets page by attrs" do
       page = insert(:page)
 
-      assert Account.get_page(fb_page_id: page.fb_page_id) |> Map.get(:id) == page.id
+      assert Account.get_page(page.fb_page_id) |> Map.get(:id) == page.id
     end
 
     test "if doesn't exist returns nil" do

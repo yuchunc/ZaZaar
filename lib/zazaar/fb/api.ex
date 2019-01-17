@@ -3,8 +3,13 @@ defmodule ZaZaar.Fb.Api do
 
   alias Facebook.{GraphAPI, Config, ResponseFormatter}
 
+  @type access_token :: String.t()
+  @type edge :: atom
+  @type inputs :: keyword
+  @type object_id :: atom
   @type object_ids :: list | String.t()
-  @type resp :: {:ok, map} | {:error, map}
+  @type params :: keyword
+  @type resp :: Facebook.resp()
 
   defdelegate me(fields, access_token), to: Facebook
 
@@ -12,12 +17,26 @@ defmodule ZaZaar.Fb.Api do
 
   defdelegate stream(api_request), to: Facebook.Stream, as: :new
 
-  @spec get_object_edge(String.t(), object_ids, String.t()) :: resp
+  defdelegate publish(edge, object_id, inputs, access_token), to: Facebook
+
+  @spec remove(edge, object_id, access_token) :: resp
+  def remove(edge, object_id, access_token) do
+    params1 =
+      []
+      |> add_app_secret(access_token)
+      |> add_access_token(access_token)
+
+    ~s(/#{object_id}/#{edge})
+    |> GraphAPI.delete([], params: params1)
+    |> ResponseFormatter.format_response()
+  end
+
+  @spec get_object_edge(edge, object_ids, access_token) :: resp
   def get_edge_objects(edge, object_ids, access_token) do
     get_edge_objects(edge, object_ids, access_token, [])
   end
 
-  @spec get_object_edge(String.t(), object_ids, String.t(), keyword) :: resp
+  @spec get_object_edge(edge, object_ids, access_token, params) :: resp
   def get_edge_objects(edge, object_ids, access_token, params) when is_list(object_ids) do
     get_edge_objects(edge, Enum.join(object_ids, ","), access_token, params)
   end

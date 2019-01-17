@@ -11,8 +11,8 @@
   <% else %>
     <div class="container">
       <!-- 正在直播 -->
-      <%= if @first_video.fb_status == :live do %>
-        <%= render @view_module, "current_video.html", live_stream: @first_video %>
+      <%= if @live_video do %>
+        <%= render @view_module, "current_video.html", live_stream: @live_video %>
       <% end %>
 
       <!-- 過去直播 -->

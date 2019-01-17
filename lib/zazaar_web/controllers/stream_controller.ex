@@ -10,8 +10,9 @@ defmodule ZaZaarWeb.StreamController do
   def index(conn, params) do
     with page <- current_page(conn),
          strategy <- Map.get(params, "strategy", "default"),
-         {:ok, videos} <- fetch_and_get_videos(strategy, page) do
-      render(conn, "index.html", videos: videos, first_video: first_video(videos))
+         {:ok, videos} <- fetch_and_get_videos(strategy, page),
+         live_video <- Enum.find(videos, &(&1.fb_status == :live)) do
+      render(conn, "index.html", videos: videos, live_video: live_video)
     end
   end
 
@@ -24,16 +25,21 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   def show(conn, %{"id" => fb_video_id}) do
-    video = %Video{} = Transcript.get_video(fb_video_id)
     # TODO append video completed_at for all products
-    render(conn, "show.html", video: video)
+    case Transcript.get_video(fb_video_id) do
+      %{fb_status: :live, id: id} ->
+        conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
+
+      %Video{} = video ->
+        render(conn, "show.html", video: video)
+
+      _ ->
+        {:error, :not_found}
+    end
   end
 
   # TODO
   # pagination option
   defp fetch_and_get_videos("default", page), do: Fb.fetch_videos(page)
   defp fetch_and_get_videos("fetch_all", page), do: Fb.fetch_videos(page, strategy: :all)
-
-  defp first_video([]), do: %Video{}
-  defp first_video(videos), do: List.first(videos)
 end

@@ -73,4 +73,11 @@ config :zazaar, ZaZaar.Repo,
 config :zazaar, ZaZaar.Auth.Guardian,
   secret_key: "p3dKt7RTFoUe8gPVoO9Qz9bGI7xowt0dyYuqDv/9KUdva8bS6fZc74oTtfy/Bnvk"
 
+config :ex_ngrok,
+  executable: "ngrok",
+  protocol: "http",
+  port: "4000",
+  api_url: "http://localhost:4040/api/tunnels",
+  sleep_between_attempts: 200
+
 import_config "dev.secret.exs"

@@ -114,7 +114,7 @@ defmodule ZaZaar.FbTest do
           end)
       end)
 
-      assert {:ok, result} = Fb.fetch_comments(video, access_token)
+      assert {:ok, result} = Fb.fetch_comments(video, access_token, strategy: :all)
       assert result.__struct__ == Video
 
       comments = result.comments
@@ -122,6 +122,47 @@ defmodule ZaZaar.FbTest do
 
       assert comments |> Enum.map(& &1.message) ==
                Enum.map(1..count, &to_string/1) |> List.duplicate(2) |> List.flatten()
+    end
+  end
+
+  describe "start_subscribe/1" do
+    test "subscribe to page's Facebook webhook" do
+      page = insert(:page)
+
+      expect(ApiMock, :publish, fn :subscribed_apps, _obj_id, [], _access_token ->
+        {:ok, %{"success" => true}}
+      end)
+
+      assert {:ok, _} = Fb.start_subscribe(page)
+    end
+  end
+
+  describe "stop_subscribe/1" do
+    test "stop subscribe to page's Facebook webhook" do
+      page = insert(:page)
+
+      expect(ApiMock, :remove, fn :subscribed_apps, _obj_id, _access_token ->
+        {:ok, %{"success" => true}}
+      end)
+
+      assert {:ok, _} = Fb.stop_subscribe(page)
+    end
+  end
+
+  describe "publish_comment/4" do
+    test "push comment to facebook, with fields to get comments back" do
+      video = insert(:video)
+      access_token = "Imthealmightyaccesstoken"
+      message = "foofoobarbar"
+
+      ApiMock
+      |> expect(:publish, fn :comments, _, [fields: _, message: msg], _ ->
+        resp = RespMock.comment(message: msg, parent_id: video.fb_video_id)
+        {:ok, resp}
+      end)
+
+      assert {:ok, %Comment{} = comment} =
+               Fb.publish_comment(video.fb_video_id, message, access_token)
     end
   end
 end

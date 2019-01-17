@@ -79,7 +79,8 @@ defmodule ZaZaar.TranscriptTest do
         build_list(5, :comment)
         |> Enum.map(&Map.from_struct/1)
 
-      assert {:ok, _res0} = Transcript.update_video(vid, fetched_comments: comments)
+      assert {:ok, res0} = Transcript.update_video(vid, fetched_comments: comments)
+      refute Enum.empty?(res0.comments)
 
       comments1 =
         build_list(5, :comment)
@@ -106,6 +107,7 @@ defmodule ZaZaar.TranscriptTest do
         insert(:merchandise)
         |> Map.from_struct()
         |> Map.put(:title, new_title)
+        |> Map.put(:invalidated_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
 
       assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
       assert merch.id == merch_map.id

@@ -2,7 +2,7 @@ defmodule ZaZaar.Fb do
   use ZaZaar, :context
 
   alias ZaZaar.Transcript
-  alias Transcript.Video
+  alias Transcript.{Video, Comment}
 
   alias ZaZaar.Account
   alias Account.{User, Page}
@@ -79,12 +79,49 @@ defmodule ZaZaar.Fb do
     filter = Keyword.get(opts, :filter, :stream)
     summary = Keyword.get(opts, :summary, false)
     limit = Keyword.get(opts, :limit, 300)
+    strategy = Keyword.get(opts, :strategy, :once)
 
     with req_opts <- [fields: fields, filter: filter, summary: summary, limit: limit],
-         fb_comments <- do_fetch_comments(video.fb_video_id, access_token, req_opts),
+         fb_comments <- do_fetch_comments(strategy, video.fb_video_id, access_token, req_opts),
          comments <- cast_comments(fb_comments) do
       Transcript.update_video(video, fetched_comments: comments)
     end
+  end
+
+  @doc """
+  Publish to Facebook object's comments edge
+  """
+  @spec publish_comment(
+          fb_video_id :: String.t(),
+          message :: String.t(),
+          access_token :: String.t(),
+          opts :: keyword
+        ) :: {:ok, map} | {:error, map}
+  def publish_comment(fb_video_id, message, access_token, opts \\ []) do
+    with fields <- Keyword.get(opts, :fields, @comment_default_fields),
+         params <- [fields: Enum.join(fields, ","), message: message],
+         {:ok, comment_raw} <- @api.publish(:comments, fb_video_id, params, access_token),
+         comment_maps <- cast_comments([comment_raw]),
+         {:ok, video} <- Transcript.update_video(fb_video_id, fetched_comments: comment_maps),
+         %Comment{} = comment <- Enum.find(video.comments, &(&1.object_id == comment_raw["id"])) do
+      {:ok, comment}
+    end
+  end
+
+  @doc """
+  Start subscribe to page
+  """
+  @spec start_subscribe(page :: Page.t()) :: {:ok, map} | {:error, map}
+  def start_subscribe(%{fb_page_id: fb_page_id, access_token: access_token}) do
+    @api.publish(:subscribed_apps, fb_page_id, [], access_token)
+  end
+
+  @doc """
+  Stop subscribe to page
+  """
+  @spec stop_subscribe(page :: Page.t()) :: {:ok, map} | {:error, map}
+  def stop_subscribe(%{fb_page_id: fb_page_id, access_token: access_token}) do
+    @api.remove(:subscribed_apps, fb_page_id, access_token)
   end
 
   defp do_fetch_videos(:default, page, fields) do
@@ -108,7 +145,12 @@ defmodule ZaZaar.Fb do
     Transcript.upsert_videos(fb_page_id, result_maps)
   end
 
-  defp do_fetch_comments(vid_id, access_token, opts \\ []) do
+  defp do_fetch_comments(:once, vid_id, access_token, opts) do
+    {:ok, %{"data" => comments}} = @api.get_object_edge("comments", vid_id, access_token, opts)
+    comments
+  end
+
+  defp do_fetch_comments(:all, vid_id, access_token, opts) do
     @api.get_object_edge("comments", vid_id, access_token, opts)
     |> @api.stream
     |> Enum.into([])
@@ -129,6 +171,7 @@ defmodule ZaZaar.Fb do
         c["created_time"] |> NaiveDateTime.from_iso8601!() |> NaiveDateTime.truncate(:second)
 
       %{
+        live_timestamp: c["live_broadcast_timestamp"],
         message: c["message"],
         created_time: created_time,
         object_id: c["id"],

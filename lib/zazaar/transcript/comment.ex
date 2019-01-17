@@ -1,14 +1,18 @@
 defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
+  @derive {Jason.Encoder, except: [:parent_object_id]}
+
   @primary_key false
   embedded_schema do
     # Comment Info
     field :object_id, :string, primary_key: true
     field :message, :string
     field :created_time, :naive_datetime
+    field :live_timestamp, :integer, default: 0
 
     # Toplevel comment ID
+    # it is the parent field on Facebook Graph
     field :parent_object_id, :string
 
     # Commenter Info
@@ -22,6 +26,7 @@ defmodule ZaZaar.Transcript.Comment do
   def changeset(comment, attrs) do
     comment
     |> cast(attrs, [
+      :live_timestamp,
       :message,
       :created_time,
       :object_id,

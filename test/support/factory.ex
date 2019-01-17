@@ -1,4 +1,4 @@
-defmodule Factory do
+defmodule ZaZaar.Factory do
   use ExMachina.Ecto, repo: ZaZaar.Repo
 
   alias ZaZaar.{Account, Transcript}

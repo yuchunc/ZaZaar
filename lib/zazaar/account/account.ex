@@ -24,10 +24,14 @@ defmodule ZaZaar.Account do
   @doc """
   Get a single fb page
   """
-  @spec get_page(attr :: String.t() | keyword) :: Page.t() | nil
-  def get_page(uuid) when is_binary(uuid), do: Repo.get(Page, uuid)
+  @spec get_page(attr :: String.t()) :: Page.t() | nil
+  def get_page(<<_::288>> = id), do: Repo.get(Page, id)
 
-  def get_page(attrs), do: Page |> get_many_query(attrs) |> Repo.one()
+  def get_page(fb_page_id) do
+    Page
+    |> where(fb_page_id: ^fb_page_id)
+    |> Repo.one()
+  end
 
   @doc """
   Gets user fb pages from DB
