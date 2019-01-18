@@ -124,6 +124,15 @@ defmodule ZaZaar.Fb do
     @api.remove(:subscribed_apps, fb_page_id, access_token)
   end
 
+  @doc """
+  Gets video's thumbnails
+  """
+  @spec video_thumbnails(fb_page_id :: String.t(), access_token :: String.t()) ::
+          {:ok, map} | {:error, map}
+  def video_thumbnails(fb_page_id, access_token) do
+    @api.get_object_edge(:thumbnails, fb_page_id, access_token, [])
+  end
+
   defp do_fetch_videos(:default, page, fields) do
     %Page{access_token: access_token, fb_page_id: fb_page_id} = page
 

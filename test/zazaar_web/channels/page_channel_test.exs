@@ -34,35 +34,46 @@ defmodule ZaZaarWeb.PageChannelTest do
     end
   end
 
-  describe "merchandise:new event" do
+  describe "merchandise:save event" do
     test "generates a new merchandise", ctx do
-      %{page: page, user: user} = ctx
+      %{page: %{access_token: access_token} = page, user: user} = ctx
       socket = joined_page_socket(user, page)
-      merch = params_with_assocs(:merchandise)
+      %{fb_video_id: fb_video_id} = video = insert(:video)
+      merch_map = params_for(:merchandise, video_id: video.id)
 
-      ref = push(socket, "merchandise:save", merch)
+      expect(ApiMock, :get_object_edge, fn :thumbnails, ^fb_video_id, ^access_token, _ ->
+        resp = %{"data" => Enum.map(1..10, fn _ -> RespMock.thumbnail() end)}
+        {:ok, resp}
+      end)
 
-      assert_reply(ref, :ok)
-      assert Repo.get_by(Merchandise, video_id: merch.video_id)
+      push(socket, "merchandise:save", merch_map)
+
       assert_broadcast("merchandise:updated", _payload)
+      assert merch = Repo.get_by(Merchandise, video_id: video.id)
+      refute is_nil(merch.snapshot_url)
     end
 
     test "update an existing merchandise", ctx do
-      %{page: page, user: user} = ctx
+      %{page: %{access_token: access_token} = page, user: user} = ctx
       socket = joined_page_socket(user, page)
       new_title = "99 Bottles of Bear"
+      %{fb_video_id: fb_video_id} = video = insert(:video)
 
       merch =
-        insert(:merchandise)
+        insert(:merchandise, video: video)
         |> Map.from_struct()
         |> Map.put(:title, new_title)
 
-      ref = push(socket, "merchandise:save", merch)
+      expect(ApiMock, :get_object_edge, fn :thumbnails, ^fb_video_id, ^access_token, _ ->
+        resp = %{"data" => Enum.map(1..10, fn _ -> RespMock.thumbnail() end)}
+        {:ok, resp}
+      end)
 
-      assert_reply(ref, :ok)
-      assert Repo.get(Merchandise, merch.id)
+      push(socket, "merchandise:save", merch)
+
       assert_broadcast("merchandise:updated", payload)
       assert payload.title == new_title
+      assert payload.snapshot_url == merch.snapshot_url
     end
   end
 

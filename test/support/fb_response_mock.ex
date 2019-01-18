@@ -107,6 +107,18 @@ defmodule ZaZaar.FbResponseMock do
     }
   end
 
+  def thumbnail(opts \\ %{}) do
+    %{
+      "id" => random_obj_id(),
+      "height" => opts[:height] || 1280,
+      "scale" => 1,
+      "uri" =>
+        "https://scontent.xx.fbcdn.net/v/t15.5256-10/#{random_obj_id()}_#{random_obj_id()}_n.jpg",
+      "width" => opts[:width] || 720,
+      "is_preferred" => opts[:preferred] || false
+    }
+  end
+
   def paging do
     %{
       "cursors" => %{
