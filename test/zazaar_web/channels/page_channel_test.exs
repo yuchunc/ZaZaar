@@ -46,10 +46,11 @@ defmodule ZaZaarWeb.PageChannelTest do
         {:ok, resp}
       end)
 
-      push(socket, "merchandise:save", merch_map)
+      ref = push(socket, "merchandise:save", merch_map)
 
+      assert_reply(ref, :ok, %{id: merch_id})
       assert_broadcast("merchandise:updated", _payload)
-      assert merch = Repo.get_by(Merchandise, video_id: video.id)
+      assert %Merchandise{} = merch = Repo.get(Merchandise, merch_id)
       refute is_nil(merch.snapshot_url)
     end
 
@@ -69,8 +70,9 @@ defmodule ZaZaarWeb.PageChannelTest do
         {:ok, resp}
       end)
 
-      push(socket, "merchandise:save", merch)
+      ref = push(socket, "merchandise:save", merch)
 
+      assert_reply(ref, :ok)
       assert_broadcast("merchandise:updated", payload)
       assert payload.title == new_title
       assert payload.snapshot_url == merch.snapshot_url

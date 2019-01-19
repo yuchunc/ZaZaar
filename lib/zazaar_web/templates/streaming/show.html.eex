@@ -58,7 +58,7 @@
           </header>
 
           <div class="card-content comments" id="streaming-comments-list">
-            <%= render_many(@video.comments, @view_module, "comment.html", as: :comment) %>
+            <%= render_many(@video.comments, ZaZaarWeb.StreamView, "comment.html", as: :comment) %>
           </div>
 
           <footer class="card-footer has-background-light">
