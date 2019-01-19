@@ -36,3 +36,5 @@ function handleDocumentUnload() {
 
 window.addEventListener('DOMContentLoaded', handleDOMContentLoaded, false);
 window.addEventListener('unload', handleDocumentUnload, false);
+
+window.__socket = require("phoenix").Socket;

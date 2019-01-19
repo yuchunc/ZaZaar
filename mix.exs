@@ -54,6 +54,7 @@ defmodule ZaZaar.MixProject do
       # Utils
       {:ecto_enum, "~> 1.0"},
       {:facebook, "~> 0.22.0"},
+      {:drab, "~> 0.10.0"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},
