@@ -12,12 +12,11 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-    app: [
-      './js/app.js',
-    ]
+    deps: './js/deps.js',
+    app: './js/app.js'
   },
   output: {
-    filename: 'app.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, '../priv/static/js')
   },
   module: {
