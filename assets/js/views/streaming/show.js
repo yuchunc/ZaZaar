@@ -1,6 +1,8 @@
 import socket from '../../socket';
 import * as R from 'ramda';
 
+const appConfig = window.appConfig;
+
 const el = ( domstring ) => {
   const html = new DOMParser().parseFromString( domstring , 'text/html');
   return html.body.firstChild;
@@ -61,16 +63,16 @@ const appendComments = (channel) => {
 
 
 const mount = () => {
-  let commentsListDom = document.getElementById("streaming-comments-list");
+  //let commentsListDom = document.getElementById("streaming-comments-list");
 
-  commentsListDom.scrollTop = commentsListDom.scrollHeight;
+  //commentsListDom.scrollTop = commentsListDom.scrollHeight;
 
-  let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
-  pageChannel.join();
+  //let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
+  //pageChannel.join();
 
-  publishComment(pageChannel);
+  //publishComment(pageChannel);
 
-  appendComments(pageChannel);
+  //appendComments(pageChannel);
 
   console.log("Streaming show unmounted");
 };

@@ -62,10 +62,12 @@ defmodule ZaZaarWeb do
     quote do
       use Drab.Commander
 
-      import Phoenix.View
       import ZaZaarWeb.Gettext
 
       ZaZaarWeb.aliases()
+
+      def current_user(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :user)
+      def current_page(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :page)
     end
   end
 
