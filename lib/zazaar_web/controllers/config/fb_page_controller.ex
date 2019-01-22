@@ -1,4 +1,4 @@
-defmodule ZaZaarWeb.Config.PageController do
+defmodule ZaZaarWeb.Config.FbPageController do
   use ZaZaarWeb, :controller
 
   alias Auth.Guardian.Plug, as: GPlug
@@ -18,7 +18,7 @@ defmodule ZaZaarWeb.Config.PageController do
           pages -> {:ok, pages}
         end
 
-      render(conn, "pages.html", pages: Enum.sort_by(pages1, & &1.fb_page_id))
+      render(conn, "fb_pages.html", pages: Enum.sort_by(pages1, & &1.fb_page_id))
     end
   end
 

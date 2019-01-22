@@ -38,7 +38,8 @@ defmodule ZaZaarWeb do
         namespace: ZaZaarWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, action_name: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
@@ -48,6 +49,21 @@ defmodule ZaZaarWeb do
       import ZaZaarWeb, only: :functions
 
       alias ZaZaarWeb.Router.Helpers, as: Routes
+
+      ZaZaarWeb.aliases()
+
+      def custom_js(_), do: ""
+
+      defoverridable custom_js: 1
+    end
+  end
+
+  def commander do
+    quote do
+      use Drab.Commander
+
+      import Phoenix.View
+      import ZaZaarWeb.Gettext
 
       ZaZaarWeb.aliases()
     end

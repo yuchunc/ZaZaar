@@ -11,7 +11,7 @@
               <p class="card-header-title">直播預覽</p>
             </header>
             <div class="card-image">
-              <div class="fb-video" data-href=<%= @video.permalink_url %> data-width="500" data-autopaly="true"></div>
+              <div class="fb-video" data-href="<%= @video.permalink_url %>" data-width="500" data-autopaly="true"></div>
             </div>
           </div>
 
@@ -58,7 +58,7 @@
           </header>
 
           <div class="card-content comments" id="streaming-comments-list">
-            <%= render_many(@video.comments, ZaZaarWeb.StreamView, "comment.html", as: :comment) %>
+            <%=# render_many(@video.comments, ZaZaarWeb.StreamView, "comment.html", as: :comment) %>
           </div>
 
           <footer class="card-footer has-background-light">

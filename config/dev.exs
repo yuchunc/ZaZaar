@@ -50,6 +50,7 @@ config :zazaar, ZaZaarWeb.Endpoint,
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/zazaar_web/views/.*(ex)$},
+      ~r{lib/zazaar_web/commanders/.*(ex)$},
       ~r{lib/zazaar_web/templates/.*(eex|drab)$}
     ]
   ]

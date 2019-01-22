@@ -1,0 +1,1 @@
+<script> <%= Drab.Client.run(@conn) %> </script>
