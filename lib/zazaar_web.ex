@@ -23,7 +23,7 @@ defmodule ZaZaarWeb do
 
       import Plug.Conn
       import ZaZaarWeb.Gettext
-      import ZaZaarWeb, only: [current_user: 1, current_page: 1]
+      import ZaZaarWeb, only: :functions
 
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
@@ -62,6 +62,7 @@ defmodule ZaZaarWeb do
     quote do
       use Drab.Commander
 
+      import Phoenix.Socket
       import ZaZaarWeb.Gettext
 
       ZaZaarWeb.aliases()

@@ -13,17 +13,33 @@ defmodule ZaZaarWeb.StreamingCommander do
 
   onload(:page_loaded)
 
+  defhandler comment_textbox_key(socket, sender) do
+    do_comment_textarea_action(socket, sender["event"], String.trim(sender["value"]))
+  end
+
   def page_loaded(socket) do
-    %{drab_assigns: %{video_id: video_id}} = socket.assigns
-    video = Transcript.get_video(video_id)
+    %{assigns: %{drab_assigns: assigns}} = socket
+    page = Account.get_page(assigns.page_id)
+    Fb.start_subscribe(page)
+  end
 
-    comment_medias =
-      video.comments
-      |> Enum.map(fn c ->
-        render_to_string(StreamView, "comment.html", comment: c)
-      end)
-      |> Enum.join("\n")
+  defp do_comment_textarea_action(socket, %{"keyCode" => 13, "shiftKey" => false}, value)
+       when value != "" do
+    %{page: page, video: video} = load_socket_resources(socket)
+    {:ok, comment} = Fb.publish_comment(video.fb_video_id, value, page.access_token)
 
-    set_prop!(socket, "#streaming-comments-list", innerHTML: comment_medias)
+    {:ok, comments} = peek(socket, :comments)
+    poke(socket, comments: comments ++ [comment])
+    set_prop!(socket, "#comment-input", value: "")
+    exec_js(socket, "window.commentsListDom.scrollTop = window.commentsListDom.scrollHeight")
+  end
+
+  defp do_comment_textarea_action(_, _, _), do: nil
+
+  defp load_socket_resources(socket) do
+    %{assigns: %{drab_assigns: assigns}} = socket
+    page = Account.get_page(assigns.page_id)
+    video = Transcript.get_video(assigns.video_id)
+    %{assigns: assigns, page: page, video: video}
   end
 end

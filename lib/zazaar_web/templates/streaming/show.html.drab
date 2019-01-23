@@ -57,7 +57,11 @@
             </p>
           </header>
 
-          <div class="card-content comments" id="streaming-comments-list"> </div>
+          <div class="card-content comments" id="streaming-comments-list">
+            <%= for comment <- @comments do %>
+              <%= render ZaZaarWeb.StreamView, "comment.html", comment: comment %>
+            <% end %>
+          </div>
 
           <footer class="card-footer has-background-light">
             <div class="media">
@@ -67,7 +71,13 @@
               <div class="media-content">
                 <div class="field">
                   <div class="control">
-                    <textarea class="input" id="comment-input" type="text" placeholder="<%= gettext("Comment Here...") %>"></textarea>
+                    <textarea class="input"
+                              id="comment-input"
+                              type="text"
+                              placeholder="<%= gettext("Comment Here...") %>"
+                              drab-keyup="comment_textbox_key"
+                              drab-options="debounce(500)"
+                    ></textarea>
                   </div>
                 </div>
             </div>
@@ -336,10 +346,6 @@
 
 <script charset="utf-8">
   window.appConfig = {
-    pageObjId: "<%= current_page(@conn) |> Map.get(:fb_page_id) %>",
-    videoObjId: "<%= @video.fb_video_id %>",
-    videoId: "<%= @video.id %>",
     userToken: "<%= current_user(@conn, :token) %>",
-    pageToken: "<%= current_page(@conn, :token) %>"
   }
 </script>
