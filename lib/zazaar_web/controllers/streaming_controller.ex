@@ -15,9 +15,15 @@ defmodule ZaZaarWeb.StreamingController do
           video_id: video.id
         }
 
+        merchs = Transcript.get_merchandises(video)
+
         conn
         |> assign(:drab_assigns, drab_assigns)
-        |> render("show.html", video: video, comments: video.comments)
+        |> render("show.html",
+          video: Map.delete(video, :comments),
+          comments: video.comments,
+          merchandises: merchs
+        )
 
       %{fb_status: :vod} ->
         redirect(conn, to: "/s/" <> video.fb_video_id)

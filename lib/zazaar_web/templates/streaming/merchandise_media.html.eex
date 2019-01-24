@@ -1,0 +1,93 @@
+<div class="media is-flex-column <%= invalidate_class(@merchandise) %>">
+  <!-- 商品截圖 -->
+  <div class="level">
+    <div class="level-item">
+      <figure class="image is-snapshot">
+        <img src="<%= snapshot_url(@merchandise) %>">
+      </figure>
+    </div>
+  </div>
+
+  <!-- 得標主 -->
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <label class="label">
+          <%= gettext "Buyer:" %>
+        </label>
+      </div>
+      <div class="level-item">
+        <a class="is-username has-text-primary has-text-weight-semibold is-link">
+          <%= @merchandise.buyer_name %>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品名稱 -->
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <label class="label" for="title">
+          <%= gettext "Title:" %>
+        </label>
+      </div>
+      <div class="level-item is-flex-grow is-shrinkable">
+        <%= if Map.get(@merchandise, :editing) do %>
+          <input class="input" type="text" name="title"
+                 placeholder="<%= gettext "Title" %>"
+                 value="<%= @merchandise.title %>">
+        <% else %>
+          <p><%= @merchandise.title %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 得標金額 -->
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <label class="label" for="amount">
+          <%= gettext "Amount:" %>
+        </label>
+      </div>
+      <div class="level-item is-flex-grow is-shrinkable">
+        <%= if Map.get(@merchandise, :editing) do %>
+          <input class="input" type="text" name="price"
+                 placeholder="<%= gettext "Amount" %>"
+                 value="<%= @merchandise.price %>">
+        <% else %>
+          <p><%= @merchandise.price %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="level is-justified-end">
+    <div class="buttons">
+      <%= cond do %>
+      <% Map.get(@merchandise, :editing) -> %>
+        <a class="button is-small is-outlined is-hover-success has-text-grey">
+          <%= gettext "Save" %>
+        </a>
+        <a class="button is-small is-outlined is-hover-danger has-text-grey">
+          <%= gettext "Cancel" %>
+        </a>
+      <% @merchandise.invalidated_at -> %>
+        <a class="button is-small is-outlined is-hover-success has-text-grey">
+          <%= gettext "Reactivate" %>
+        </a>
+      <% true -> %>
+        <a class="button is-small is-outlined is-hover-success has-text-grey">
+          <%= gettext "Edit" %>
+        </a>
+        <a class="button is-small is-outlined is-hover-danger has-text-grey">
+          <%= gettext "Invalidate" %>
+        </a>
+      <% end %>
+    </div>
+  </div>
+
+</div>
