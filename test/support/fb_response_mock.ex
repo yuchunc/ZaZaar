@@ -25,7 +25,16 @@ defmodule ZaZaar.FbResponseMock do
       ],
       "id" => opts1.page_id || Faker.UUID.v4(),
       "name" => opts1.page_name || Faker.Superhero.name(),
-      "tasks" => opts1[:tasks] || default_tasks
+      "tasks" => opts1[:tasks] || default_tasks,
+      "picture" => %{
+        "data" => %{
+          "height" => 50,
+          "is_silhouette" => false,
+          "url" =>
+            "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/#{random_obj_id()}_#{random_obj_id()}.png",
+          "width" => 50
+        }
+      }
     }
   end
 

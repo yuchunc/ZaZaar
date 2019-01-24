@@ -9,6 +9,13 @@ defmodule ZaZaar.Fb do
 
   @api Application.get_env(:zazaar, :fb_api)
 
+  @page_default_fields [
+    "access_token",
+    "name",
+    "tasks",
+    "picture"
+  ]
+
   @video_default_fields [
     "embed_html",
     "permalink_url",
@@ -25,10 +32,13 @@ defmodule ZaZaar.Fb do
   fetches and stores Facebook Pages
   uses user access token
   """
-  @spec set_pages(User.t()) :: {:ok, [Page.t()]} | {:error, String.t()}
-  def set_pages(user) do
-    with {:ok, %{"accounts" => accounts}} <- @api.me("accounts", user.fb_access_token),
-         pages1 <- Enum.map(accounts["data"], &format_page_map/1) do
+  require IEx
+  @spec set_pages(user :: User.t(), opts :: keyword) :: {:ok, [Page.t()]} | {:error, String.t()}
+  def set_pages(user, opts \\ []) do
+    with fields <- Keyword.get(opts, :fields, @page_default_fields) |> Enum.join(","),
+         {:ok, %{"data" => accounts}} <-
+           @api.get_object_edge("accounts", user.fb_id, user.fb_access_token, fields: fields),
+         pages1 <- Enum.map(accounts, &format_page_map/1) do
       Account.upsert_pages(user, pages1, strategy: :flush)
     else
       {:error, %{error: msg}} ->
@@ -170,7 +180,8 @@ defmodule ZaZaar.Fb do
       access_token: raw["access_token"],
       fb_page_id: raw["id"],
       name: raw["name"],
-      tasks: raw["tasks"]
+      tasks: raw["tasks"],
+      picture_url: raw["picture"]["data"]["url"]
     }
   end
 
@@ -194,7 +205,6 @@ defmodule ZaZaar.Fb do
 
   defp format_video_map(video) do
     video_id = video["video"]["id"]
-    # [_, page_id, _, _, _] = String.split(video["permalink_url"], "/")
 
     status =
       case video["status"] do
@@ -209,7 +219,6 @@ defmodule ZaZaar.Fb do
       embed_html: video["embed_html"],
       image_url: video["video"]["picture"],
       permalink_url: "https://www.facebook.com" <> video["permalink_url"],
-      # post_id: "#{page_id}_#{video_id}",
       title: video["title"],
       fb_video_id: video_id,
       fb_status: status

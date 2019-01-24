@@ -18,7 +18,7 @@ defmodule ZaZaar.FbTest do
 
   describe "set_pages/1" do
     test "get list of pages and stores pages in Account" do
-      user = insert(:user)
+      %{fb_id: fb_id, fb_access_token: access_token} = user = insert(:user)
 
       opts = [
         page_access_token: "lookatmeIamaccesstoken",
@@ -26,7 +26,7 @@ defmodule ZaZaar.FbTest do
         page_id: "1736200000004778"
       ]
 
-      expect(ApiMock, :me, fn "accounts", _ ->
+      expect(ApiMock, :get_object_edge, fn "accounts", ^fb_id, ^access_token, _ ->
         resp = %{
           "accounts" => %{
             "data" => [
