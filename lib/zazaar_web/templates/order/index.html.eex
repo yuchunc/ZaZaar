@@ -14,10 +14,10 @@
       <h1 class="title">訂單管理</h1>
     </header>
 
-    <div class="columns is-marginless">
+    <div class="columns">
 
       <!-- Filters -->
-      <div class="column is-one-third is-one-quarter-desktop is-paddingless">
+      <div class="column is-one-third is-one-quarter-desktop">
         <div class="card order__filters">
           <header class="card-header">
             <p class="card-header-title">篩選條件</p>
@@ -95,7 +95,7 @@
       </div>
 
       <!-- Order Table -->
-      <div class="column is-paddingless">
+      <div class="column">
 
         <table class="table main-table is-striped is-hoverable has-margin-left">
           <thead class="main-table__header">

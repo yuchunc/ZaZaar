@@ -1,7 +1,7 @@
 <tr>
   <td><%= @product.inserted_at |> to_string %></td>
   <td>
-    <figure class="image is-4by3 is-thumbnail"> <!-- Modal Trigger -->
+    <figure class="image is-thumbnail"> <!-- Modal Trigger -->
       <img class="merch-snapshot" src=<%= @product.snapshot_url %>>
     </figure>
   </td>
