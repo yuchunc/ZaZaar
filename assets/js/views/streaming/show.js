@@ -1,4 +1,5 @@
 import socket from '../../socket';
+import {el} from "../../utils/dom_control"
 
 const appConfig = window.appConfig;
 
@@ -14,10 +15,11 @@ const shiftEnterAction = () => {
   });
 };
 
-
 const mount = () => {
-  window.commentsListDom = document.getElementById("streaming-comments-list");
-  window.commentsListDom.scrollTop = window.commentsListDom.scrollHeight;
+  let commentsListDom = document.getElementById("streaming-comments-list");
+  commentsListDom.scrollTop = commentsListDom.scrollHeight;
+
+  window.el = el;
 
   shiftEnterAction();
 

@@ -1,3 +1,5 @@
+import {el} from "../../utils/dom_control"
+
 let merchSnapshotModal = document.getElementById("merch-snapshot-modal");
 
 const tbodyOnclickHandler = (e) => {
@@ -44,11 +46,6 @@ const replaceInnerWithInput = (td) => {
 
 const replaceInputWithText = (td) => {
   td.innerText = td.children[0].value;
-};
-
-const el = ( domstring ) => {
-  const html = new DOMParser().parseFromString( domstring , 'text/html');
-  return html.body.firstChild;
 };
 
 const closeModal = () => {

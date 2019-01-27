@@ -25,13 +25,23 @@ defmodule ZaZaarWeb.StreamingCommander do
 
   defp do_comment_textarea_action(socket, %{"keyCode" => 13, "shiftKey" => false}, value)
        when value != "" do
+    set_prop!(socket, "#comment-input", %{"attributes" => %{"disabled" => true}})
     %{page: page, video: video} = load_socket_resources(socket)
     {:ok, comment} = Fb.publish_comment(video.fb_video_id, value, page.access_token)
 
-    {:ok, comments} = peek(socket, :comments)
-    poke(socket, comments: comments ++ [comment])
-    set_prop!(socket, "#comment-input", value: "")
-    exec_js(socket, "window.commentsListDom.scrollTop = window.commentsListDom.scrollHeight")
+    comment_partial = render_to_string(StreamView, "comment.html", comment: comment)
+
+    js_funciton =
+      """
+        let listDom = document.getElementById('streaming-comments-list');
+        listDom.appendChild(el('#{comment_partial}'));
+        document.getElementById("comment-input").value = "";
+        listDom.scrollTop = listDom.scrollHeight;
+      """
+      |> String.replace("\n", "")
+
+    exec_js(socket, js_funciton)
+    set_prop!(socket, "#comment-input", %{"attributes" => %{"disabled" => false}})
   end
 
   defp do_comment_textarea_action(_, _, _), do: nil
