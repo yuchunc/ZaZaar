@@ -17,7 +17,7 @@ const shiftEnterAction = () => {
 
 const cancelNewMerchandise = () => {
   document.querySelector("html").classList.remove("is-clipped");
-  document.getElementById("new-merch-modal").remove("is-active");
+  document.getElementById("new-merch-modal").remove();
 };
 
 const newMerchandiseModal = (modal_str) => {

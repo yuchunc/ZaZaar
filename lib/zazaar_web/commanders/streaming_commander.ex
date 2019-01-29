@@ -21,6 +21,7 @@ defmodule ZaZaarWeb.StreamingCommander do
     %{page: page, video: video} = load_socket_resources(socket)
     {:ok, comment_map} = Jason.decode(comment_str)
     {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(video.fb_video_id, page.access_token)
+    taipei_dt = Timex.now("Asia/Taipei") |> Timex.format!("%F %T", :strftime)
 
     snapshot_url =
       if thumbnails == [] do
@@ -34,7 +35,7 @@ defmodule ZaZaarWeb.StreamingCommander do
     merch = %Merchandise{
       buyer_fb_id: comment_map["commenter_fb_id"],
       buyer_name: comment_map["commenter_fb_name"],
-      # title:
+      title: taipei_dt <> gettext(" Merchandise"),
       price: Regex.run(~r/\d+/, comment_map["message"]),
       snapshot_url: snapshot_url
     }
