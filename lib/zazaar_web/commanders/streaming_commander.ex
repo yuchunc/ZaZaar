@@ -32,23 +32,20 @@ defmodule ZaZaarWeb.StreamingCommander do
       end
 
     # comment to merchandise
-    merch = %Merchandise{
+    payload = %{
       buyer_fb_id: comment_map["commenter_fb_id"],
       buyer_name: comment_map["commenter_fb_name"],
       title: taipei_dt <> gettext(" Merchandise"),
-      price: Regex.run(~r/\d+/, comment_map["message"]),
-      snapshot_url: snapshot_url
+      price: Regex.run(~r/\d+/, comment_map["message"]) |> List.first(),
+      snapshot_url: snapshot_url,
+      message: comment_map["message"]
     }
 
-    modal_str =
-      render_to_string(StreamingView, "new_merchandise_modal.html",
-        merch: merch,
-        message: comment_map["message"]
-      )
+    exec_js(socket, "newMerchandiseModal(`#{Jason.encode!(payload)}`)")
+  end
 
-    exec_js(socket, "newMerchandiseModal(`#{modal_str}`)")
-
-    # set_prop! socket, "#new-merch-modal-img", %{attributes: %{src: url}}
+  defhandler save_merchandise(socket, sender) do
+    sender |> IO.inspect(label: "sender")
   end
 
   def page_loaded(socket) do

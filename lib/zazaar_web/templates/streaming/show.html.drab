@@ -103,7 +103,7 @@
   </div>
 </section>
 
-<%=# render __MODULE__, "new_merchandise_modal.html"%>
+<%= render __MODULE__, "new_merchandise_modal.html"%>
 
 <script charset="utf-8">
   window.appConfig = {
