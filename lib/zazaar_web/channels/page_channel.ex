@@ -67,7 +67,7 @@ defmodule ZaZaarWeb.PageChannel do
     %{
       id: merch["id"],
       video_id: merch["video_id"],
-      buyer_fb_ido: merch["buyer_fb_id"],
+      buyer_fb_id: merch["buyer_fb_id"],
       buyer_name: merch["buyer_name"],
       price: merch["price"],
       title: merch["title"],

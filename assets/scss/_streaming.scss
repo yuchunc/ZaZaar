@@ -1,79 +1,85 @@
 .streaming {
   height: calc(100vh - 3.25rem);
 
- .container, .is-ancestor{
-   height: 100%;
- }
+  .container, .is-ancestor{
+    height: 100%;
+  }
 
- &__view, &__action {
-   flex-grow: 0;
- }
+  &__view, &__action {
+    flex-grow: 0;
+  }
 
- &__metrics {
-   flex-grow: 1;
- }
+  &__metrics {
+    flex-grow: 1;
+  }
 
- &__comments {
+  &__comments {
 
-  .comments {
-    height: calc(100vh - 11rem);
-   }
+    .comments {
+      height: calc(100vh - 11rem);
+    }
 
-   .card-footer {
-     padding: 0.5rem 1.5rem;
+    .card-footer {
+      padding: 0.5rem 1.5rem;
 
-     .media {
-       width: 100%;
-     }
-
-     .input {
-       border-radius: 1rem;
-       resize: none;
-     }
-   }
- }
-
- &__merchandises {
-
-  .card-content {
-    height: calc(100vh - 10.5rem);
-    padding: 0;
-    margin: 1.5rem;
-    overflow-x: hidden;
-    overflow-y: scroll;
-
-    .media {
-
-      &.is-invalidate {
-        
-        .level:not(:last-child) {
-          pointer-events: none;
-          opacity: 0.5;
-        }
-
-        .button {
-          pointer-events: all;
-        }
-      }
-
-      .level {
+      .media {
         width: 100%;
-
-        &:not(:last-child) {
-          margin-bottom: 0.75rem;
-        }
-
-        .level-left, p {
-          width: 100%;
-        }
       }
 
-      .is-snapshot {
-        img{
-          max-width: 160px;
+      .input {
+        border-radius: 1rem;
+        resize: none;
+      }
+    }
+  }
+
+  &__merchandises {
+
+    .card-content {
+      height: calc(100vh - 10.5rem);
+      padding: 0;
+      margin: 1.5rem;
+      overflow-x: hidden;
+      overflow-y: scroll;
+
+      .media {
+
+        &.is-invalidate {
+
+          .level:not(:last-child) {
+            pointer-events: none;
+            opacity: 0.5;
+          }
+
+          .button {
+            pointer-events: all;
+          }
+        }
+
+        .level {
+          width: 100%;
+
+          &:not(:last-child) {
+            margin-bottom: 0.75rem;
+          }
+
+          .level-left, p {
+            width: 100%;
+          }
+        }
+
+        .is-snapshot {
+          img{
+            max-width: 160px;
+          }
         }
       }
     }
   }
- }
+
+  #new-merch-modal {
+    #new-merch-modal-img {
+      max-height: 18em;
+    }
+  }
 }

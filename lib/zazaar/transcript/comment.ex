@@ -1,7 +1,8 @@
 defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
-  @derive {Jason.Encoder, except: [:parent_object_id]}
+  @derive {Jason.Encoder,
+           only: [:object_id, :message, :live_timestamp, :commenter_fb_name, :commenter_fb_id]}
 
   @primary_key false
   embedded_schema do

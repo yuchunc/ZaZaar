@@ -15,11 +15,25 @@ const shiftEnterAction = () => {
   });
 };
 
+const cancelNewMerchandise = () => {
+  document.querySelector("html").classList.remove("is-clipped");
+  document.getElementById("new-merch-modal").remove("is-active");
+};
+
+const newMerchandiseModal = (modal_str) => {
+  let html = document.querySelector("html");
+  html.classList.add("is-clipped");
+
+  document.querySelector("main").appendChild(el(modal_str));
+};
+
 const mount = () => {
-  let commentsListDom = document.getElementById("streaming-comments-list");
+  window.commentsListDom = document.getElementById("streaming-comments-list");
   commentsListDom.scrollTop = commentsListDom.scrollHeight;
 
   window.el = el;
+  window.newMerchandiseModal = newMerchandiseModal;
+  window.cancelNewMerchandise = cancelNewMerchandise;
 
   shiftEnterAction();
 
