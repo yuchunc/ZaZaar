@@ -73,7 +73,7 @@
       </div>
     <% end %>
 
-    <div class="columns main-columns is-marginless">
+    <div class="columns main-columns">
       <!-- Comment Area-->
       <div class="column comment-container is-one-third-desktop">
         <div class="card">
@@ -107,7 +107,7 @@
 </div>
 
 <!-- Add Item Modal -->
-<div class="modal is-active" id="merch-add-modal">
+<div class="modal" id="merch-add-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head has-background-primary has-text-centered">
