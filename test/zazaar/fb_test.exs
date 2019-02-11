@@ -28,11 +28,9 @@ defmodule ZaZaar.FbTest do
 
       expect(ApiMock, :get_object_edge, fn "accounts", ^fb_id, ^access_token, _ ->
         resp = %{
-          "accounts" => %{
-            "data" => [
-              RespMock.page(opts)
-            ]
-          },
+          "data" => [
+            RespMock.page(opts)
+          ],
           "paging" => RespMock.paging()
         }
 
