@@ -1,12 +1,5 @@
 defmodule ZaZaarWeb.StreamingCommander do
   use ZaZaarWeb, :commander
-  # Place your event handlers here
-  #
-  # defhandler button_clicked(socket, sender) do
-  #   set_prop socket, "#output_div", innerHTML: "Clicked the button!"
-  # end
-  #
-  # Place you callbacks here
 
   alias ZaZaar.Auth.Guardian
   alias ZaZaarWeb.{StreamView, StreamingView}
@@ -24,13 +17,12 @@ defmodule ZaZaarWeb.StreamingCommander do
 
     unless thumbnails == [] do
       %{"uri" => uri} = _ = List.last(thumbnails)
+      title = taipei_dt <> gettext(" Merchandise")
 
       exec_js(socket, """
         document.getElementById('merch-modal-img').src = '#{uri}';
-        document.getElementById('merch-modal-img').value = '#{uri}';
-        document.getElementById('merch-modal-title').value = '#{
-        taipei_dt <> gettext(" Merchandise")
-      }';
+        document.getElementById('merch-modal-snapshot-url').value = '#{uri}';
+        document.getElementById('merch-modal-title').value = '#{title}';
       """)
     end
   end
@@ -40,6 +32,7 @@ defmodule ZaZaarWeb.StreamingCommander do
 
     {:ok, merch} =
       params
+      |> IO.inspect(label: "params")
       |> Map.put("video_id", assigns.video_id)
       |> map_merchandise
       |> Transcript.save_merchandise()
@@ -77,6 +70,8 @@ defmodule ZaZaarWeb.StreamingCommander do
   end
 
   defp map_merchandise(merch) do
+    merch |> IO.inspect(label: "merch")
+
     %{
       id: merch["id"],
       video_id: merch["video_id"],
