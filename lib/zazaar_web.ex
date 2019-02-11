@@ -23,7 +23,7 @@ defmodule ZaZaarWeb do
 
       import Plug.Conn
       import ZaZaarWeb.Gettext
-      import ZaZaarWeb, only: [current_user: 1, current_page: 1]
+      import ZaZaarWeb, only: :functions
 
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
@@ -38,7 +38,8 @@ defmodule ZaZaarWeb do
         namespace: ZaZaarWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, action_name: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
@@ -50,6 +51,24 @@ defmodule ZaZaarWeb do
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
       ZaZaarWeb.aliases()
+
+      def custom_js(_), do: ""
+
+      defoverridable custom_js: 1
+    end
+  end
+
+  def commander do
+    quote do
+      use Drab.Commander
+
+      import Phoenix.Socket
+      import ZaZaarWeb.Gettext
+
+      ZaZaarWeb.aliases()
+
+      def current_user(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :user)
+      def current_page(socket), do: Guardian.Phoenix.Socket.current_resource(socket, :page)
     end
   end
 

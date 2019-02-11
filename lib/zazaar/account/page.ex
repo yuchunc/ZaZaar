@@ -7,6 +7,7 @@ defmodule ZaZaar.Account.Page do
           access_token: String.t(),
           fb_page_id: String.t(),
           tasks: [String.t()],
+          picture_url: nil | String.t(),
           user_id: String.t(),
           user: nil | Account.User.t()
         }
@@ -20,6 +21,7 @@ defmodule ZaZaar.Account.Page do
     field :fb_page_id, :string
     field :name, :string
     field :tasks, {:array, :string}
+    field :picture_url, :string
 
     belongs_to :user, Account.User
 
@@ -29,7 +31,7 @@ defmodule ZaZaar.Account.Page do
   @doc false
   def changeset(page, attrs) do
     page
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :picture_url])
     |> validate_change(:tasks, &validate_tasks/2)
     |> validate_required([:fb_page_id, :access_token, :tasks, :name, :user_id])
     |> unique_constraint(:fb_page_id, name: :pages_user_id_fb_page_id_index)

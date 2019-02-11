@@ -123,20 +123,24 @@ defmodule ZaZaar.Transcript do
 
   def get_merchandises(%Video{} = video, opts), do: get_merchandises(%{video_id: video.id}, opts)
 
-  def get_merchandises(attrs, _opts) do
+  def get_merchandises(attrs, opts) do
+    order_by = Keyword.get(opts, :order_by, [])
+
     Merchandise
     |> get_many_query(attrs)
+    |> order_by(^order_by)
     |> Repo.all()
   end
 
   @doc """
   Update or Insert a Merchandise
   """
-  @spec upsert_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
-  def upsert_merchandise(attrs) do
-    upsert_fields = [:title, :snapshot_url, :price, :invalidated_at]
+  @spec save_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
+  def save_merchandise(attrs) do
+    upsert_fields = [:title, :price, :invalidated_at]
 
-    %Merchandise{id: attrs[:id], video_id: attrs[:video_id]}
+    attrs
+    |> prep_merch_struct
     |> Merchandise.changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
@@ -149,5 +153,15 @@ defmodule ZaZaar.Transcript do
       updated_at:
         input_map[:updated_at] || NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
+  end
+
+  defp prep_merch_struct(attrs) do
+    %Merchandise{
+      id: attrs[:id],
+      video_id: attrs[:video_id],
+      snapshot_url: attrs[:snapshot_url],
+      buyer_fb_id: attrs[:buyer_fb_id],
+      buyer_name: attrs[:buyer_name]
+    }
   end
 end

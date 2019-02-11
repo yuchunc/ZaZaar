@@ -52,7 +52,7 @@ defmodule ZaZaarWeb.Router do
   scope "/", ZaZaarWeb, as: :config do
     pipe_through [:browser, :user_authed]
 
-    resources "/config/pages", Config.PageController, only: [:index, :show, :delete]
+    resources "/config/pages", Config.FbPageController, only: [:index, :show, :delete]
 
     delete("/logout", SessionController, :delete)
   end

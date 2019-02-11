@@ -1,76 +1,84 @@
 import socket from '../../socket';
-import * as R from 'ramda';
+import {el} from "../../utils/dom_control"
 
-const el = ( domstring ) => {
-  const html = new DOMParser().parseFromString( domstring , 'text/html');
-  return html.body.firstChild;
-};
+const appConfig = window.appConfig;
 
-const publishComment = (channel) => {
+const shiftEnterAction = () => {
   let commentInput = document.getElementById("comment-input");
 
   commentInput.addEventListener("keydown", (e) => {
-    if(e.keyCode == 13) {
+    if(!e.shiftKey && e.keyCode == 13) {
       e.preventDefault();
-      let message = commentInput.value.trim();
-
-      if(e.shiftKey) {
-        commentInput.value += "\n";
-      } else if(message != "") {
-        let payload = {object_id: window.appConfig.videoObjId, message: message};
-        channel.push("comment:save", payload)
-        commentInput.value = "";
-      };
-    }
-  });
-};
-
-const appendComments = (channel) => {
-  channel.on("video:new_comments", (resp) => {
-    if(resp.video_id === window.appConfig.videoId) {
-      let commentsListDom = document.getElementById("streaming-comments-list");
-      let currentCommentIds = R.map((elem) => {
-        return elem.dataset.objectId;
-      }, document.getElementsByClassName("comment-panel"));
-
-      R.forEach((newCom) => {
-        if(!R.contains(newCom.object_id, currentCommentIds)) {
-          let toBottom = commentsListDom.scrollTop >= (commentsListDom.scrollHeight - 600)
-          let newComElem =
-            el(`<div class="media comment-panel" data-object-id="${newCom.object_id}">
-                  <figure class="media-left image is-32x32 is-avatar">
-                    <img class="is-rounded" src="${newCom.commenter_picture}">
-                  </figure>
-                  <div class="media-content comment has-background-light">
-                    <a class="is-username has-text-primary has-text-weight-semibold is-link">
-                      ${newCom.commenter_fb_name}
-                    </a>
-                    ${newCom.message}
-                  </div>
-                </div>`)
-
-          commentsListDom.appendChild(newComElem);
-
-          console.log(toBottom);
-          if(toBottom) {commentsListDom.scrollTop = commentsListDom.scrollHeight};
-        };
-      }, resp.comments)
+    } else if (e.shiftKey && e.keyCode == 13) {
+      commentInput.value += "\n";
     };
   });
 };
 
+const appendCommentPanel = (htmlStr) => {
+  let elem = el(htmlStr);
 
-const mount = () => {
-  let commentsListDom = document.getElementById("streaming-comments-list");
+  commentsListDom.appendChild(elem);
+  document.getElementById("comment-input").value = "";
+  if (commentsListDom.scrollTop >= commentsListDom.scrollHeight - 800) {
+   commentsListDom.scrollTop = commentsListDom.scrollHeight;
+  }
+};
 
+const closeNewMerchModal = (actionFlag) => {
+  let merchModal = document.getElementById("merch-modal");
+  document.querySelector("html").classList.remove("is-clipped");
+  merchModal.classList.remove("is-active");
+
+  merchModal.querySelector("#merch-modal-img").src = "";
+  merchModal.querySelector("#merch-modal-username").innerText = "";
+  merchModal.querySelector("#merch-modal-message").innerText = '';
+  merchModal.querySelector("#merch-modal-title").value = '';
+  merchModal.querySelector("#merch-modal-price").value = '';
+  merchModal.querySelector("#merch-modal-buyer-id").value = '';
+  merchModal.querySelector("#merch-modal-snapshot-url").value = '';
+
+  if (actionFlag === 'newMerch') {
+    let merchList = document.querySelector(".streaming__merchandises .card-content");
+    console.log("list", merchList);
+    merchList.scrollTop = 0;
+  };
+};
+
+const newMerchandiseModal = (resp) => {
+  let merchModal = document.getElementById("merch-modal");
+
+  merchModal.querySelector("#merch-modal-username").innerText = resp.commenterName;
+  merchModal.querySelector("#merch-modal-message").innerText = resp.commentMessage;
+  merchModal.querySelector("#merch-modal-price").value = /\d+/.exec(resp.commentMessage);
+  merchModal.querySelector("#merch-modal-buyer-id").value = resp.commenterId;
+  merchModal.querySelector("#merch-modal-buyer-name").value = resp.commenterName;
+
+  document.querySelector("html").classList.add("is-clipped");
+  merchModal.classList.add("is-active");
+};
+
+const prepCommentsList = () => {
   commentsListDom.scrollTop = commentsListDom.scrollHeight;
 
-  let pageChannel = socket.channel('page:' + window.appConfig.pageObjId, {pageToken: window.appConfig.pageToken});
-  pageChannel.join();
+  commentsListDom.addEventListener("click", (e) => {
+    let elem = e.target
+    if (elem.classList.contains("new-merch")) {
+      Drab.exec_elixir(`set_merchandise_modal`);
+      newMerchandiseModal(elem.dataset);
+    };
+  });
+};
 
-  publishComment(pageChannel);
+const mount = () => {
+  window.commentsListDom = document.getElementById("streaming-comments-list");
+  window.el = el;
+  window.newMerchandiseModal = newMerchandiseModal;
+  window.closeNewMerchModal = closeNewMerchModal;
+  window.appendCommentPanel = appendCommentPanel;
 
-  appendComments(pageChannel);
+  prepCommentsList();
+  shiftEnterAction();
 
   console.log("Streaming show unmounted");
 };

@@ -10,7 +10,8 @@ defmodule ZaZaar.Factory do
     %Account.User{
       name: Faker.Name.name(),
       email: Faker.Internet.email(),
-      fb_id: "integer with somelength"
+      fb_id: random_obj_id(),
+      fb_access_token: StreamData.string(:alphanumeric, length: 64) |> Enum.at(0)
     }
   end
 

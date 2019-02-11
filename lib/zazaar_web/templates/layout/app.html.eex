@@ -23,6 +23,8 @@
       <%= render(ZaZaarWeb.LayoutView, "main_nav.html", conn: @conn) %>
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/deps.js") %>"></script>
+    <%= Drab.Client.run(@conn, drab_assigns: @conn.assigns[:drab_assigns] ) %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

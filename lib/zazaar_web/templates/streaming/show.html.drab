@@ -1,0 +1,112 @@
+<section class="hero streaming">
+  <div class="container is-fluid">
+    <div class="tile is-ancestor is-marginless">
+
+      <!-- Left Sidebar: Streaming View + Action Btn + Metrics -->
+      <div class="tile is-vertical is-4">
+        <div class="tile is-parent is-vertical">
+
+          <div class="tile is-child card streaming__view">
+            <header class="card-header">
+              <p class="card-header-title">直播預覽</p>
+            </header>
+            <div class="card-image">
+              <div class="fb-video" data-href="<%= @video.permalink_url %>" data-width="500" data-autopaly="true"></div>
+            </div>
+          </div>
+
+          <div class="tile is-child streaming__action">
+            <a href="#" class="button is-primary is-medium is-fullwidth">Take a Snapshot</a>
+          </div>
+
+          <div class="tile is-child card streaming__metrics">
+            <header class="card-header">
+              <p class="card-header-title">統計</p>
+            </header>
+            <div class="card-content">
+              <ul>
+                <li><!-- 觀看人數 -->
+                  <span class="icon is-medium"><i class="fas fa-user"></i></span>
+                  目前觀看人數
+                  <span class="tag is-medium">666</span>
+                </li>
+                <li><!-- 已直播時間 -->
+                  <span class="icon is-medium"><i class="fas fa-clock"></i></span>
+                  已直播時間
+                  <span class="tag is-medium">0:36</span>
+                </li>
+                <li><!-- 直播剩餘時間 -->
+                  <span class="icon is-medium"><i class="fas fa-hourglass-half"></i></span>
+                  直播剩餘時間
+                  <span class="tag is-medium">1:35</span>
+                </li>
+                <li></li><!-- 可以再往下新增 -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Comment Area -->
+      <div class="tile is-parent is-4 streaming__comments">
+        <div class="tile is-child card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <%= gettext "Live Comments" %>
+            </p>
+          </header>
+
+          <div class="card-content comments" id="streaming-comments-list">
+            <%= for comment <- @comments do %>
+              <%= render ZaZaarWeb.StreamView, "comment.html", comment: comment %>
+            <% end %>
+          </div>
+
+          <footer class="card-footer has-background-light">
+            <div class="media">
+              <figure class="media-left image is-32x32 is-avatar">
+                <img class="is-rounded"
+                     src="<%= if current_page(@conn), do: current_page(@conn).picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
+              </figure>
+              <div class="media-content">
+                <div class="field">
+                  <div class="control">
+                    <textarea class="input"
+                              id="comment-input"
+                              type="text"
+                              placeholder="<%= gettext("Comment Here...") %>"
+                              drab-keydown="comment_textbox_keydown"
+                              drab-options="debounce(500)"
+                    ></textarea>
+                  </div>
+                </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Merchandises List -->
+      <div class="tile is-parent is-4 streaming__merchandises">
+        <div class="tile is-child card">
+          <header class="card-header">
+            <p class="card-header-title">商品列表</p>
+          </header>
+
+          <div class="card-content">
+            <%= render_many @merchandises, __MODULE__, "merchandise_media.html", as: :merchandise %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render __MODULE__, "new_merchandise_modal.html"%>
+
+<script charset="utf-8">
+  window.appConfig = {
+    userToken: "<%= current_user(@conn, :token) %>",
+  }
+</script>

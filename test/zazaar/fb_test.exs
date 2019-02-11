@@ -18,7 +18,7 @@ defmodule ZaZaar.FbTest do
 
   describe "set_pages/1" do
     test "get list of pages and stores pages in Account" do
-      user = insert(:user)
+      %{fb_id: fb_id, fb_access_token: access_token} = user = insert(:user)
 
       opts = [
         page_access_token: "lookatmeIamaccesstoken",
@@ -26,13 +26,11 @@ defmodule ZaZaar.FbTest do
         page_id: "1736200000004778"
       ]
 
-      expect(ApiMock, :me, fn "accounts", _ ->
+      expect(ApiMock, :get_object_edge, fn "accounts", ^fb_id, ^access_token, _ ->
         resp = %{
-          "accounts" => %{
-            "data" => [
-              RespMock.page(opts)
-            ]
-          },
+          "data" => [
+            RespMock.page(opts)
+          ],
           "paging" => RespMock.paging()
         }
 
@@ -151,18 +149,32 @@ defmodule ZaZaar.FbTest do
 
   describe "publish_comment/4" do
     test "push comment to facebook, with fields to get comments back" do
-      video = insert(:video)
+      %{fb_video_id: fb_video_id} = video = insert(:video)
       access_token = "Imthealmightyaccesstoken"
       message = "foofoobarbar"
 
-      ApiMock
-      |> expect(:publish, fn :comments, _, [fields: _, message: msg], _ ->
+      expect(ApiMock, :publish, fn :comments, ^fb_video_id, [fields: _, message: msg], _ ->
         resp = RespMock.comment(message: msg, parent_id: video.fb_video_id)
         {:ok, resp}
       end)
 
       assert {:ok, %Comment{} = comment} =
                Fb.publish_comment(video.fb_video_id, message, access_token)
+    end
+  end
+
+  describe "video_thumbnails/2" do
+    test "get thumbnails from facebook" do
+      %{fb_video_id: fb_video_id} = insert(:video)
+      access_token = "iamyourawesometoken"
+      count = 10
+
+      expect(ApiMock, :get_object_edge, fn :thumbnails, ^fb_video_id, ^access_token, _ ->
+        resp = %{"data" => Enum.map(1..count, fn _ -> RespMock.thumbnail() end)}
+        {:ok, resp}
+      end)
+
+      assert {:ok, _} = Fb.video_thumbnails(fb_video_id, access_token)
     end
   end
 end

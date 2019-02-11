@@ -91,11 +91,11 @@ defmodule ZaZaar.TranscriptTest do
     end
   end
 
-  describe "upsert_merchandise/2" do
+  describe "save_merchandise/2" do
     test "inserts merchandise if doesn't exist" do
       merch_map = params_with_assocs(:merchandise)
 
-      assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
+      assert {:ok, merch} = Transcript.save_merchandise(merch_map)
       assert Ecto.get_meta(merch, :state) == :loaded
       assert merch.video_id == merch_map.video_id
     end
@@ -109,7 +109,7 @@ defmodule ZaZaar.TranscriptTest do
         |> Map.put(:title, new_title)
         |> Map.put(:invalidated_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
 
-      assert {:ok, merch} = Transcript.upsert_merchandise(merch_map)
+      assert {:ok, merch} = Transcript.save_merchandise(merch_map)
       assert merch.id == merch_map.id
       assert merch.title == new_title
     end

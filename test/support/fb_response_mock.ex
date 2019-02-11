@@ -25,7 +25,16 @@ defmodule ZaZaar.FbResponseMock do
       ],
       "id" => opts1.page_id || Faker.UUID.v4(),
       "name" => opts1.page_name || Faker.Superhero.name(),
-      "tasks" => opts1[:tasks] || default_tasks
+      "tasks" => opts1[:tasks] || default_tasks,
+      "picture" => %{
+        "data" => %{
+          "height" => 50,
+          "is_silhouette" => false,
+          "url" =>
+            "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/#{random_obj_id()}_#{random_obj_id()}.png",
+          "width" => 50
+        }
+      }
     }
   end
 
@@ -104,6 +113,18 @@ defmodule ZaZaar.FbResponseMock do
       "is_silhouette" => false,
       "url" => src,
       "width" => 160
+    }
+  end
+
+  def thumbnail(opts \\ %{}) do
+    %{
+      "id" => random_obj_id(),
+      "height" => opts[:height] || 1280,
+      "scale" => 1,
+      "uri" =>
+        "https://scontent.xx.fbcdn.net/v/t15.5256-10/#{random_obj_id()}_#{random_obj_id()}_n.jpg",
+      "width" => opts[:width] || 720,
+      "is_preferred" => opts[:preferred] || false
     }
   end
 

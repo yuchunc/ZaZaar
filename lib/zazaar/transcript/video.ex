@@ -42,7 +42,8 @@ defmodule ZaZaar.Transcript.Video do
       :description,
       :title,
       :fb_status,
-      :completed_at
+      :completed_at,
+      :image_url
     ])
     |> validate_required([
       :embed_html,
