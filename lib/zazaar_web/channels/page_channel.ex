@@ -43,7 +43,7 @@ defmodule ZaZaarWeb.PageChannel do
          {:ok, %{"data" => thumbnails}} <-
            Fb.video_thumbnails(video.fb_video_id, page.access_token),
          merch_map1 <- apply_snapshot(merch_map0, thumbnails),
-         {:ok, merch} <- Transcript.upsert_merchandise(merch_map1) do
+         {:ok, merch} <- Transcript.save_merchandise(merch_map1) do
       broadcast_from!(socket, "merchandise:updated", merch)
       {:reply, {:ok, merch}, socket}
     else

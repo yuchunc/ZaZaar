@@ -33,6 +33,7 @@ defmodule ZaZaar.Transcript.Merchandise do
   def changeset(merchandise, attrs) do
     merchandise
     |> cast(attrs, [:title, :snapshot_url, :price, :invalidated_at])
-    |> validate_required([:price])
+    |> validate_required([:price, :buyer_fb_id, :buyer_name])
+    |> assoc_constraint(:video)
   end
 end

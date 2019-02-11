@@ -15,9 +15,20 @@ const shiftEnterAction = () => {
   });
 };
 
-const closeNewMerchModal = () => {
+const appendCommentPanel = (htmlStr) => {
+  let elem = el(htmlStr);
+
+  commentsListDom.appendChild(elem);
+  document.getElementById("comment-input").value = "";
+  if (commentsListDom.scrollTop >= commentsListDom.scrollHeight - 800) {
+   commentsListDom.scrollTop = commentsListDom.scrollHeight;
+  }
+};
+
+const closeNewMerchModal = (actionFlag) => {
+  let merchModal = document.getElementById("merch-modal");
   document.querySelector("html").classList.remove("is-clipped");
-  document.getElementById("merch-modal").classList.remove("is-active");
+  merchModal.classList.remove("is-active");
 
   merchModal.querySelector("#merch-modal-img").src = "";
   merchModal.querySelector("#merch-modal-username").innerText = "";
@@ -26,34 +37,47 @@ const closeNewMerchModal = () => {
   merchModal.querySelector("#merch-modal-price").value = '';
   merchModal.querySelector("#merch-modal-buyer-id").value = '';
   merchModal.querySelector("#merch-modal-snapshot-url").value = '';
+
+  if (actionFlag === 'newMerch') {
+    let merchList = document.querySelector(".streaming__merchandises .card-content");
+    console.log("list", merchList);
+    merchList.scrollTop = 0;
+  };
 };
 
-const newMerchandiseModal = (resp_str) => {
-  let payload = JSON.parse(resp_str)
+const newMerchandiseModal = (resp) => {
   let merchModal = document.getElementById("merch-modal");
 
-  console.log("payload", payload);
-  merchModal.querySelector("#merch-modal-img").src = payload.snapshot_url;
-  merchModal.querySelector("#merch-modal-username").innerText = payload.buyer_name;
-  merchModal.querySelector("#merch-modal-message").innerText = payload.message;
-  merchModal.querySelector("#merch-modal-title").value = payload.title;
-  merchModal.querySelector("#merch-modal-price").value = payload.price;
-  merchModal.querySelector("#merch-modal-buyer-id").value = payload.buyer_fb_id;
-  merchModal.querySelector("#merch-modal-snapshot-url").value = payload.snapshot_url;
+  merchModal.querySelector("#merch-modal-username").innerText = resp.commenterName;
+  merchModal.querySelector("#merch-modal-message").innerText = resp.commentMessage;
+  merchModal.querySelector("#merch-modal-price").value = /\d+/.exec(resp.commentMessage);
+  merchModal.querySelector("#merch-modal-buyer-id").value = resp.commenterId;
+  merchModal.querySelector("#merch-modal-buyer-name").value = resp.commenterName;
 
   document.querySelector("html").classList.add("is-clipped");
   merchModal.classList.add("is-active");
-  //document.querySelector("main").appendChild(el(modal_str));
+};
+
+const prepCommentsList = () => {
+  commentsListDom.scrollTop = commentsListDom.scrollHeight;
+
+  commentsListDom.addEventListener("click", (e) => {
+    let elem = e.target
+    if (elem.classList.contains("new-merch")) {
+      Drab.exec_elixir(`set_merchandise_modal`);
+      newMerchandiseModal(elem.dataset);
+    };
+  });
 };
 
 const mount = () => {
   window.commentsListDom = document.getElementById("streaming-comments-list");
-  commentsListDom.scrollTop = commentsListDom.scrollHeight;
-
   window.el = el;
   window.newMerchandiseModal = newMerchandiseModal;
   window.closeNewMerchModal = closeNewMerchModal;
+  window.appendCommentPanel = appendCommentPanel;
 
+  prepCommentsList();
   shiftEnterAction();
 
   console.log("Streaming show unmounted");

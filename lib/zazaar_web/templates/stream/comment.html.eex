@@ -1,8 +1,4 @@
-<div class="media comment-panel"
-     data-object-id="<%= @comment.object_id %>"
-     data-commenter-name="<%= @comment.commenter_fb_name %>"
-     data-comment-message="<%= @comment.message %>"
->
+<div class="media comment-panel">
   <figure class="media-left image is-32x32 is-avatar">
     <img class="is-rounded" src=<%= @comment.commenter_picture %>>
   </figure>
@@ -21,8 +17,12 @@
       <small class="has-text-grey-light">
         15 小時
       </small>
-      <button class="button is-small is-outlined has-text-grey is-hover-primary"
-              drab-click="new_merchandise('<%= Jason.encode! @comment %>')">
+      <button class="button is-small is-outlined has-text-grey is-hover-primary new-merch"
+              data-object-id="<%= @comment.object_id %>"
+              data-commenter-name="<%= @comment.commenter_fb_name %>"
+              data-commenter-id="<%= @comment.commenter_fb_id %>"
+              data-comment-message="<%= @comment.message %>"
+      >
         <%= gettext "New Merch" %>
       </button>
     </div>

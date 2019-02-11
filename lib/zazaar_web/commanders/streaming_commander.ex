@@ -17,35 +17,36 @@ defmodule ZaZaarWeb.StreamingCommander do
     do_comment_textarea_action(socket, sender["event"], String.trim(sender["value"]))
   end
 
-  defhandler new_merchandise(socket, sender, comment_str) do
+  defhandler set_merchandise_modal(socket, sender) do
     %{page: page, video: video} = load_socket_resources(socket)
-    {:ok, comment_map} = Jason.decode(comment_str)
     {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(video.fb_video_id, page.access_token)
     taipei_dt = Timex.now("Asia/Taipei") |> Timex.format!("%F %T", :strftime)
 
-    snapshot_url =
-      if thumbnails == [] do
-        nil
-      else
-        %{"uri" => uri} = _ = List.last(thumbnails)
-        uri
-      end
+    unless thumbnails == [] do
+      %{"uri" => uri} = _ = List.last(thumbnails)
 
-    # comment to merchandise
-    payload = %{
-      buyer_fb_id: comment_map["commenter_fb_id"],
-      buyer_name: comment_map["commenter_fb_name"],
-      title: taipei_dt <> gettext(" Merchandise"),
-      price: Regex.run(~r/\d+/, comment_map["message"]) |> List.first(),
-      snapshot_url: snapshot_url,
-      message: comment_map["message"]
-    }
-
-    exec_js(socket, "newMerchandiseModal(`#{Jason.encode!(payload)}`)")
+      exec_js(socket, """
+        document.getElementById('merch-modal-img').src = '#{uri}';
+        document.getElementById('merch-modal-img').value = '#{uri}';
+        document.getElementById('merch-modal-title').value = '#{
+        taipei_dt <> gettext(" Merchandise")
+      }';
+      """)
+    end
   end
 
-  defhandler save_merchandise(socket, sender) do
-    sender |> IO.inspect(label: "sender")
+  defhandler save_merchandise(socket, %{params: params}) do
+    %{assigns: assigns} = load_socket_resources(socket)
+
+    {:ok, merch} =
+      params
+      |> Map.put("video_id", assigns.video_id)
+      |> map_merchandise
+      |> Transcript.save_merchandise()
+
+    {:ok, merchs} = peek(socket, :merchandises)
+    poke(socket, merchandises: [merch | merchs])
+    exec_js(socket, "closeNewMerchModal('newMerch')")
   end
 
   def page_loaded(socket) do
@@ -60,21 +61,9 @@ defmodule ZaZaarWeb.StreamingCommander do
     %{page: page, video: video} = load_socket_resources(socket)
     {:ok, comment} = Fb.publish_comment(video.fb_video_id, value, page.access_token)
 
-    comment_partial =
-      render_to_string(StreamView, "comment.html", comment: comment)
-      |> IO.inspect(label: "label")
+    comment_partial = render_to_string(StreamView, "comment.html", comment: comment)
 
-    js_funciton =
-      """
-        commentsListDom.appendChild(el('#{comment_partial}'));
-        document.getElementById("comment-input").value = "";
-        if (commentsListDom.scrollTop >= commentsListDom.scrollHeight - 800) {
-         commentsListDom.scrollTop = commentsListDom.scrollHeight;
-        }
-      """
-      |> String.replace("\n", "")
-
-    exec_js(socket, js_funciton)
+    exec_js(socket, "appendCommentPanel(`#{comment_partial}`)")
     set_prop!(socket, "#comment-input", %{attributes: %{disabled: false}})
   end
 
@@ -85,5 +74,19 @@ defmodule ZaZaarWeb.StreamingCommander do
     page = Account.get_page(assigns.page_id)
     video = Transcript.get_video(assigns.video_id)
     %{assigns: assigns, page: page, video: video}
+  end
+
+  defp map_merchandise(merch) do
+    %{
+      id: merch["id"],
+      video_id: merch["video_id"],
+      buyer_fb_id: merch["buyer_fb_id"],
+      buyer_name: merch["buyer_name"],
+      price: merch["price"],
+      title: merch["title"],
+      invalidated_at: merch["invalidated_at"],
+      snapshot_url: merch["snapshot_url"],
+      live_timestamp: merch["live_broadcast_timestamp"]
+    }
   end
 end

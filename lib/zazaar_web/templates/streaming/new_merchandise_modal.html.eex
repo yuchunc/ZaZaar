@@ -76,6 +76,7 @@
 
         <!-- Hidden Inputs -->
         <input class="is-hidden" id="merch-modal-buyer-id" name="buyer_fb_id" value="" readonly>
+        <input class="is-hidden" id="merch-modal-buyer-name" name="buyer_name" value="" readonly>
         <input class="is-hidden" id="merch-modal-snapshot-url" name="snapshot_url" value="" readonly>
       </section>
 

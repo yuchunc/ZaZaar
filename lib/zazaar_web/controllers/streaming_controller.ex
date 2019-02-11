@@ -15,7 +15,7 @@ defmodule ZaZaarWeb.StreamingController do
           video_id: video.id
         }
 
-        merchs = Transcript.get_merchandises(video)
+        merchs = Transcript.get_merchandises(video, order_by: [desc: :inserted_at])
 
         conn
         |> assign(:drab_assigns, drab_assigns)
