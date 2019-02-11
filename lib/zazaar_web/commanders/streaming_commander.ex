@@ -1,8 +1,7 @@
 defmodule ZaZaarWeb.StreamingCommander do
   use ZaZaarWeb, :commander
 
-  alias ZaZaar.Auth.Guardian
-  alias ZaZaarWeb.{StreamView, StreamingView}
+  alias ZaZaarWeb.StreamView
 
   onload(:page_loaded)
 
@@ -10,7 +9,7 @@ defmodule ZaZaarWeb.StreamingCommander do
     do_comment_textarea_action(socket, sender["event"], String.trim(sender["value"]))
   end
 
-  defhandler set_merchandise_modal(socket, sender) do
+  defhandler set_merchandise_modal(socket, _sender) do
     %{page: page, video: video} = load_socket_resources(socket)
     {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(video.fb_video_id, page.access_token)
     taipei_dt = Timex.now("Asia/Taipei") |> Timex.format!("%F %T", :strftime)
@@ -32,7 +31,6 @@ defmodule ZaZaarWeb.StreamingCommander do
 
     {:ok, merch} =
       params
-      |> IO.inspect(label: "params")
       |> Map.put("video_id", assigns.video_id)
       |> map_merchandise
       |> Transcript.save_merchandise()
