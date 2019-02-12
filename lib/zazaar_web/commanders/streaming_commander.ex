@@ -40,6 +40,20 @@ defmodule ZaZaarWeb.StreamingCommander do
     exec_js(socket, "closeNewMerchModal('newMerch')")
   end
 
+  defhandler edit_merchandise(socket, _sender, merch_id) do
+    if Transcript.get_merchandise(merch_id) do
+      {:ok, merchs} = peek(socket, :merchandises)
+
+      poke(socket,
+        merchandises:
+          Enum.map(merchs, fn
+            %{id: ^merch_id} = m -> Map.put(m, :editing, true)
+            m -> m
+          end)
+      )
+    end
+  end
+
   def page_loaded(socket) do
     %{assigns: %{drab_assigns: assigns}} = socket
     page = Account.get_page(assigns.page_id)

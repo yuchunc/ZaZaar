@@ -25,69 +25,92 @@
   </div>
 
   <!-- 商品名稱 -->
-  <div class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <label class="label" for="title">
-          <%= gettext "Title:" %>
-        </label>
-      </div>
-      <div class="level-item is-flex-grow is-shrinkable">
-        <%= if Map.get(@merchandise, :editing) do %>
+  <%= if Map.get(@merchandise, :editing) do %>
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <label class="label" for="title">
+            <%= gettext "Title:" %>
+          </label>
+        </div>
+        <div class="level-item is-flex-grow is-shrinkable">
           <input class="input" type="text" name="title"
                  placeholder="<%= gettext "Title" %>"
-                 value="<%= @merchandise.title %>">
-        <% else %>
-          <p><%= @merchandise.title %></p>
-        <% end %>
+                 value="<%= @merchandise.title %>" />
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 得標金額 -->
-  <div class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <label class="label" for="amount">
-          <%= gettext "Amount:" %>
-        </label>
-      </div>
-      <div class="level-item is-flex-grow is-shrinkable">
-        <%= if Map.get(@merchandise, :editing) do %>
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <label class="label" for="amount">
+            <%= gettext "Amount:" %>
+          </label>
+        </div>
+        <div class="level-item is-flex-grow is-shrinkable">
           <input class="input" type="text" name="price"
                  placeholder="<%= gettext "Amount" %>"
                  value="<%= @merchandise.price %>">
-        <% else %>
-          <p><%= @merchandise.price %></p>
-        <% end %>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Actions -->
-  <div class="level is-justified-end">
-    <div class="buttons">
-      <%= cond do %>
-      <% Map.get(@merchandise, :editing) -> %>
+    <div class="level is-justified-end">
+      <div class="buttons">
         <a class="button is-small is-outlined is-hover-success has-text-grey">
           <%= gettext "Save" %>
         </a>
         <a class="button is-small is-outlined is-hover-danger has-text-grey">
           <%= gettext "Cancel" %>
         </a>
-      <% @merchandise.invalidated_at -> %>
-        <a class="button is-small is-outlined is-hover-success has-text-grey">
-          <%= gettext "Reactivate" %>
-        </a>
-      <% true -> %>
-        <a class="button is-small is-outlined is-hover-success has-text-grey">
-          <%= gettext "Edit" %>
-        </a>
-        <a class="button is-small is-outlined is-hover-danger has-text-grey">
-          <%= gettext "Invalidate" %>
-        </a>
-      <% end %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <label class="label" for="title">
+            <%= gettext "Title:" %>
+          </label>
+        </div>
+        <div class="level-item is-flex-grow is-shrinkable">
+          <p><%= @merchandise.title %></p>
+        </div>
+      </div>
+    </div>
 
+    <!-- 得標金額 -->
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <label class="label" for="amount">
+            <%= gettext "Amount:" %>
+          </label>
+        </div>
+        <div class="level-item is-flex-grow is-shrinkable">
+          <p><%= @merchandise.price %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="level is-justified-end">
+      <div class="buttons">
+        <%= if @merchandise.invalidated_at do %>
+          <a class="button is-small is-outlined is-hover-success has-text-grey">
+            <%= gettext "Reactivate" %>
+          </a>
+        <% else %>
+          <a class="button is-small is-outlined is-hover-success has-text-grey"
+             drab-click='edit_merchandise("<%= @merchandise.id %>")'>
+            <%= gettext "Edit" %>
+          </a>
+          <a class="button is-small is-outlined is-hover-danger has-text-grey">
+            <%= gettext "Invalidate" %>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
