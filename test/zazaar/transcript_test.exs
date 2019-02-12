@@ -115,7 +115,15 @@ defmodule ZaZaar.TranscriptTest do
     end
   end
 
-  describe "get_merchandises/1" do
+  describe "get_merchandise/1" do
+    test "gets a merchandise" do
+      %{id: id} = insert(:merchandise)
+
+      assert %Merchandise{id: ^id} = Transcript.get_merchandise(id)
+    end
+  end
+
+  describe "get_merchandises/2" do
     test "gets a list of merchandise for the video" do
       video = insert(:video)
       insert_list(5, :merchandise, video: video)
