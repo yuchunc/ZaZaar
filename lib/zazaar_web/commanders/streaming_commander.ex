@@ -64,7 +64,8 @@ defmodule ZaZaarWeb.StreamingCommander do
     )
   end
 
-  defhandler invalidate_merchandise(socket, _sender, merch_id) do
+  defhandler toggle_merchandise(socket, _sender, [action, merch_id]) do
+    invalidated_at = if action == "invalidate", do: NaiveDateTime.utc_now()
     {:ok, merchs} = peek(socket, :merchandises)
 
     poke(socket,
@@ -74,7 +75,7 @@ defmodule ZaZaarWeb.StreamingCommander do
             {:ok, merch} =
               m
               |> Map.from_struct()
-              |> Map.put(:invalidated_at, NaiveDateTime.utc_now())
+              |> Map.put(:invalidated_at, invalidated_at)
               |> Transcript.save_merchandise()
 
             merch

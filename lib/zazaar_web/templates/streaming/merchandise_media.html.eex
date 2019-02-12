@@ -99,7 +99,8 @@
     <div class="level is-justified-end">
       <div class="buttons">
         <%= if @merchandise.invalidated_at do %>
-          <a class="button is-small is-outlined is-hover-success has-text-grey">
+          <a class="button is-small is-outlined is-hover-success has-text-grey"
+             drab-click='toggle_merchandise(<%= Jason.encode! ["activate", @merchandise.id] %>)'>
             <%= gettext "Reactivate" %>
           </a>
         <% else %>
@@ -108,7 +109,7 @@
             <%= gettext "Edit" %>
           </a>
           <a class="button is-small is-outlined is-hover-danger has-text-grey"
-             drab-click='invalidate_merchandise("<%= @merchandise.id %>")'>
+             drab-click='toggle_merchandise(<%= Jason.encode! ["invalidate", @merchandise.id] %>)'>
             <%= gettext "Invalidate" %>
           </a>
         <% end %>
