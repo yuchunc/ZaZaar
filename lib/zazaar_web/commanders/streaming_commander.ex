@@ -1,8 +1,7 @@
 defmodule ZaZaarWeb.StreamingCommander do
   use ZaZaarWeb, :commander
 
-  alias ZaZaar.Auth.Guardian
-  alias ZaZaarWeb.{StreamView, StreamingView}
+  alias ZaZaarWeb.StreamView
 
   onload(:page_loaded)
 
@@ -10,7 +9,7 @@ defmodule ZaZaarWeb.StreamingCommander do
     do_comment_textarea_action(socket, sender["event"], String.trim(sender["value"]))
   end
 
-  defhandler set_merchandise_modal(socket, sender) do
+  defhandler set_merchandise_modal(socket, _sender) do
     %{page: page, video: video} = load_socket_resources(socket)
     {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(video.fb_video_id, page.access_token)
     taipei_dt = Timex.now("Asia/Taipei") |> Timex.format!("%F %T", :strftime)
@@ -27,12 +26,32 @@ defmodule ZaZaarWeb.StreamingCommander do
     end
   end
 
-  defhandler save_merchandise(socket, %{params: params}) do
+  # NOTE need a better way to handle this
+  defhandler update_merchandise(socket, %{params: params}) do
+    %{"id" => id} = params
+
+    {:ok, merch} =
+      Transcript.get_merchandise(id)
+      |> Map.from_struct()
+      |> Map.merge(%{price: params["price"], title: params["title"]})
+      |> Transcript.save_merchandise()
+
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^id} -> merch
+          m -> m
+        end)
+    )
+  end
+
+  defhandler create_merchandise(socket, %{params: params}) do
     %{assigns: assigns} = load_socket_resources(socket)
 
     {:ok, merch} =
       params
-      |> IO.inspect(label: "params")
       |> Map.put("video_id", assigns.video_id)
       |> map_merchandise
       |> Transcript.save_merchandise()
@@ -40,6 +59,52 @@ defmodule ZaZaarWeb.StreamingCommander do
     {:ok, merchs} = peek(socket, :merchandises)
     poke(socket, merchandises: [merch | merchs])
     exec_js(socket, "closeNewMerchModal('newMerch')")
+  end
+
+  defhandler edit_merchandise(socket, _sender, merch_id) do
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m -> Map.put(m, :editing, true)
+          m -> m
+        end)
+    )
+  end
+
+  defhandler cancel_edit_merchandise(socket, _sender, merch_id) do
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m -> Map.put(m, :editing, false)
+          m -> m
+        end)
+    )
+  end
+
+  defhandler toggle_merchandise(socket, _sender, [action, merch_id]) do
+    invalidated_at = if action == "invalidate", do: NaiveDateTime.utc_now()
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m ->
+            {:ok, merch} =
+              m
+              |> Map.from_struct()
+              |> Map.put(:invalidated_at, invalidated_at)
+              |> Transcript.save_merchandise()
+
+            merch
+
+          m ->
+            m
+        end)
+    )
   end
 
   def page_loaded(socket) do
@@ -70,8 +135,6 @@ defmodule ZaZaarWeb.StreamingCommander do
   end
 
   defp map_merchandise(merch) do
-    merch |> IO.inspect(label: "merch")
-
     %{
       id: merch["id"],
       video_id: merch["video_id"],

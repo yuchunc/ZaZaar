@@ -81,7 +81,7 @@
       </section>
 
       <footer class="modal-card-foot has-background-white is-justified-end">
-        <button class="button is-primary" drab-click="save_merchandise">
+        <button class="button is-primary" drab-click="create_merchandise">
           <%= gettext "Save" %>
         </button>
         <button class="button" type="button" onclick="closeNewMerchModal()">

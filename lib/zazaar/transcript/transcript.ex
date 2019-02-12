@@ -133,6 +133,14 @@ defmodule ZaZaar.Transcript do
   end
 
   @doc """
+  gets a merchandise record
+  """
+  @spec get_merchandise(id :: Ecto.UUID.t()) :: %Merchandise{} | nil
+  def get_merchandise(id) do
+    Repo.get(Merchandise, id)
+  end
+
+  @doc """
   Update or Insert a Merchandise
   """
   @spec save_merchandise(attrs :: map) :: {:ok, Merchandise.t()} | {:error, any}
