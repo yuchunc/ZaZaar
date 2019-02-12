@@ -61,7 +61,8 @@
         <a class="button is-small is-outlined is-hover-success has-text-grey">
           <%= gettext "Save" %>
         </a>
-        <a class="button is-small is-outlined is-hover-danger has-text-grey">
+        <a class="button is-small is-outlined is-hover-danger has-text-grey"
+             drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
           <%= gettext "Cancel" %>
         </a>
       </div>
@@ -106,7 +107,8 @@
              drab-click='edit_merchandise("<%= @merchandise.id %>")'>
             <%= gettext "Edit" %>
           </a>
-          <a class="button is-small is-outlined is-hover-danger has-text-grey">
+          <a class="button is-small is-outlined is-hover-danger has-text-grey"
+             drab-click='invalidate_merchandise("<%= @merchandise.id %>")'>
             <%= gettext "Invalidate" %>
           </a>
         <% end %>

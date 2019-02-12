@@ -41,17 +41,48 @@ defmodule ZaZaarWeb.StreamingCommander do
   end
 
   defhandler edit_merchandise(socket, _sender, merch_id) do
-    if Transcript.get_merchandise(merch_id) do
-      {:ok, merchs} = peek(socket, :merchandises)
+    {:ok, merchs} = peek(socket, :merchandises)
 
-      poke(socket,
-        merchandises:
-          Enum.map(merchs, fn
-            %{id: ^merch_id} = m -> Map.put(m, :editing, true)
-            m -> m
-          end)
-      )
-    end
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m -> Map.put(m, :editing, true)
+          m -> m
+        end)
+    )
+  end
+
+  defhandler cancel_edit_merchandise(socket, _sender, merch_id) do
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m -> Map.put(m, :editing, false)
+          m -> m
+        end)
+    )
+  end
+
+  defhandler invalidate_merchandise(socket, _sender, merch_id) do
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^merch_id} = m ->
+            {:ok, merch} =
+              m
+              |> Map.from_struct()
+              |> Map.put(:invalidated_at, NaiveDateTime.utc_now())
+              |> Transcript.save_merchandise()
+
+            merch
+
+          m ->
+            m
+        end)
+    )
   end
 
   def page_loaded(socket) do
