@@ -26,47 +26,51 @@
 
   <!-- 商品名稱 -->
   <%= if Map.get(@merchandise, :editing) do %>
-    <div class="level">
-      <div class="level-left">
-        <div class="level-item">
-          <label class="label" for="title">
-            <%= gettext "Title:" %>
-          </label>
-        </div>
-        <div class="level-item is-flex-grow is-shrinkable">
-          <input class="input" type="text" name="title"
-                 placeholder="<%= gettext "Title" %>"
-                 value="<%= @merchandise.title %>" />
+    <form>
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <label class="label" for="title">
+              <%= gettext "Title:" %>
+            </label>
+          </div>
+          <div class="level-item is-flex-grow is-shrinkable">
+            <input class="input" name="title"
+                                             placeholder="<%= gettext "Title" %>"
+                                             value="<%= @merchandise.title %>" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="level">
-      <div class="level-left">
-        <div class="level-item">
-          <label class="label" for="amount">
-            <%= gettext "Amount:" %>
-          </label>
-        </div>
-        <div class="level-item is-flex-grow is-shrinkable">
-          <input class="input" type="text" name="price"
-                 placeholder="<%= gettext "Amount" %>"
-                 value="<%= @merchandise.price %>">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <label class="label" for="amount">
+              <%= gettext "Amount:" %>
+            </label>
+          </div>
+          <div class="level-item is-flex-grow is-shrinkable">
+            <input class="input" name="price"
+                                             placeholder="<%= gettext "Amount" %>"
+                                             value="<%= @merchandise.price %>">
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="level is-justified-end">
-      <div class="buttons">
-        <a class="button is-small is-outlined is-hover-success has-text-grey">
-          <%= gettext "Save" %>
-        </a>
-        <a class="button is-small is-outlined is-hover-danger has-text-grey"
-             drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
-          <%= gettext "Cancel" %>
-        </a>
+      <input class="is-hidden" name="id" value="<%= @merchandise.id %>" readonly/>
+
+      <div class="level is-justified-end">
+        <div class="buttons">
+          <a class="button is-small is-outlined is-hover-success has-text-grey" drab-click="update_merchandise">
+            <%= gettext "Save" %>
+          </a>
+          <a class="button is-small is-outlined is-hover-danger has-text-grey"
+            drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
+            <%= gettext "Cancel" %>
+          </a>
+        </div>
       </div>
-    </div>
+    </form>
   <% else %>
     <div class="level">
       <div class="level-left">

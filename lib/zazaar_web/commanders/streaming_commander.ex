@@ -26,7 +26,28 @@ defmodule ZaZaarWeb.StreamingCommander do
     end
   end
 
-  defhandler save_merchandise(socket, %{params: params}) do
+  # NOTE need a better way to handle this
+  defhandler update_merchandise(socket, %{params: params}) do
+    %{"id" => id} = params
+
+    {:ok, merch} =
+      Transcript.get_merchandise(id)
+      |> Map.from_struct()
+      |> Map.merge(%{price: params["price"], title: params["title"]})
+      |> Transcript.save_merchandise()
+
+    {:ok, merchs} = peek(socket, :merchandises)
+
+    poke(socket,
+      merchandises:
+        Enum.map(merchs, fn
+          %{id: ^id} -> merch
+          m -> m
+        end)
+    )
+  end
+
+  defhandler create_merchandise(socket, %{params: params}) do
     %{assigns: assigns} = load_socket_resources(socket)
 
     {:ok, merch} =
@@ -114,8 +135,6 @@ defmodule ZaZaarWeb.StreamingCommander do
   end
 
   defp map_merchandise(merch) do
-    merch |> IO.inspect(label: "merch")
-
     %{
       id: merch["id"],
       video_id: merch["video_id"],
