@@ -14,7 +14,7 @@ defmodule ZaZaarWeb.StreamCommander do
 
     unless thumbnails == [] do
       %{"uri" => uri} = _ = List.last(thumbnails)
-      title = taipei_dt <> gettext(" Merchandise")
+      title = taipei_dt <> gettext(" Merch")
 
       exec_js(socket, """
         document.querySelector('#merch-modal-title').value = '#{title}';
