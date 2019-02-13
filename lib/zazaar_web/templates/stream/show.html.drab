@@ -49,9 +49,9 @@
         <!-- Create Order Button-->
         <div class="level-right">
           <%= if @video.comments != [] do %>
-            <a class="button is-primary is-medium">
-              <%= gettext "Create Orders" %>
-            </a>
+          <a class="button is-primary is-medium">
+            <%= gettext "Create Orders" %>
+          </a>
           <% end %>
         </div>
       </div>
@@ -59,18 +59,18 @@
 
     <!-- Fetch Comments Button-->
     <%= if @video.comments == [] do %>
-      <div class="columns">
-        <div class="column">
-          <article class="message is-danger is-medium">
-            <div class="message-body">
-              <%= gettext "This comments has not been loaded." %>
-            </div>
-          </article>
-        </div>
-        <div class="column is-flex is-narrow is-aligned-center">
-          <%= link gettext("Click Here to get Comments"), to: "/s/#{@video.fb_video_id}", class: "button is-primary is-large", method: :patch %>
-        </div>
+    <div class="columns">
+      <div class="column">
+        <article class="message is-danger is-medium">
+          <div class="message-body">
+            <%= gettext "This comments has not been loaded." %>
+          </div>
+        </article>
       </div>
+      <div class="column is-flex is-narrow is-aligned-center">
+        <%= link gettext("Click Here to get Comments"), to: "/s/#{@video.fb_video_id}", class: "button is-primary is-large", method: :patch %>
+      </div>
+    </div>
     <% end %>
 
     <div class="columns main-columns">
@@ -89,7 +89,22 @@
 
       <!-- Stream Table -->
       <div class="column stream__page__order">
-        <%= render @view_module, "merchandises_table.html", products: [] %>
+        <table class="table main-table is-striped is-hoverable">
+          <thead class="main-table__header">
+            <tr>
+              <th width="10%"><%= gettext "Time" %></th>
+              <th width="20%"><%= gettext "Snapshot" %></th>
+              <th width="22%"><%= gettext "Product Name" %></th>
+              <th width="22%"><%= gettext "Buyer" %></th>
+              <th width="10%"><%= gettext "Amount" %></th>
+              <th width="16%"></th>
+            </tr>
+          </thead>
+
+          <tbody class="main-table__body" id="items-table-body">
+            <%= render_many @merchandises, @view_module, "merchandise_tr.html", as: :merch %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

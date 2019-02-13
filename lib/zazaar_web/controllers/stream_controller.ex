@@ -31,7 +31,8 @@ defmodule ZaZaarWeb.StreamController do
         conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
 
       %Video{} = video ->
-        render(conn, "show.html", video: video)
+        merchs = Transcript.get_merchandises(video)
+        render(conn, "show.html", video: video, merchandises: merchs)
 
       _ ->
         {:error, :not_found}
