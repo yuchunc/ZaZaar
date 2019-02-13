@@ -103,7 +103,9 @@
   </div>
 </section>
 
-<%= render __MODULE__, "new_merchandise_modal.html"%>
+<% @conn.private.phoenix_controller |> IO.inspect%>
+
+<%= render ZaZaarWeb.StreamView, "new_merchandise_modal.html", conn: @conn%>
 
 <script charset="utf-8">
   window.appConfig = {
