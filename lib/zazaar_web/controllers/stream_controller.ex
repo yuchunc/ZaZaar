@@ -25,14 +25,23 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   def show(conn, %{"id" => fb_video_id}) do
-    # TODO append video completed_at for all products
     case Transcript.get_video(fb_video_id) do
       %{fb_status: :live, id: id} ->
         conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
 
       %Video{} = video ->
-        merchs = Transcript.get_merchandises(video)
-        render(conn, "show.html", video: video, merchandises: merchs)
+        drab_assigns = %{
+          user_token: current_user(conn, :token),
+          page_id: current_page(conn) |> Map.get(:id),
+          video_id: video.id
+        }
+
+        merchs =
+          video
+          |> Transcript.get_merchandises()
+          |> Enum.map(&Map.put(&1, :completed_at, video.completed_at))
+
+        render(conn, "show.html", video: video, merchandises: merchs, drab_assigns: drab_assigns)
 
       _ ->
         {:error, :not_found}

@@ -103,8 +103,6 @@
   </div>
 </section>
 
-<% @conn.private.phoenix_controller |> IO.inspect%>
-
 <%= render ZaZaarWeb.StreamView, "new_merchandise_modal.html", conn: @conn%>
 
 <script charset="utf-8">

@@ -1,8 +1,6 @@
 import socket from '../../socket';
 import {el} from "../../utils/dom_control"
 
-const appConfig = window.appConfig;
-
 const shiftEnterAction = () => {
   let commentInput = document.getElementById("comment-input");
 

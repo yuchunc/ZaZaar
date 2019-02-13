@@ -1,15 +1,15 @@
 <tr>
-  <td><%= @product.inserted_at |> to_string %></td>
+  <td><%= @merchandise.inserted_at |> to_string %></td>
   <td>
     <figure class="image is-thumbnail"> <!-- Modal Trigger -->
-      <img class="merch-snapshot" src=<%= @product.snapshot_url %>>
+      <img class="merch-snapshot" src=<%= @merchandise.snapshot_url %>>
     </figure>
   </td>
-  <td class="merch-name editable"><%= @product.title %></td>
-  <td><%= @product.bidder_name %></td>
-  <td class="editable"> <%= @product.total_amount %></td>
+  <td class="merch-name editable"><%= @merchandise.title %></td>
+  <td><%= @merchandise.buyer_name %></td>
+  <td class="editable"> <%= @merchandise.price %></td>
   <td class="has-text-centered">
-    <%= if @product.completed_at do %>
+    <%= if Map.get(@merchandise, :completed_at) do %>
       <a class="button is-primary is-outlined is-centered">
         <%= gettext "Check Order" %>
       </a>

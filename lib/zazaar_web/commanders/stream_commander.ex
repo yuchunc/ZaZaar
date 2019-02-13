@@ -1,9 +1,7 @@
-defmodule ZaZaarWeb.StreamingCommander do
+defmodule ZaZaarWeb.StreamCommander do
   use ZaZaarWeb, :commander
 
   alias ZaZaarWeb.StreamView
-
-  onload(:page_loaded)
 
   defhandler comment_textbox_keydown(socket, sender) do
     do_comment_textarea_action(socket, sender["event"], String.trim(sender["value"]))
@@ -19,14 +17,11 @@ defmodule ZaZaarWeb.StreamingCommander do
       title = taipei_dt <> gettext(" Merchandise")
 
       exec_js(socket, """
-        document.getElementById('merch-modal-img').src = '#{uri}';
-        document.getElementById('merch-modal-snapshot-url').value = '#{uri}';
-        document.getElementById('merch-modal-title').value = '#{title}';
+        document.querySelector('#merch-modal-title').value = '#{title}';
       """)
     end
   end
 
-  # NOTE need a better way to handle this
   defhandler update_merchandise(socket, %{params: params}) do
     %{"id" => id} = params
 
@@ -107,12 +102,6 @@ defmodule ZaZaarWeb.StreamingCommander do
     )
   end
 
-  def page_loaded(socket) do
-    %{assigns: %{drab_assigns: assigns}} = socket
-    page = Account.get_page(assigns.page_id)
-    Fb.start_subscribe(page)
-  end
-
   defp do_comment_textarea_action(socket, %{"keyCode" => 13, "shiftKey" => false}, value)
        when value != "" do
     set_prop!(socket, "#comment-input", %{"attributes" => %{"disabled" => true}})
@@ -128,7 +117,7 @@ defmodule ZaZaarWeb.StreamingCommander do
   defp do_comment_textarea_action(_, _, _), do: nil
 
   defp load_socket_resources(socket) do
-    %{assigns: %{drab_assigns: assigns}} = socket
+    %{assigns: %{drab_assigns: assigns}} = socket |> IO.inspect(label: "label")
     page = Account.get_page(assigns.page_id)
     video = Transcript.get_video(assigns.video_id)
     %{assigns: assigns, page: page, video: video}

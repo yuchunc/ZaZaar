@@ -102,7 +102,7 @@
           </thead>
 
           <tbody class="main-table__body" id="items-table-body">
-            <%= render_many @merchandises, @view_module, "merchandise_tr.html", as: :merch %>
+            <%= render_many @merchandises, @view_module, "merchandise_tr.html", as: :merchandise %>
           </tbody>
         </table>
       </div>
@@ -122,3 +122,9 @@
 </div>
 
 <%= render __MODULE__, "new_merchandise_modal.html", conn: @conn %>
+
+<script charset="utf-8">
+  window.appConfig = {
+    userToken: "<%= current_user(@conn, :token) %>",
+  }
+</script>

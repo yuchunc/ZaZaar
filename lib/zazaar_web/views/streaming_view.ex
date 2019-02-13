@@ -1,6 +1,8 @@
 defmodule ZaZaarWeb.StreamingView do
   use ZaZaarWeb, :view
 
+  alias ZaZaarWeb.StreamView
+
   def snapshot_url(%{snapshot_url: nil}), do: "https://bulma.io/images/placeholders/640x480.png"
 
   def snapshot_url(merch), do: merch.snapshot_url
@@ -11,7 +13,7 @@ defmodule ZaZaarWeb.StreamingView do
 
   def custom_js(conn) do
     if action_name(conn) == :show do
-      render(__MODULE__, "drab_configs.html", conn: conn, video_id: conn.assigns.video_id)
+      render(StreamView, "drab_configs.html", conn: conn, video_id: conn.assigns.video_id)
     end
   end
 end
