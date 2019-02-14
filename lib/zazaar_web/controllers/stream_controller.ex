@@ -38,8 +38,9 @@ defmodule ZaZaarWeb.StreamController do
 
         merchs =
           video
-          |> Transcript.get_merchandises()
-          |> Enum.map(&Map.put(&1, :completed_at, video.completed_at))
+          |> Transcript.get_merchandises(
+            order_by: [desc: :inserted_at, desc_nulls_first: :invalidated_at]
+          )
 
         render(conn, "show.html", video: video, merchandises: merchs, drab_assigns: drab_assigns)
 

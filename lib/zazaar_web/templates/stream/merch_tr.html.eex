@@ -1,0 +1,60 @@
+<tr>
+  <td>
+    <%= @merchandise.inserted_at |> Timex.to_datetime("Asia/Taipei") |> Timex.format!("%F", :strftime)%>
+  </td>
+  <td>
+    <figure class="image is-thumbnail"> <!-- Modal Trigger -->
+      <img class="merch-snapshot" src=<%= @merchandise.snapshot_url %>>
+    </figure>
+  </td>
+  <%= if Map.get(@merchandise, :editing) do %>
+    <td class="merch-name editable">
+      <input class="input" type="text" name="<%= @merchandise.id %>:title" value="<%= @merchandise.title %>">
+    </td>
+    <td> <%= @merchandise.buyer_name %> </td>
+    <td class="editable">
+      <input class="input" type="text" name="<%= @merchandise.id %>:price" value="<%= @merchandise.price %>">
+    </td>
+    <td class="has-text-centered">
+      <div class="field is-grouped is-centered merch-actions editable">
+        <div class="control">
+          <button class="button is-primary is-outlined save-merch"
+                  drab-click="update_merchandise('<%= @merchandise.id %>')">
+                  <%= gettext "Save" %>
+          </button>
+        </div>
+        <div class="control">
+          <button class="button is-secondary is-outlined cancel-merch"
+                  drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
+                  <%= gettext "Cancel" %>
+          </button>
+        </div>
+      </div>
+    </td>
+  <% else %>
+    <td class="merch-name editable"><%= @merchandise.title %></td>
+    <td><%= @merchandise.buyer_name %></td>
+    <td class="editable"> <%= @merchandise.price %></td>
+    <td class="has-text-centered">
+      <%= if @video.completed_at do %>
+        <button class="button is-primary is-outlined is-centered">
+          <%= gettext "Check Order" %>
+        </button>
+      <% else %>
+        <div class="field is-grouped is-centered merch-actions editable">
+          <div class="control">
+            <button class="button is-primary is-outlined edit-merch"
+                    drab-click='edit_merchandise("<%= @merchandise.id %>")'>
+                    <%= gettext "Edit" %>
+            </button>
+          </div>
+          <div class="control">
+            <button class="button">
+              <%= gettext "Invalidate" %>
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </td>
+  <% end%>
+</tr>

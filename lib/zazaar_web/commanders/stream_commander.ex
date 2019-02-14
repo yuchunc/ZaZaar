@@ -22,13 +22,11 @@ defmodule ZaZaarWeb.StreamCommander do
     end
   end
 
-  defhandler update_merchandise(socket, %{params: params}) do
-    %{"id" => id} = params
-
+  defhandler update_merchandise(socket, %{params: params} = sender, merch_id) do
     {:ok, merch} =
-      Transcript.get_merchandise(id)
+      Transcript.get_merchandise(merch_id)
       |> Map.from_struct()
-      |> Map.merge(%{price: params["price"], title: params["title"]})
+      |> Map.merge(%{price: params[merch_id <> ":price"], title: params[merch_id <> ":title"]})
       |> Transcript.save_merchandise()
 
     {:ok, merchs} = peek(socket, :merchandises)
@@ -36,7 +34,7 @@ defmodule ZaZaarWeb.StreamCommander do
     poke(socket,
       merchandises:
         Enum.map(merchs, fn
-          %{id: ^id} -> merch
+          %{id: ^merch_id} -> merch
           m -> m
         end)
     )
