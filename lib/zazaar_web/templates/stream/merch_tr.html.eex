@@ -24,7 +24,7 @@
           </button>
         </div>
         <div class="control">
-          <button class="button is-secondary is-outlined cancel-merch"
+          <button class="button is-outlined cancel-merch"
                   drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
                   <%= gettext "Cancel" %>
           </button>
@@ -49,7 +49,8 @@
             </button>
           </div>
           <div class="control">
-            <button class="button">
+            <button class="button"
+             drab-click='toggle_merchandise(<%= Jason.encode! ["invalidate", @merchandise.id] %>)'>
               <%= gettext "Invalidate" %>
             </button>
           </div>
