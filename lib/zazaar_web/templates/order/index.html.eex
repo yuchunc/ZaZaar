@@ -160,7 +160,7 @@
               </td>
             </tr>
 
-            <tr>
+            <tr class="is-void">
               <td>2018年12月26日下午3:33</td>
               <td><a class="is-link" href="#">Statuse: Void</a></td>
               <td>3000</td>
@@ -168,7 +168,7 @@
                 <span class="tag is-medium">已取消</span>
               </td>
               <td>
-                <a class="button is-hover-primary" href="#">檢視明細</a>
+                <a class="button is-hover-primary" href="#" disabled>檢視明細</a>
                 <a class="button" disabled>完成</a>
                 <a class="button is-hover-success">恢復</a>
               </td>
