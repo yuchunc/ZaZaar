@@ -118,6 +118,8 @@ defmodule ZaZaarWeb do
 
       alias ZaZaar.Account
       alias Account.{User, Page}
+
+      alias ZaZaar.Booking
     end
   end
 
