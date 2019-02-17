@@ -13,7 +13,5 @@ defmodule ZaZaar.Booking.Item do
     field :title, :string, null: false
     field :price, :integer, null: false
     field :status, OrderItemStatus
-
-    timestamps
   end
 end
