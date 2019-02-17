@@ -1,21 +1,89 @@
-<section class="hero is-fullheight has-background-z landing">
-  <div class="hero-body">
+<div class="landing">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+
+        <div class="level">
+          <div class="level-left is-flex-column is-aligned-start">
+            <div class="level-item">
+              <h1 class="title has-text-zazaar">
+                雜雜直播
+              </h1>
+            </div>
+
+            <div class="level-item">
+              <h2 class="is-size-3">
+                直播競標不再手忙腳亂
+              </h2>
+            </div>
+
+            <div class="level-item has-margin-top-sm">
+              <%= link(to: "/auth/facebook", class: "button is-primary is-outlined is-medium") do %>
+                <%= gettext "立即免費使用" %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="level-right is-shrinkable">
+            <figure class="image">
+              <img src="<%= Routes.static_path(@conn, "/images/landing_cover.png") %>" alt="Welcome to ZaZaar!"/>
+            </figure>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Description -->
+  <section class="section landing__description has-background-z-light">
     <div class="container">
 
-      <a href="/" class="zazaar-logo">
-        <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
-      </a>
+      <div class="level">
+        <div class="level-item is-flex-column">
 
-      <div class="level has-margin-top-lg">
-        <div class="level-item">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.png") %>" alt="What is ZaZaar"/>
+          </figure>
+          
+          <h3 class="has-text-centered is-size-5">
+            ZaZaar 是一套操作簡單的 Facebook 競標小幫手系統
+            <br>
+            幫助你快速將直播留言轉換成訂單，並自動聯絡買家
+            <br>
+            不僅節省人力成本、縮短工作時間，更能提高信任與回購率！
+          </h3>
+        </div>
+      </div>
 
-          <%= link(to: "/auth/facebook", class: "button is-primary is-inverted is-outlined is-large") do %>
-            <%= gettext "Sign In" %>
-          <% end %>
-
+      <div class="columns is-variable is-4 has-text-centered has-margin-top-md">
+        <div class="column">
+          <p class="label has-text-z-light is-size-5">Step 1</p>
+          <div class="button is-primary is-medium is-fullwidth">
+            開始直播拍賣
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light is-size-5">Step 2</p>
+          <div class="button is-primary is-medium is-fullwidth">
+            ZaZaar 小幫手追蹤留言
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light is-size-5">Step 3</p>
+          <div class="button is-primary is-medium is-fullwidth">
+            成立訂單並自動通知買家
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light is-size-5">Step 4</p>
+          <div class="button is-primary is-medium is-fullwidth">
+            後續訂單管理
+          </div>
         </div>
       </div>
 
     </div>
-  </div>
-</section>
+  <section>
+</div>
