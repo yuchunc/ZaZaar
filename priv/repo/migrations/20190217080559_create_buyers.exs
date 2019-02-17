@@ -6,11 +6,12 @@ defmodule ZaZaar.Repo.Migrations.CreateBuyers do
       add :id, :binary_id, primary_key: true
       add :fb_name, :string
       add :fb_id, :string
-      add :page_id, references(:pages, on_delete: :nothing, type: :binary_id), null: false
+
+      add :page_id, :uuid, null: false
 
       timestamps()
     end
 
-    create index(:buyers, [:page_id])
+    create unique_index(:buyers, [:page_id, :fb_id])
   end
 end
