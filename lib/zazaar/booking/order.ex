@@ -9,7 +9,8 @@ defmodule ZaZaar.Booking.Order do
   schema "orders" do
     field :title, :string
     field :total_amount, :integer, null: false
-    field :page_id, :integer
+    field :page_id, :string
+    field :video_id, Ecto.UUID
 
     belongs_to :buyer, Booking.Buyer
 
@@ -21,8 +22,8 @@ defmodule ZaZaar.Booking.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [])
-    |> validate_required([:title, :total_amount, :page_id])
+    |> cast(attrs, [:title, :total_amount])
+    |> validate_required([:title, :total_amount, :page_id, :video_id])
     |> assoc_constraint(:buyer)
   end
 end

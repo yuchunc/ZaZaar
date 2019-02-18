@@ -1,4 +1,7 @@
 defmodule ZaZaar.Booking.Item do
+  @moduledoc """
+  need to add image url
+  """
   use ZaZaar, :schema
 
   @type t :: %__MODULE__{

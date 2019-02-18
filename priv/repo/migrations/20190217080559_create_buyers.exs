@@ -7,9 +7,7 @@ defmodule ZaZaar.Repo.Migrations.CreateBuyers do
       add :fb_name, :string
       add :fb_id, :string
 
-      add :page_id, :uuid, null: false
-
-      timestamps()
+      add :page_id, :string, null: false
     end
 
     create unique_index(:buyers, [:page_id, :fb_id])

@@ -7,9 +7,7 @@ defmodule ZaZaar.Booking.Buyer do
   schema "buyers" do
     field :fb_id, :string
     field :fb_name, :string
-    field :page_id, :binary_id
-
-    timestamps()
+    field :page_id, :string
   end
 
   @doc false
