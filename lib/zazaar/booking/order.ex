@@ -23,6 +23,7 @@ defmodule ZaZaar.Booking.Order do
   def changeset(order, attrs) do
     order
     |> cast(attrs, [:title, :total_amount])
+    |> cast_embed(:items)
     |> validate_required([:title, :total_amount, :page_id, :video_id])
     |> assoc_constraint(:buyer)
   end

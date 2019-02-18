@@ -24,8 +24,8 @@
         <div class="level-right">
           <div class="level-item">
             <div class="tags has-addons">
-              <span class="tag is-medium">訂單狀態</span>
-              <span class="tag is-danger is-medium">待處理</span>
+              <span class="tag is-medium"><%= gettext "Order Status"%></span>
+              <span class="tag is-danger is-medium"><%= gettext "Pending" %></span>
               <!-- 已確認狀態
                 <span class="tag is-success is-medium">已確認</span>
               -->

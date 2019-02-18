@@ -5,7 +5,7 @@ defmodule ZaZaar.Booking do
   import ZaZaar.TimeUtil
 
   alias ZaZaar.Booking
-  alias Booking.{Order, Item, Buyer}
+  alias Booking.{Order, Buyer}
 
   alias ZaZaar.Transcript
   alias Transcript.Video
@@ -26,9 +26,12 @@ defmodule ZaZaar.Booking do
         merchs,
         &%{fb_id: &1.buyer_fb_id, fb_name: &1.buyer_name, page_id: video.fb_page_id},
         fn merch ->
-          %Item{
+          %{
+            merchandise_id: merch.id,
             title: merch.title,
-            price: merch.price
+            price: merch.price,
+            snapshot_url: merch.snapshot_url,
+            status: "active"
           }
         end
       )
