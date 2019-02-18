@@ -1,7 +1,4 @@
 defmodule ZaZaar.Transcript.Merchandise do
-  @moduledoc """
-  TODO Need to add page id reference to this schema
-  """
   use ZaZaar, :schema
 
   alias ZaZaar.Transcript
