@@ -114,6 +114,14 @@ a {
     td {
       vertical-align: middle;
     }
+
+    tr.is-void {
+      color: $grey-light;
+
+      .is-link, .tag {
+        color: $grey-light;
+      }
+    }
   }
 
   figure {
