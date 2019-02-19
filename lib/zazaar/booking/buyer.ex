@@ -14,6 +14,6 @@ defmodule ZaZaar.Booking.Buyer do
   def changeset(buyer, attrs) do
     buyer
     |> cast(attrs, [:fb_name, :fb_id])
-    |> validate_required([:fb_name, :fb_id])
+    |> validate_required([:fb_name, :fb_id, :page_id])
   end
 end

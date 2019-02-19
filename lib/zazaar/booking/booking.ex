@@ -21,6 +21,8 @@ defmodule ZaZaar.Booking do
   def create_video_orders(video, merchs) do
     local_dt = video.creation_time |> convert_local_dt("Asia/Taipei")
 
+    merchs = Enum.reject(merchs, &(!!&1.invalidated_at))
+
     users_with_items =
       Enum.group_by(
         merchs,
@@ -36,7 +38,9 @@ defmodule ZaZaar.Booking do
         end
       )
 
-    buyer_maps = Map.keys(users_with_items)
+    buyer_maps =
+      Map.keys(users_with_items)
+      |> IO.inspect(label: "label")
 
     Repo.insert_all(Buyer, buyer_maps,
       on_conflict: {:replace, [:fb_name]},

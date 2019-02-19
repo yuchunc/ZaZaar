@@ -36,8 +36,8 @@
           </div>
           <div class="level-item is-flex-grow is-shrinkable">
             <input class="input" name="title"
-                                             placeholder="<%= gettext "Title" %>"
-                                             value="<%= @merchandise.title %>" />
+                                 placeholder="<%= gettext "Title" %>"
+                                 value="<%= @merchandise.title %>" />
           </div>
         </div>
       </div>
@@ -51,8 +51,8 @@
           </div>
           <div class="level-item is-flex-grow is-shrinkable">
             <input class="input" name="price"
-                                             placeholder="<%= gettext "Amount" %>"
-                                             value="<%= @merchandise.price %>">
+                                 placeholder="<%= gettext "Amount" %>"
+                                 value="<%= @merchandise.price %>">
           </div>
         </div>
       </div>
@@ -65,8 +65,8 @@
             <%= gettext "Save" %>
           </a>
           <a class="button is-small is-outlined is-hover-danger has-text-grey"
-            drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
-            <%= gettext "Cancel" %>
+             drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
+             <%= gettext "Cancel" %>
           </a>
         </div>
       </div>
@@ -105,16 +105,16 @@
         <%= if @merchandise.invalidated_at do %>
           <a class="button is-small is-outlined is-hover-success has-text-grey"
              drab-click='toggle_merchandise(<%= Jason.encode! ["activate", @merchandise.id] %>)'>
-            <%= gettext "Reactivate" %>
+             <%= gettext "Reactivate" %>
           </a>
         <% else %>
           <a class="button is-small is-outlined is-hover-success has-text-grey"
              drab-click='edit_merchandise("<%= @merchandise.id %>")'>
-            <%= gettext "Edit" %>
+             <%= gettext "Edit" %>
           </a>
           <a class="button is-small is-outlined is-hover-danger has-text-grey"
              drab-click='toggle_merchandise(<%= Jason.encode! ["invalidate", @merchandise.id] %>)'>
-            <%= gettext "Invalidate" %>
+             <%= gettext "Invalidate" %>
           </a>
         <% end %>
       </div>

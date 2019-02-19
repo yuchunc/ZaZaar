@@ -49,9 +49,10 @@
         <!-- Create Order Button-->
         <div class="level-right">
           <%= if @video.comments != [] do %>
-          <a class="button is-primary is-medium">
-            <%= gettext "Create Orders" %>
-          </a>
+          <%= form_tag("/s/batch_orders") %>
+            <input class="is-hidden" name="video_id" value="<%= @video.id%>" />
+            <input class="button is-primary is-medium" type="submit" value="<%= gettext "Create Orders" %>"/ >
+          </form>
           <% end %>
         </div>
       </div>
