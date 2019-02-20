@@ -38,9 +38,7 @@ defmodule ZaZaar.Booking do
         end
       )
 
-    buyer_maps =
-      Map.keys(users_with_items)
-      |> IO.inspect(label: "label")
+    buyer_maps = Map.keys(users_with_items)
 
     Repo.insert_all(Buyer, buyer_maps,
       on_conflict: {:replace, [:fb_name]},
