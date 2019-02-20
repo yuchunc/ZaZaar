@@ -24,14 +24,16 @@
         <div class="level-right">
           <div class="level-item">
             <div class="tags has-addons">
-              <span class="tag is-medium">訂單狀態</span>
-              <span class="tag is-danger is-medium">待處理</span>
-              <!-- 已確認狀態
-                <span class="tag is-success is-medium">已確認</span>
-              -->
-              <!-- 已完成狀態
-                <span class="tag is-primary is-medium">已完成</span>
-              -->
+              <span class="tag is-medium"><%= dgettext "stream", "Stream Status" %></span>
+              <%= cond do %>
+              <% false -> %>
+                <%# NOTE this is for when all order related to this stream has been completed%>
+                <span class="tag is-primary is-medium"><%= dgettext "stream", "Completed" %></span>
+              <% @video.completed_at -> %>
+                <span class="tag is-success is-medium"><%= dgettext "steam", "Confirmed" %></span>
+              <% true -> %>
+                <span class="tag is-danger is-medium"><%= dgettext "stream", "Pending" %></span>
+              <% end %>
             </div>
           </div>
         </div>
@@ -48,10 +50,11 @@
         </div>
         <!-- Create Order Button-->
         <div class="level-right">
-          <%= if @video.comments != [] do %>
-          <a class="button is-primary is-medium">
-            <%= gettext "Create Orders" %>
-          </a>
+          <%= if !@video.completed_at && @video.comments != [] do %>
+            <%= form_tag("/s/batch_orders") %>
+              <input class="is-hidden" name="video_id" value="<%= @video.id%>" />
+              <input class="button is-primary is-medium" type="submit" value="<%= gettext "Create Orders" %>"/ >
+            </form>
           <% end %>
         </div>
       </div>

@@ -153,6 +153,15 @@ defmodule ZaZaar.Transcript do
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
 
+  @spec save_merchandise(merch :: Merchandise.t(), attrs :: Map) ::
+          {:ok, Merchandise.t()} | {:error, any}
+  def save_merchandise(%Merchandise{} = merch, attrs) do
+    merch
+    |> Map.from_struct()
+    |> Map.merge(%{price: attrs[:price], title: attrs[:title]})
+    |> save_merchandise()
+  end
+
   defp prep_video_upsert_map(input_map) do
     Map.merge(input_map, %{
       id: input_map[:id] || Ecto.UUID.generate(),

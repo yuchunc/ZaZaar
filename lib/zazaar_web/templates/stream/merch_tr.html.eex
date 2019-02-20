@@ -37,7 +37,8 @@
     <td class="editable"> <%= @merchandise.price %></td>
     <td class="has-text-centered">
       <%= if @video.completed_at do %>
-        <button class="button is-primary is-outlined is-centered">
+        <!-- TODO redirect to the given order-->
+        <button class="button is-primary is-outlined is-centered is-hidden">
           <%= gettext "Check Order" %>
         </button>
       <% else %>

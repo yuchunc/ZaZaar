@@ -49,8 +49,6 @@ defmodule ZaZaarWeb.StreamController do
     end
   end
 
-  # TODO
-  # pagination option
   defp fetch_and_get_videos("default", page), do: Fb.fetch_videos(page)
   defp fetch_and_get_videos("fetch_all", page), do: Fb.fetch_videos(page, strategy: :all)
 end

@@ -13,7 +13,6 @@ defmodule ZaZaarWeb.StreamCommander do
     taipei_dt = Timex.now("Asia/Taipei") |> Timex.format!("%F %T", :strftime)
 
     unless thumbnails == [] do
-      %{"uri" => uri} = _ = List.last(thumbnails)
       title = taipei_dt <> gettext(" Merch")
 
       exec_js(socket, """
@@ -22,12 +21,14 @@ defmodule ZaZaarWeb.StreamCommander do
     end
   end
 
-  defhandler update_merchandise(socket, %{params: params} = sender, merch_id) do
+  defhandler update_merchandise(socket, %{params: params}, merch_id) do
     {:ok, merch} =
-      Transcript.get_merchandise(merch_id)
-      |> Map.from_struct()
-      |> Map.merge(%{price: params[merch_id <> ":price"], title: params[merch_id <> ":title"]})
-      |> Transcript.save_merchandise()
+      merch_id
+      |> Transcript.get_merchandise()
+      |> Transcript.save_merchandise(%{
+        price: params[merch_id <> ":price"],
+        title: params[merch_id <> ":title"]
+      })
 
     {:ok, merchs} = peek(socket, :merchandises)
 
@@ -115,7 +116,7 @@ defmodule ZaZaarWeb.StreamCommander do
   defp do_comment_textarea_action(_, _, _), do: nil
 
   defp load_socket_resources(socket) do
-    %{assigns: %{drab_assigns: assigns}} = socket |> IO.inspect(label: "label")
+    %{assigns: %{drab_assigns: assigns}} = socket
     page = Account.get_page(assigns.page_id)
     video = Transcript.get_video(assigns.video_id)
     %{assigns: assigns, page: page, video: video}

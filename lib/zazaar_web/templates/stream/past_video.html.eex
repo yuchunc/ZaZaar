@@ -13,15 +13,15 @@
               <%= @video.title || @video.creation_time |> NaiveDateTime.to_iso8601 %>
             </p>
             <div class="tags has-addons">
-              <span class="tag is-medium">訂單狀態</span>
+              <span class="tag is-medium"><%= dgettext "stream", "Stream Status" %></span>
               <%= cond do %>
               <% false -> %>
                 <%# NOTE this is for when all order related to this stream has been completed%>
-                <span class="tag is-primary is-medium">已完成</span>
+                <span class="tag is-primary is-medium"><%= dgettext "stream", "Completed" %></span>
               <% @video.completed_at -> %>
-                <span class="tag is-success is-medium">已確認</span>
+                <span class="tag is-success is-medium"><%= dgettext "steam", "Confirmed" %></span>
               <% true -> %>
-                <span class="tag is-danger is-medium">待處理</span>
+                <span class="tag is-danger is-medium"><%= dgettext "stream", "Pending" %></span>
               <% end %>
             </div>
           </div>
