@@ -71,20 +71,16 @@
             <label class="label has-text-grey-light">訂單狀態</label>
             <div class="field">
               <div class="control">
-                <label class="radio is-block is-marginless">
-                  <input type="radio" name="answer" checked="checked">
-                  全部
-                </label>
-                <label class="radio is-block is-marginless">
-                  <input type="radio" name="answer">
+                <label class="checkbox is-block is-marginless">
+                  <input type="checkbox" name="answer" checked>
                   已通知買家
                 </label>
-                <label class="radio is-block is-marginless">
-                  <input type="radio" name="answer">
+                <label class="checkbox is-block is-marginless">
+                  <input type="checkbox" name="answer" checked>
                   已完成
                 </label>
-                <label class="radio is-block is-marginless">
-                  <input type="radio" name="answer">
+                <label class="checkbox is-block is-marginless">
+                  <input type="checkbox" name="answer" checked>
                   已取消
                 </label>
               </div>
@@ -129,69 +125,7 @@
           </thead>
 
           <tbody class="main-table__body" id="items-table-body">
-
-            <!-- 示意：不同狀態的樣式 -->
-            <tr>
-              <td>2018年12月26日下午3:33</td>
-              <!-- 買家 Facebook 個人頁連結？ -->
-              <td><a class="is-link" href="#">Statuse: Notified</a></td>
-              <td>3000</td>
-              <td>
-                <span class="tag is-medium">已通知買家</span>
-              </td>
-              <td>
-                <a class="button is-hover-primary" href="#">檢視明細</a>
-                <a class="button is-hover-success">完成</a>
-                <a class="button is-hover-danger">作廢</a>
-              </td>
-            </tr>
-
-            <tr>
-              <td>2018年12月26日下午3:33</td>
-              <td><a class="is-link" href="#">Statuse: Completed</a></td>
-              <td>3000</td>
-              <td>
-                <span class="tag is-medium">已完成</span>
-              </td>
-              <td>
-                <a class="button is-hover-primary" href="#">檢視明細</a>
-                <a class="button" disabled>完成</a>
-                <a class="button" disabled>作廢</a>
-              </td>
-            </tr>
-
-            <tr class="is-void">
-              <td>2018年12月26日下午3:33</td>
-              <td><a class="is-link" href="#">Statuse: Void</a></td>
-              <td>3000</td>
-              <td>
-                <span class="tag is-medium">已取消</span>
-              </td>
-              <td>
-                <a class="button is-hover-primary" href="#" disabled>檢視明細</a>
-                <a class="button" disabled>完成</a>
-                <a class="button is-hover-success">恢復</a>
-              </td>
-            </tr>
-            <!-- 示意：不同狀態的樣式 -->
-
-            <%= for x <- 4..15 do %>
-            <tr>
-              <td>2018年12月26日下午<%= x %>:33</td>
-              <td><a class="is-link" href="#">Buyer Name <%= x %></a></td>
-              <td><%= x %>000</td>
-              <td>
-                <span class="tag is-medium">已通知買家</span>
-              </td>
-              <td>
-                <a class="button is-hover-primary" href=<%= "/o/#{x}" %>>檢視明細</a>
-                <a class="button is-hover-success">完成</a>
-                <a class="button is-hover-danger">作廢</a>
-              </td>
-            </tr>
-
-            <% end %>
-
+            <%= render_many @orders, ZaZaarWeb.OrderView, "order_tr.html", as: :order %>
           </tbody>
         </table>
 
