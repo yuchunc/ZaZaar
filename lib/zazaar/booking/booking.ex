@@ -89,7 +89,7 @@ defmodule ZaZaar.Booking do
     |> Repo.all()
   end
 
-  defp get_orders(attrs) do
+  def get_orders(attrs) do
     Order
     |> get_many_query(attrs)
     |> Repo.all()

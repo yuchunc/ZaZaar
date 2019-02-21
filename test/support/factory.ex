@@ -1,7 +1,7 @@
 defmodule ZaZaar.Factory do
   use ExMachina.Ecto, repo: ZaZaar.Repo
 
-  alias ZaZaar.{Account, Transcript}
+  alias ZaZaar.{Account, Transcript, Booking}
 
   # ====== Account =========
   @valid_tasks ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
@@ -60,6 +60,30 @@ defmodule ZaZaar.Factory do
       snapshot_url: Faker.Internet.url(),
       title: Faker.Pizza.pizza(),
       video: build(:video)
+    }
+  end
+
+  # ====== Booking =========
+  def order_factory do
+    page = insert(:page)
+    video = insert(:video)
+
+    %Booking.Order{
+      title: Faker.Lorem.sentence(),
+      total_amount: Enum.random(0..20000),
+      page_id: page.fb_page_id,
+      video_id: video.id,
+      buyer: insert(:buyer, page_id: page.fb_page_id)
+    }
+  end
+
+  def buyer_factory do
+    page = insert(:page)
+
+    %Booking.Buyer{
+      fb_id: random_obj_id(),
+      fb_name: Faker.Name.name(),
+      page_id: page.fb_page_id
     }
   end
 

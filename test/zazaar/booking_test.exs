@@ -48,4 +48,14 @@ defmodule ZaZaar.BookingTest do
                Enum.map(merchs, & &1.id) |> Enum.sort()
     end
   end
+
+  describe "get_orders/1" do
+    test "get orders with an attribute" do
+      attr = [page_id: random_obj_id()]
+      insert_list(3, :order, attr)
+      insert(:order)
+
+      assert Booking.get_orders(attr) |> Enum.count() == 3
+    end
+  end
 end
