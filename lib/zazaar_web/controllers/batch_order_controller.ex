@@ -6,6 +6,7 @@ defmodule ZaZaarWeb.BatchOrderController do
     merchs = Transcript.get_merchandises(video_id)
     {:ok, _} = Booking.create_video_orders(video, merchs)
     Transcript.update_video(video, %{completed_at: NaiveDateTime.utc_now()})
+    # TODO need to send created invoice url to buyers
     redirect(conn, to: "/o")
   end
 end
