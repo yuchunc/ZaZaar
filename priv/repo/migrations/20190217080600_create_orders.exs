@@ -10,6 +10,8 @@ defmodule ZaZaar.Repo.Migrations.CreateOrders do
       add :buyer_id, references(:buyers, type: :binary_id), null: false
       add :video_id, references(:videos, type: :binary_id), null: false
       add :items, {:array, :map}
+      add :notified_at, :naive_datetime
+      add :void_at, :naive_datetime
 
       timestamps()
     end

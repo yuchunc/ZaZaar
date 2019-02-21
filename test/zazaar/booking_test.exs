@@ -48,4 +48,23 @@ defmodule ZaZaar.BookingTest do
                Enum.map(merchs, & &1.id) |> Enum.sort()
     end
   end
+
+  describe "get_orders/1" do
+    setup do
+      buyer = insert(:buyer)
+      orders = insert_list(3, :order, page_id: buyer.page_id, buyer: buyer)
+      insert(:order)
+
+      {:ok, page_id: buyer.page_id, orders: orders}
+    end
+
+    test "get orders with an attribute", ctx do
+      assert Booking.get_orders(page_id: ctx.page_id) |> Enum.count() == 3
+    end
+
+    test "get orders with an attribute, with preloads", ctx do
+      orders = Booking.get_orders([page_id: ctx.page_id], preload: :buyer)
+      refute Enum.map(orders, & &1.buyer) == [nil, nil, nil]
+    end
+  end
 end

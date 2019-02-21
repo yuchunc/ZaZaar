@@ -83,14 +83,17 @@ defmodule ZaZaar.Booking do
     {:ok, get_orders(video_id: video.id)}
   end
 
-  defp get_buyers(attrs) do
-    Buyer
+  def get_orders(attrs, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
+    Order
     |> get_many_query(attrs)
+    |> preload(^preload)
     |> Repo.all()
   end
 
-  defp get_orders(attrs) do
-    Order
+  defp get_buyers(attrs) do
+    Buyer
     |> get_many_query(attrs)
     |> Repo.all()
   end
