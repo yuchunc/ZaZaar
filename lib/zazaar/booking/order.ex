@@ -21,6 +21,8 @@ defmodule ZaZaar.Booking.Order do
     field :total_amount, :integer, null: false
     field :page_id, :string
     field :video_id, Ecto.UUID
+    field :notified_at, :naive_datetime
+    field :void_at, :naive_datetime
 
     belongs_to :buyer, Booking.Buyer
 
@@ -32,7 +34,7 @@ defmodule ZaZaar.Booking.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:title, :total_amount])
+    |> cast(attrs, [:title, :total_amount, :notified_at, :void_at])
     |> cast_embed(:items)
     |> validate_required([:title, :total_amount, :page_id, :video_id])
     |> assoc_constraint(:buyer)
