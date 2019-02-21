@@ -12,7 +12,8 @@ defmodule ZaZaar.Transcript.Video do
           fb_status: FbLiveVideoStatus.__enum_map__(),
           permalink_url: String.t(),
           fb_video_id: String.t(),
-          title: nil | String.t()
+          title: nil | String.t(),
+          comments: [Transcript.Comment]
         }
 
   @primary_key {:id, :binary_id, autogenerate: true}

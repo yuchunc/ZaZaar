@@ -1,8 +1,18 @@
 defmodule ZaZaar.Booking.Order do
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias ZaZaar.Booking
+
+  @type t :: %__MODULE__{
+          title: :string,
+          total_amount: :pos_integer,
+          page_id: :string,
+          video_id: :string,
+          buyer_id: :string,
+          items: [Booking.Item]
+        }
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
