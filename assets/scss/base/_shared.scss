@@ -35,6 +35,17 @@ a {
   }
 }
 
+.main-container {
+  overflow: hidden;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  .main {
+    flex: 1;
+  }
+}
+
 .checkbox, .radio {
   line-height: 1.8;
 }
@@ -55,7 +66,7 @@ a {
 }
 
 footer {
-  padding: 1.5rem !important;
+  padding: 1.25rem !important;
 }
 
 .modal {
@@ -68,6 +79,7 @@ footer {
 
 // Fans Page
 .fans-page {
+  min-height: calc(100vh - 7.25rem) !important;
 
   .hero-body {
     align-items: center;
