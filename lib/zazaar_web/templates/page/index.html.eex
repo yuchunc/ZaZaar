@@ -105,7 +105,7 @@
       <div class="columns">
         <div class="column is-half">
           <figure class="image">
-            <img src="<%= Routes.static_path(@conn, "/images/feature_artificial-intelligence.png") %>" alt="Welcome to ZaZaar!"/>
+            <img src="<%= Routes.static_path(@conn, "/images/feature_artificial-intelligence.png") %>" alt="訂單小幫手"/>
           </figure>
         </div>
 
@@ -123,7 +123,7 @@
 
         <div class="column is-half">
           <figure class="image">
-            <img src="<%= Routes.static_path(@conn, "/images/feature_productive-work.png") %>" alt="Welcome to ZaZaar!"/>
+            <img src="<%= Routes.static_path(@conn, "/images/feature_productive-work.png") %>" alt="迅速成立訂單"/>
           </figure>
         </div>
       </div>
@@ -131,7 +131,7 @@
       <div class="columns">
         <div class="column is-half">
           <figure class="image">
-            <img src="<%= Routes.static_path(@conn, "/images/feature_chatbot.png") %>" alt="Welcome to ZaZaar!"/>
+            <img src="<%= Routes.static_path(@conn, "/images/feature_chatbot.png") %>" alt="自動發送訂單給買家"/>
           </figure>
         </div>
 
@@ -149,11 +149,26 @@
 
         <div class="column is-half">
           <figure class="image">
-            <img src="<%= Routes.static_path(@conn, "/images/feature_interface.png") %>" alt="Welcome to ZaZaar!"/>
+            <img src="<%= Routes.static_path(@conn, "/images/feature_interface.png") %>" alt="一目瞭然的訂單管理介面"/>
           </figure>
         </div>
       </div>
+    </div>
+  </section>
 
+  <!-- Call To Action -->
+  <section class="hero is-medium landing__cta">
+    <div class="hero-background" style="background-image:url('<%= Routes.static_path(@conn, "/images/cta_background.jpg")%>')"></div>
+    <div class="hero-mask"></div>
+    <div class="hero-body has-text-centered">
+      <div class="container">
+        <h4 class="title has-text-white is-size-1">
+          立即免費使用
+        </h4>
+        <%= link(to: "/auth/facebook", class: "button is-primary is-outlined is-inverted is-medium has-margin-top-sm") do %>
+          <%= gettext "Facebook 登入" %>
+        <% end %>
+      </div>
     </div>
   </section>
 </div>

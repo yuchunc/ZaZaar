@@ -35,4 +35,29 @@
       max-width: 960px;
     }
   }
+
+  &__cta {
+    position: relative;
+
+    .hero-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center center;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .hero-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(#333, 0.8);
+    }
+  }
 }
