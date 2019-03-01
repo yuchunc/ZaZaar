@@ -43,7 +43,7 @@
       <div class="level">
         <div class="level-item is-flex-column">
 
-          <figure class="image">
+          <figure class="image main-logo">
             <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.png") %>" alt="What is ZaZaar"/>
           </figure>
           
@@ -57,33 +57,103 @@
         </div>
       </div>
 
-      <div class="columns is-variable is-4 has-text-centered has-margin-top-md">
+      <div class="columns is-variable is-4 has-text-centered has-margin-top-md steps">
         <div class="column">
-          <p class="label has-text-z-light is-size-5">Step 1</p>
-          <div class="button is-primary is-medium is-fullwidth">
-            開始直播拍賣
+          <p class="label has-text-z-light">Step 1</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-video fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">開始直播拍賣</p>
           </div>
         </div>
         <div class="column">
-          <p class="label has-text-z-light is-size-5">Step 2</p>
-          <div class="button is-primary is-medium is-fullwidth">
-            ZaZaar 小幫手追蹤留言
+          <p class="label has-text-z-light">Step 2</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-comments-dollar fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">ZaZaar 小幫手追蹤留言</p>
           </div>
         </div>
         <div class="column">
-          <p class="label has-text-z-light is-size-5">Step 3</p>
-          <div class="button is-primary is-medium is-fullwidth">
-            成立訂單並自動通知買家
+          <p class="label has-text-z-light">Step 3</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-bullhorn fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">成立訂單並自動通知買家</p>
           </div>
         </div>
         <div class="column">
-          <p class="label has-text-z-light is-size-5">Step 4</p>
-          <div class="button is-primary is-medium is-fullwidth">
-            後續訂單管理
+          <p class="label has-text-z-light">Step 4</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-file-invoice-dollar fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">後續訂單管理</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section landing__features">
+    <div class="container">
+
+      <div class="columns">
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_artificial-intelligence.png") %>" alt="Welcome to ZaZaar!"/>
+          </figure>
+        </div>
+
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">訂單小幫手</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">迅速成立訂單</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_productive-work.png") %>" alt="Welcome to ZaZaar!"/>
+          </figure>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_chatbot.png") %>" alt="Welcome to ZaZaar!"/>
+          </figure>
+        </div>
+
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">自動發送訂單給買家</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">一目瞭然的訂單管理介面</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_interface.png") %>" alt="Welcome to ZaZaar!"/>
+          </figure>
         </div>
       </div>
 
     </div>
-  <section>
+  </section>
 </div>

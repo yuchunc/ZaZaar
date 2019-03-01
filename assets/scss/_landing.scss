@@ -14,14 +14,25 @@
 
   &__description {
 
-    .image {
+    .main-logo {
       width: 160px;
       margin-bottom: 2rem;
     }
 
-    .button {
-      pointer-events: none;
-      padding: 2rem 1.5rem;
+    .steps {
+
+      &__item {
+        background: #fff;
+        border-radius: 6px;
+        padding: 1.5rem 0.75rem;
+      }
+    }
+  }
+
+  &__features {
+
+    .container {
+      max-width: 960px;
     }
   }
 }
