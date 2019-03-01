@@ -1,0 +1,19 @@
+<footer class="footer">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p>© <%= DateTime.utc_now |> Map.fetch!(:year) %> ZaZaar. All Right Reserved.</p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <a class="has-text-grey" href="/privacy"><%= gettext "Privacy Policy" %></a>
+        </div>
+        <div class="level-item">
+          <a class="has-text-grey" href="/service"><%= gettext "Terms and Conditions" %></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
