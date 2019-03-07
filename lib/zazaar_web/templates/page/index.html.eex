@@ -1,21 +1,174 @@
-<section class="hero is-fullheight has-background-z landing">
-  <div class="hero-body">
+<div class="landing">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+
+        <div class="level">
+          <div class="level-left is-flex-column is-aligned-start">
+            <div class="level-item">
+              <h1 class="title has-text-zazaar">
+                雜雜直播
+              </h1>
+            </div>
+
+            <div class="level-item">
+              <h2 class="is-size-3">
+                直播競標不再手忙腳亂
+              </h2>
+            </div>
+
+            <div class="level-item has-margin-top-sm">
+              <%= link(to: "/auth/facebook", class: "button is-primary is-outlined is-medium") do %>
+                <%= gettext "立即免費使用" %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="level-right is-shrinkable">
+            <figure class="image">
+              <img src="<%= Routes.static_path(@conn, "/images/landing_cover.png") %>" alt="Welcome to ZaZaar!"/>
+            </figure>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Description -->
+  <section class="section landing__description has-background-z-light">
     <div class="container">
 
-      <a href="/" class="zazaar-logo">
-        <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.svg") %>" alt="Welcome to ZaZaar!"/>
-      </a>
+      <div class="level">
+        <div class="level-item is-flex-column">
 
-      <div class="level has-margin-top-lg">
-        <div class="level-item">
-
-          <%= link(to: "/auth/facebook", class: "button is-primary is-inverted is-outlined is-large") do %>
-            <%= gettext "Sign In" %>
-          <% end %>
-
+          <figure class="image main-logo">
+            <img src="<%= Routes.static_path(@conn, "/images/zazaar_logo.png") %>" alt="What is ZaZaar"/>
+          </figure>
+          
+          <h3 class="has-text-centered is-size-5">
+            ZaZaar 是一套操作簡單的 Facebook 競標小幫手系統
+            <br>
+            幫助你快速將直播留言轉換成訂單，並自動聯絡買家
+            <br>
+            不僅節省人力成本、縮短工作時間，更能提高信任與回購率！
+          </h3>
         </div>
       </div>
 
+      <div class="columns is-variable is-4 has-text-centered has-margin-top-md steps">
+        <div class="column">
+          <p class="label has-text-z-light">Step 1</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-video fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">開始直播拍賣</p>
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light">Step 2</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-comments-dollar fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">ZaZaar 小幫手追蹤留言</p>
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light">Step 3</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-bullhorn fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">成立訂單並自動通知買家</p>
+          </div>
+        </div>
+        <div class="column">
+          <p class="label has-text-z-light">Step 4</p>
+          <div class="steps__item">
+            <span class="icon is-large has-text-primary">
+              <i class="fas fa-file-invoice-dollar fa-2x"></i>
+            </span>
+            <p class="has-text-primary is-size-5">後續訂單管理</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- Features -->
+  <section class="section landing__features">
+    <div class="container">
+
+      <div class="columns">
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_artificial-intelligence.png") %>" alt="訂單小幫手"/>
+          </figure>
+        </div>
+
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">訂單小幫手</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">迅速成立訂單</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_productive-work.png") %>" alt="迅速成立訂單"/>
+          </figure>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_chatbot.png") %>" alt="自動發送訂單給買家"/>
+          </figure>
+        </div>
+
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">自動發送訂單給買家</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half is-flex is-flex-column is-justified-center">
+          <h3 class="title has-text-primary is-size-3">一目瞭然的訂單管理介面</h3>
+          <p>上百張訂單還在一筆一筆統計留言數量嗎? FBbuy系統直接串接FB抓取所有PO文留言，並針對留言分析規則演算轉為訂單，節省人力以及降低錯誤機率。</p>
+        </div>
+
+        <div class="column is-half">
+          <figure class="image">
+            <img src="<%= Routes.static_path(@conn, "/images/feature_interface.png") %>" alt="一目瞭然的訂單管理介面"/>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call To Action -->
+  <section class="hero is-medium landing__cta">
+    <div class="hero-background" style="background-image:url('<%= Routes.static_path(@conn, "/images/cta_background.jpg")%>')"></div>
+    <div class="hero-mask"></div>
+    <div class="hero-body has-text-centered">
+      <div class="container">
+        <h4 class="title has-text-white is-size-1">
+          立即免費使用
+        </h4>
+        <%= link(to: "/auth/facebook", class: "button is-primary is-outlined is-inverted is-medium has-margin-top-sm") do %>
+          <%= gettext "Facebook 登入" %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+</div>

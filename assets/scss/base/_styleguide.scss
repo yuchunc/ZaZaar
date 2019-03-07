@@ -29,6 +29,11 @@ $c-marble: #fafafa;
 
 .is-centered {margin: auto;}
 
+.has-text-zazaar {color: $c-zazaar !important}
+.has-text-z-light {color: $c-z-light !important}
+
+.has-background-z-light {background: rgba($c-z-light, 0.1)}
+
 .has-z-gradient {background-image: linear-gradient(to top, $c-zazaar, rgba(#fff, 0));}
 
 .has-shadow {box-shadow: 0 2px 4px 0 rgba($c-z-dark ,0.3) !important;}
