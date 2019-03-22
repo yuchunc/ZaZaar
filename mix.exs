@@ -46,22 +46,22 @@ defmodule ZaZaar.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       # Auth
-      {:argon2_elixir, "~> 1.3"},
-      {:comeonin, "~> 4.1"},
+      {:argon2_elixir, "~> 2.0"},
+      {:comeonin, "~> 5.0"},
       {:guardian, "~> 1.1"},
       {:ueberauth, "~> 0.5"},
       {:ueberauth_facebook, "~> 0.7"},
       # Utils
       {:drab, "~> 0.10.0"},
       {:ecto_enum, "~> 1.0"},
-      {:facebook, "~> 0.22.0"},
+      {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},
       {:stream_data, "~> 0.1", only: [:test, :dev]},
       {:mox, "~> 0.4", only: :test},
-      {:ex_ngrok, "~> 0.3.0", only: :dev},
+      {:ex_ngrok, "~> 0.3", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
       {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
     ]
