@@ -1,6 +1,8 @@
 defmodule ZaZaarWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :zazaar
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", ZaZaarWeb.UserSocket,
     websocket: true,
     longpoll: false

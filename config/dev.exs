@@ -11,8 +11,9 @@ config :zazaar, ZaZaarWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
+  live_view: [signing_salt: "udLfDC/dkeopmACsBHYgvMVtl7M+2Mh6"],
   watchers: [
-    yarn: [
+    npm: [
       "run",
       "watch",
       cd: Path.expand("../assets", __DIR__)
@@ -51,6 +52,7 @@ config :zazaar, ZaZaarWeb.Endpoint,
       ~r{priv/gettext/.*(po)$},
       ~r{lib/zazaar_web/views/.*(ex)$},
       ~r{lib/zazaar_web/commanders/.*(ex)$},
+      ~r{lib/zazaar_web/live/.*(ex)},
       ~r{lib/zazaar_web/templates/.*(eex|drab)$}
     ]
   ]
