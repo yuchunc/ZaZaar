@@ -13,7 +13,7 @@ config :zazaar, ZaZaarWeb.Endpoint,
   check_origin: false,
   live_view: [signing_salt: "udLfDC/dkeopmACsBHYgvMVtl7M+2Mh6"],
   watchers: [
-    yarn: [
+    npm: [
       "run",
       "watch",
       cd: Path.expand("../assets", __DIR__)
