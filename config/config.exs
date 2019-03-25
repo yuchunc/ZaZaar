@@ -17,7 +17,8 @@ config :zazaar, ZaZaarWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "fVKkwCPaWHCyGMLyhnwCvq81VLsiLM0b8fwSGPnJa70eeVewwhl7xN5n48NgNRCG",
   render_errors: [view: ZaZaarWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: ZaZaar.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: ZaZaar.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "ejxI5AHdkFAN0Fzt55Gm7lN82rVQCvTm"]
 
 # Guardian Configs
 config :zazaar, ZaZaar.Auth.Guardian,
@@ -31,7 +32,7 @@ config :zazaar, :fb_api, ZaZaar.Fb.Api
 config :drab, ZaZaarWeb.Endpoint, otp_app: :zazaar
 
 # Configures default Drab file extension
-config :phoenix, :template_engines, drab: Drab.Live.Engine
+config :phoenix, template_engines: [leex: Phoenix.LiveView.Engine, drab: Drab.Live.Engine]
 
 # Configures Drab for webpack
 config :drab, ZaZaarWeb.Endpoint, js_socket_constructor: "window.__socket"
