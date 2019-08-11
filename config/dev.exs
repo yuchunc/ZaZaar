@@ -69,8 +69,11 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :zazaar, ZaZaar.Repo,
+  username: "postgres",
+  password: "postgres",
   database: "zazaar_dev",
   hostname: "localhost",
+  show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
 config :zazaar, ZaZaar.Auth.Guardian,
@@ -83,4 +86,4 @@ config :ex_ngrok,
   api_url: "http://localhost:4040/api/tunnels",
   sleep_between_attempts: 200
 
-import_config "dev.secret.exs"
+#import_config "dev.secret.exs"
