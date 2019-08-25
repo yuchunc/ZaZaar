@@ -51,6 +51,7 @@ defmodule ZaZaar.Transcript do
   @spec upsert_videos(video_maps :: [%{fb_page_id: String.t()}]) ::
           {:ok, [Video.t()]} | {:error, any}
   def upsert_videos(video_maps) do
+    video_maps |> IO.inspect(label: "vids")
     replace_fields = [:description, :image_url, :fb_status, :title]
     conflict_target = [:fb_video_id]
 

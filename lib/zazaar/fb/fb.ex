@@ -32,7 +32,6 @@ defmodule ZaZaar.Fb do
   fetches and stores Facebook Pages
   uses user access token
   """
-  require IEx
   @spec set_pages(user :: User.t(), opts :: keyword) :: {:ok, [Page.t()]} | {:error, String.t()}
   def set_pages(user, opts \\ []) do
     with fields <- Keyword.get(opts, :fields, @page_default_fields) |> Enum.join(","),
