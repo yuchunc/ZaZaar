@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :zazaar, ZaZaarWeb.Endpoint,
-  http: [:inet6, port: System.get_env("PORT") || 4000],
+  http: [:inet6, port: {:system, "PORT"} || 4000],
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
@@ -21,8 +21,8 @@ config :zazaar, ZaZaar.Auth.Guardian,
 config :logger, level: :info
 
 config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
-  client_id: System.get_env("FACEBOOK_CLIENT_ID"),
-  client_secret: System.get_env("FACEBOOK_CLIENT_SECRET")
+  client_id: {:system, "FACEBOOK_CLIENT_ID"},
+  client_secret: {:system, "FACEBOOK_CLIENT_SECRET"}
 
 # ## SSL Support
 #
