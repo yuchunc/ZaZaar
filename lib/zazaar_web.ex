@@ -44,7 +44,6 @@ defmodule ZaZaarWeb do
 
       import Phoenix.LiveView, only: [live_render: 2, live_render: 3, live_link: 1, live_link: 2]
 
-      # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
       import ZaZaarWeb.ErrorHelpers
@@ -58,6 +57,17 @@ defmodule ZaZaarWeb do
       def custom_js(_), do: ""
 
       defoverridable custom_js: 1
+    end
+  end
+
+  def live do
+    quote do
+      use Phoenix.LiveView
+
+      alias Phoenix.LiveView.Socket
+      alias ZaZaarWeb.Router.Helpers, as: Routes
+
+      ZaZaarWeb.aliases()
     end
   end
 

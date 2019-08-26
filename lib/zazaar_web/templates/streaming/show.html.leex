@@ -67,7 +67,7 @@
             <div class="media">
               <figure class="media-left image is-32x32 is-avatar">
                 <img class="is-rounded"
-                     src="<%= if current_page(@conn), do: current_page(@conn).picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
+                     src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
               </figure>
               <div class="media-content">
                 <div class="field">
@@ -103,10 +103,4 @@
   </div>
 </section>
 
-<%= render ZaZaarWeb.StreamView, "new_merchandise_modal.html", conn: @conn%>
-
-<script charset="utf-8">
-  window.appConfig = {
-    userToken: "<%= current_user(@conn, :token) %>",
-  }
-</script>
+<%= render ZaZaarWeb.StreamView, "new_merchandise_modal.html", assigns %>

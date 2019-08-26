@@ -9,7 +9,7 @@
       <section class="modal-card-body">
 
         <!-- 商品截圖 -->
-        <%= if controller_module(@conn) == ZaZaarWeb.StreamingController do %>
+        <%= if @socket.view == ZaZaarWeb.StreamingLive do %>
           <div class="level">
             <div class="level-item">
               <figure class="image is-snapshot">

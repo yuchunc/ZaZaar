@@ -27,7 +27,7 @@
       <%= render(ZaZaarWeb.LayoutView, "main_footer.html", conn: @conn) %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/deps.js") %>"></script>
-    <%= Drab.Client.run(@conn, drab_assigns: Map.get(@conn.assigns, :drab_assigns, %{})) %>
+    <%=# Drab.Client.run(@conn, drab_assigns: Map.get(@conn.assigns, :drab_assigns, %{})) %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

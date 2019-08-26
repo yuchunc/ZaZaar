@@ -27,7 +27,10 @@ defmodule ZaZaarWeb.StreamController do
   def show(conn, %{"id" => fb_video_id}) do
     case Transcript.get_video(fb_video_id) do
       %{fb_status: :live, id: id} ->
-        conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
+        conn
+        |> put_session(:page, current_page(conn))
+        |> put_session(:video_id, id)
+        |> redirect(to: "/s/current")
 
       %Video{} = video ->
         drab_assigns = %{
