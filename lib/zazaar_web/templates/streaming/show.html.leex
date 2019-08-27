@@ -48,43 +48,7 @@
         </div>
       </div>
 
-      <!-- Comment Area -->
-      <div class="tile is-parent is-4 streaming__comments">
-        <div class="tile is-child card">
-          <header class="card-header">
-            <p class="card-header-title">
-              <%= gettext "Live Comments" %>
-            </p>
-          </header>
-
-          <div class="card-content comments" id="streaming-comments-list">
-            <%= for comment <- @comments do %>
-              <%= render ZaZaarWeb.StreamView, "comment.html", comment: comment %>
-            <% end %>
-          </div>
-
-          <footer class="card-footer has-background-light">
-            <div class="media">
-              <figure class="media-left image is-32x32 is-avatar">
-                <img class="is-rounded"
-                     src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
-              </figure>
-              <div class="media-content">
-                <div class="field">
-                  <div class="control">
-                    <textarea class="input"
-                              id="comment-input"
-                              type="text"
-                              placeholder="<%= gettext("Comment Here...") %>"
-                              drab-keydown="comment_textbox_keydown"
-                              drab-options="debounce(500)"
-                    ></textarea>
-                  </div>
-                </div>
-            </div>
-          </footer>
-        </div>
-      </div>
+      <%= live_render(@socket, ZaZaarWeb.StreamingLive.CommentArea, session: %{comments: @comments, page: @page}, container: {:div, class: "tile is-parent is-4 streaming__comments"}) %>
 
       <!-- Merchandises List -->
       <div class="tile is-parent is-4 streaming__merchandises">

@@ -64,6 +64,9 @@ defmodule ZaZaarWeb do
     quote do
       use Phoenix.LiveView
 
+      import Phoenix.View, only: [render: 3]
+      import ZaZaarWeb.Gettext
+
       alias Phoenix.LiveView.Socket
       alias ZaZaarWeb.Router.Helpers, as: Routes
 
