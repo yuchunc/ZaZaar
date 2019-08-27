@@ -22,22 +22,31 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
                 <img class="is-rounded"
                      src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
               </figure>
-              <div class="media-content">
-                <div class="field">
-                  <div class="control">
-                    <textarea class="input" id="comment-input" type="text" placeholder="<%= gettext("Comment Here...") %>"
-                              phx-keyup="new_comment" ></textarea>
+              <form phx-submit="new_comment">
+                <div class="media-content">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" />
+                    </div>
                   </div>
                 </div>
+              </form>
             </div>
           </footer>
         </div>
     """
+                      #<textarea class="input" id="comment-input" name="comment"
+                          #placeholder="<%= gettext("Comment Here...") %>"><%= @textarea %></textarea>
   end
 
   def mount(session, socket) do
-    assigns = Map.take(session, [:comments, :page]) |> Map.to_list()
+    %{comments: comments, page: page} = session
+    assigns = %{comments: comments, page: page, textarea: nil}
 
     {:ok, assign(socket, assigns)}
+  end
+
+  def handle_event("new_comment", %{"comment" => comment}, socket) do
+    {:noreply, assign(socket, :textarea, "")}
   end
 end
