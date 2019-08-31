@@ -1,5 +1,8 @@
-import socket from '../../socket';
+//import socket from '../../socket';
 import {el} from "../../utils/dom_control"
+
+import "phoenix_html"
+import LiveSocket from "phoenix_live_view"
 
 const shiftEnterAction = () => {
   let commentInput = document.getElementById("comment-input");
@@ -69,16 +72,28 @@ const prepCommentsList = () => {
 };
 
 const mount = () => {
-  window.commentsListDom = document.getElementById("streaming-comments-list");
-  window.el = el;
-  window.newMerchandiseModal = newMerchandiseModal;
-  window.closeNewMerchModal = closeNewMerchModal;
-  window.appendCommentPanel = appendCommentPanel;
+  let Hooks = {}
+  Hooks.COMMENT_LIST = {
+    mounted() {
+      const elem = this.el
+      elem.scrollTop = elem.scrollHeight
+    },
+    updated() {
+      const elem = this.el
+      elem.scrollTop = elem.scrollHeight
+    }
+  }
 
-  prepCommentsList();
-  shiftEnterAction();
+  const liveSocket = new LiveSocket("/live", {hooks: Hooks})
+  liveSocket.connect()
+  //const commentList = document.querySelector("#streaming-comments-list")
+  //const commentsWrapper = document.querySelector(".streaming__comments")
+  //document.addEventListener("phx:update", (e) => {
+    //console.log("p", e);
+    //commentList.scrollTop = commentList.scrollHeight
+  //})
 
-  console.log("Streaming show unmounted");
+  console.log("Streaming show mounted");
 };
 
 const unmount = () => {

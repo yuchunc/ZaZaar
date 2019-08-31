@@ -64,11 +64,9 @@ defmodule ZaZaarWeb.Router do
     get "/m", StreamController, :index
 
     scope "/s" do
-      # resources "/current", StreamingController, singleton: true, only: [:show]
-      live "/current", StreamingLive, session: [:video_id, :page]
-      live "/current/comments", StreamingLive.CommentArea, session: [:video]
-      resources "/batch_orders", BatchOrderController, singleton: true, only: [:create]
       resources "/", StreamController, only: [:show, :update]
+      resources "/current", StreamingController, singleton: true, only: [:show]
+      resources "/batch_orders", BatchOrderController, singleton: true, only: [:create]
     end
 
     resources "/o", OrderController, only: [:index, :show]

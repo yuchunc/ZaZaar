@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <%= live_render(@socket, ZaZaarWeb.StreamingLive.CommentArea, session: %{comments: @comments, page: @page}, container: {:div, class: "tile is-parent is-4 streaming__comments"}) %>
+      <%= live_render(@conn, ZaZaarWeb.StreamingLive.CommentArea, session: %{fb_video_id: @video.fb_video_id, comments: @comments, page: current_page(@conn)}, container: {:div, class: "tile is-parent is-4 streaming__comments"}) %>
 
       <!-- Merchandises List -->
       <div class="tile is-parent is-4 streaming__merchandises">

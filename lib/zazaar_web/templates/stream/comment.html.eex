@@ -1,4 +1,4 @@
-<div class="media comment-panel">
+<div class="media comment-panel" phx-hook="CommentListUpdated">
   <figure class="media-left image is-32x32 is-avatar">
     <img class="is-rounded" src=<%= @comment.commenter_picture %>>
   </figure>
