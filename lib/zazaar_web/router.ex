@@ -64,8 +64,8 @@ defmodule ZaZaarWeb.Router do
     get "/m", StreamController, :index
 
     scope "/s" do
-      resources "/", StreamController, only: [:show, :update]
       resources "/current", StreamingController, singleton: true, only: [:show]
+      resources "/", StreamController, only: [:show, :update]
       resources "/batch_orders", BatchOrderController, singleton: true, only: [:create]
     end
 

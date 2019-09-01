@@ -86,12 +86,6 @@ const mount = () => {
 
   const liveSocket = new LiveSocket("/live", {hooks: Hooks})
   liveSocket.connect()
-  //const commentList = document.querySelector("#streaming-comments-list")
-  //const commentsWrapper = document.querySelector(".streaming__comments")
-  //document.addEventListener("phx:update", (e) => {
-    //console.log("p", e);
-    //commentList.scrollTop = commentList.scrollHeight
-  //})
 
   console.log("Streaming show mounted");
 };

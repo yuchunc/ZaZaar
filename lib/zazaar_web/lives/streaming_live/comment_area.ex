@@ -3,37 +3,66 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
 
   def render(assigns) do
     ~L"""
-        <div class="tile is-child card">
-          <header class="card-header">
-            <p class="card-header-title">
-              <%= gettext "Live Comments" %>
-            </p>
-          </header>
+    <div class="tile is-child card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <%= gettext "Live Comments" %>
+        </p>
+      </header>
 
-          <div class="card-content comments" id="streaming-comments-list" phx-hook="COMMENT_LIST">
-            <%= for comment <- @comments do %>
-              <%= render ZaZaarWeb.StreamView, "comment.html", comment: comment %>
-            <% end %>
-          </div>
+      <div class="card-content comments" id="streaming-comments-list" phx-hook="COMMENT_LIST">
+        <%= for comment <- @comments do %>
+          <div class="media comment-panel">
+            <figure class="media-left image is-32x32 is-avatar">
+              <img class="is-rounded" src=<%= comment.commenter_picture %>>
+            </figure>
+            <div class="media-content">
+              <div class="content comment has-background-light is-marginless">
+                <p>
+                  <span class="is-username has-text-primary has-text-weight-semibold">
+                    <%= comment.commenter_fb_name %>
+                  </span>
+                  <%= comment.message %>
+                </p>
+              </div>
 
-          <footer class="card-footer has-background-light">
-            <div class="media">
-              <figure class="media-left image is-32x32 is-avatar">
-                <img class="is-rounded"
-                     src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
-              </figure>
-              <form phx-submit="new_comment">
-                <div class="media-content">
-                  <div class="field">
-                    <div class="control">
-                      <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" phx-keyup="set_comment"/>
-                    </div>
-                  </div>
-                </div>
-              </form>
+              <!-- 留言時間 + 手動新增 btn -->
+              <div class="level is-mobile">
+                <small class="has-text-grey-light">
+                  15 小時
+                </small>
+                <button class="button is-small is-outlined has-text-grey is-hover-primary new-merch"
+                        data-object-id="<%= comment.object_id %>"
+                        data-commenter-name="<%= comment.commenter_fb_name %>"
+                        data-commenter-id="<%= comment.commenter_fb_id %>"
+                        data-comment-message="<%= comment.message %>"
+                >
+                  <%= gettext "New Merch" %>
+                </button>
+              </div>
             </div>
-          </footer>
+          </div>
+        <% end %>
+      </div>
+
+      <footer class="card-footer has-background-light">
+        <div class="media">
+          <figure class="media-left image is-32x32 is-avatar">
+            <img class="is-rounded"
+                 src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
+          </figure>
+          <form phx-submit="new_comment">
+            <div class="media-content">
+              <div class="field">
+                <div class="control">
+                  <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" phx-keyup="set_comment"/>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
+      </footer>
+    </div>
     """
 
     # <textarea class="input" id="comment-input" name="comment" placeholder="<%= gettext("Comment Here...") %>"><%= @textarea %></textarea>
@@ -51,25 +80,22 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   end
 
   def handle_event("new_comment", %{"comment" => comment}, socket) do
-    send(self, {:new_comment, comment})
+    send(self(), {:new_comment, comment})
     {:noreply, assign(socket, :textarea, "")}
   end
 
   def handle_info({:new_comment, new_comment}, socket) do
     %{comments: comments, page: page, fb_video_id: fb_video_id} = socket.assigns
 
-    case Fb.publish_comment(fb_video_id, new_comment, page.access_token) do
-      {:ok, comment} ->
-        send(self, {:update_comments, comments ++ [comment]})
+    comments_1 =
+      case Fb.publish_comment(fb_video_id, new_comment, page.access_token) do
+        {:ok, comment} ->
+          comments ++ [comment]
 
-      _ ->
-        send(self, {:update_comments, comments})
-    end
+        _ ->
+          comments
+      end
 
-    {:noreply, socket}
-  end
-
-  def handle_info({:update_comments, comments}, socket) do
-    {:noreply, assign(socket, :comments, comments)}
+    {:noreply, assign(socket, comments: comments_1)}
   end
 end
