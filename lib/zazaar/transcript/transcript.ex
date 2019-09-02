@@ -10,13 +10,21 @@ defmodule ZaZaar.Transcript do
   @doc """
   Get video by id or fb_video_id
   """
-  @spec get_video(id_or_fb_video_id :: String.t()) :: nil | Video.t()
-  def get_video(<<_::288>> = id), do: Repo.get(Video, id)
+  @spec get_video(id_or_fb_video_id :: String.t(), opts :: keyword) :: nil | Video.t()
 
-  def get_video(fb_vid_id) do
-    Video
-    |> where(fb_video_id: ^fb_vid_id)
-    |> Repo.one()
+  def get_video(id, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
+    case id do
+      <<_::288>> ->
+        Repo.get(Video, id)
+
+      _ ->
+        Video
+        |> where(fb_video_id: ^id)
+        |> Repo.one()
+    end
+    |> Repo.preload(preload)
   end
 
   @doc """
@@ -85,7 +93,9 @@ defmodule ZaZaar.Transcript do
   def update_video(video, params) when is_list(params),
     do: update_video(video, Enum.into(params, %{}))
 
-  def update_video(video, %{fetched_comments: comment_maps} = params) do
+  def update_video(video0, %{fetched_comments: comment_maps} = params) do
+    video = Repo.preload(video0, :comments)
+
     new_comments =
       Enum.reject(comment_maps, fn cm ->
         Enum.find(video.comments, &(&1.object_id == cm.object_id))
@@ -99,7 +109,9 @@ defmodule ZaZaar.Transcript do
     update_video(video, params1)
   end
 
-  def update_video(%Video{} = video, params) do
+  def update_video(%Video{} = video0, params) do
+    video = Repo.preload(video0, :comments)
+
     new_comments =
       params
       |> Map.get(:new_comments, [])
@@ -107,7 +119,7 @@ defmodule ZaZaar.Transcript do
 
     video
     |> Video.changeset(params)
-    |> put_embed(:comments, video.comments ++ new_comments)
+    |> put_assoc(:comments, video.comments ++ new_comments)
     |> Repo.update()
   end
 

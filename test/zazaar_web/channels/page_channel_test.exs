@@ -79,35 +79,35 @@ defmodule ZaZaarWeb.PageChannelTest do
     end
   end
 
-  describe "comment:save event" do
-    test "save a new comment, publish to Facebook, and broadcast", ctx do
-      %{page: page, user: user} = ctx
-      socket = joined_page_socket(user, page)
-      %{id: video_id} = video = insert(:video)
+  # describe "comment:save event" do
+  #   test "save a new comment, publish to Facebook, and broadcast", ctx do
+  #     %{page: page, user: user} = ctx
+  #     socket = joined_page_socket(user, page)
+  #     %{id: video_id} = video = insert(:video)
 
-      message = "oheiohei"
+  #     message = "oheiohei"
 
-      expect(ApiMock, :publish, fn :comments, _, _, _ ->
-        resp = RespMock.comment(message: message, parent_id: video.fb_video_id)
-        {:ok, resp}
-      end)
+  #     expect(ApiMock, :publish, fn :comments, _, _, _ ->
+  #       resp = RespMock.comment(message: message, parent_id: video.fb_video_id)
+  #       {:ok, resp}
+  #     end)
 
-      push(socket, "comment:save", %{object_id: video.fb_video_id, message: message})
+  #     push(socket, "comment:save", %{object_id: video.fb_video_id, message: message})
 
-      assert_broadcast "video:new_comments", %{video_id: ^video_id, comments: comments}
+  #     assert_broadcast "video:new_comments", %{video_id: ^video_id, comments: comments}
 
-      comment_ids =
-        Repo.get(Video, video.id)
-        |> Map.get(:comments)
-        |> Enum.map(& &1.object_id)
+  #     comment_ids =
+  #       Repo.get(Video, video.id)
+  #       |> Map.get(:comments)
+  #       |> Enum.map(& &1.object_id)
 
-      result_ids =
-        comments
-        |> Enum.map(& &1.object_id)
+  #     result_ids =
+  #       comments
+  #       |> Enum.map(& &1.object_id)
 
-      assert result_ids -- comment_ids == []
-    end
-  end
+  #     assert result_ids -- comment_ids == []
+  #   end
+  # end
 
   describe "internal:new_comments event" do
     test "broadcast new comments to channel", ctx do

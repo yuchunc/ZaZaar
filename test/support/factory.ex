@@ -43,12 +43,15 @@ defmodule ZaZaar.Factory do
   end
 
   def comment_factory do
+    video = insert(:video)
+
     %Transcript.Comment{
       message: Faker.Lorem.sentence(),
       created_time: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       object_id: random_obj_id() <> "_" <> random_obj_id(),
       commenter_fb_id: random_obj_id(),
-      commenter_fb_name: Faker.Name.name()
+      commenter_fb_name: Faker.Name.name(),
+      video_id: video.id
     }
   end
 

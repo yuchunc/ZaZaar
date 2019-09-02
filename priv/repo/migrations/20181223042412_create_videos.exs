@@ -15,8 +15,6 @@ defmodule ZaZaar.Repo.Migrations.CreateVideos do
       add :fb_page_id, :string, null: false
       add :completed_at, :naive_datetime
 
-      add :comments, {:array, :map}
-
       timestamps()
     end
 

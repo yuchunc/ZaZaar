@@ -21,10 +21,10 @@ defmodule ZaZaarWeb.Webhook.FacebookController do
 
     with [fb_page_id, fb_video_id] = String.split(event["post_id"], "_"),
          %Page{} = page <- Account.get_page(fb_page_id),
-         %Video{} = video <- Transcript.get_video(fb_video_id),
+         %Video{} = video <- Transcript.get_video(fb_video_id, preload: :comments),
          {:ok, video1} <- Fb.fetch_comments(video, page.access_token),
-         new_comments <- video1.comments -- video.comments do
-      payload = %{video_id: fb_video_id, comments: new_comments}
+         new_comments <- video1.comments -- video.comments,
+         payload <- %{video_id: fb_video_id, comments: new_comments} do
       Endpoint.broadcast!("page:#{fb_page_id}", "internal:new_comments", payload)
       send_resp(conn, :ok, "")
     else

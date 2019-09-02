@@ -52,16 +52,16 @@ defmodule ZaZaarWeb.PageChannel do
     end
   end
 
-  def handle_in("comment:save", payload, socket) do
-    %{"object_id" => fb_video_id, "message" => message} = payload
-    page = current_page(socket)
-    video = Transcript.get_video(fb_video_id)
+  # def handle_in("comment:save", payload, socket) do
+  #   %{"object_id" => fb_video_id, "message" => message} = payload
+  #   page = current_page(socket)
+  #   video = Transcript.get_video(fb_video_id)
 
-    {:ok, comment} = Fb.publish_comment(fb_video_id, message, page.access_token)
+  #   {:ok, comment} = Fb.publish_comment(fb_video_id, message, page.access_token)
 
-    send(self(), {:new_comments, %{video_id: video.id, comments: [comment]}})
-    {:noreply, socket}
-  end
+  #   send(self(), {:new_comments, %{video_id: video.id, comments: [comment]}})
+  #   {:noreply, socket}
+  # end
 
   defp map_merchandise(merch) do
     %{

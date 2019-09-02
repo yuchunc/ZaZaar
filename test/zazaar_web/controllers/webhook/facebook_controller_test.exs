@@ -31,7 +31,7 @@ defmodule ZaZaarWeb.Webhook.FacebookControllerTest do
       # event: "internal:new_comments",
       # payload: %{video_id: ^video_id, comments: comments}}, 10_000)
 
-      video = Repo.get(Video, video_id)
+      video = Repo.get(Video, video_id) |> Repo.preload(:comments)
 
       assert Enum.count(video.comments) == 1
     end
