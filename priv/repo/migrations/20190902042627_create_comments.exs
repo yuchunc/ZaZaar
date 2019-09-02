@@ -4,7 +4,7 @@ defmodule ZaZaar.Repo.Migrations.CreateComments do
   def change do
     create table(:comments, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :binary_id, :string, null: false
+      add :object_id, :string, null: false
       add :message, :string, null: false
       add :created_time, :naive_datetime
       add :live_timestamp, :integer, default: 0

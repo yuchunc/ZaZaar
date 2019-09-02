@@ -46,11 +46,13 @@ defmodule ZaZaar.TranscriptTest do
         insert(:video, fb_page_id: fb_page_id)
         |> Map.from_struct()
         |> Map.delete(:__meta__)
+        |> Map.delete(:comments)
 
       new_vid_map =
         build(:video, fb_page_id: fb_page_id)
         |> Map.from_struct()
         |> Map.delete(:__meta__)
+        |> Map.delete(:comments)
 
       vid_maps = [Map.put(curr_vid_map, :id, nil), new_vid_map]
 
@@ -64,7 +66,7 @@ defmodule ZaZaar.TranscriptTest do
       vid = insert(:video)
 
       comments =
-        build_list(5, :comment)
+        build_list(5, :comment, video_id: vid.id)
         |> Enum.map(&Map.from_struct/1)
 
       assert {:ok, res} = Transcript.update_video(vid, new_comments: comments)

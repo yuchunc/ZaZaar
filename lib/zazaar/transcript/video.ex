@@ -12,8 +12,7 @@ defmodule ZaZaar.Transcript.Video do
           fb_status: FbLiveVideoStatus.__enum_map__(),
           permalink_url: String.t(),
           fb_video_id: String.t(),
-          title: nil | String.t(),
-          comments: [Transcript.Comment]
+          title: nil | String.t()
         }
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -30,7 +29,7 @@ defmodule ZaZaar.Transcript.Video do
     field :title, :string
     field :completed_at, :naive_datetime
 
-    embeds_many :comments, Transcript.Comment
+    has_many :comments, Transcript.Comment
 
     timestamps()
   end
@@ -56,6 +55,7 @@ defmodule ZaZaar.Transcript.Video do
       :fb_status
     ])
     |> validate_inclusion(:fb_status, FbLiveVideoStatus.__valid_values__())
+    |> cast_assoc(:comments)
     |> unique_constraint(:fb_video_id)
   end
 end

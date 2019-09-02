@@ -1,13 +1,12 @@
 defmodule ZaZaar.Transcript.Comment do
   use ZaZaar, :schema
 
-  @derive {Jason.Encoder,
-           only: [:object_id, :message, :live_timestamp, :commenter_fb_name, :commenter_fb_id]}
+  alias ZaZaar.Transcript
 
-  @primary_key false
-  embedded_schema do
+  @primary_key {:id, :binary_id, autogenerate: true}
+  schema "comments" do
     # Comment Info
-    field :object_id, :string, primary_key: true
+    field :object_id, :string
     field :message, :string
     field :created_time, :naive_datetime
     field :live_timestamp, :integer, default: 0
@@ -20,6 +19,8 @@ defmodule ZaZaar.Transcript.Comment do
     field :commenter_fb_id, :string
     field :commenter_picture, :string
     field :commenter_fb_name, :string
+
+    belongs_to :video, Transcript.Video, type: :binary_id
 
     timestamps()
   end
