@@ -67,4 +67,4 @@
   </div>
 </section>
 
-<%= render ZaZaarWeb.StreamView, "new_merchandise_modal.html", assigns %>
+<%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal, session: %{fb_video_id: @video.fb_video_id, page_id: current_page(@conn) |> Map.get(:id)}) %>

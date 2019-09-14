@@ -5,7 +5,7 @@ defmodule ZaZaarWeb.StreamingController do
     video =
       conn
       |> get_session(:video_id)
-      |> Transcript.get_video()
+      |> Transcript.get_video(preload: :comments)
 
     case video do
       %{fb_status: :live} ->

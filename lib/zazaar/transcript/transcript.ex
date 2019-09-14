@@ -37,11 +37,9 @@ defmodule ZaZaar.Transcript do
   def get_videos(%{fb_page_id: page_id}, opts), do: get_videos([fb_page_id: page_id], opts)
 
   def get_videos(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
     Video
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
+    |> get_many_query(attrs, opts)
+    |> cast_videos_opts_to_query(opts)
     |> Repo.all()
   end
 
@@ -174,6 +172,19 @@ defmodule ZaZaar.Transcript do
     |> save_merchandise()
   end
 
+  @spec get_comment(id :: String.t(), opts :: keyword) :: Comment | nil
+  def get_comment(id_or_obj_id, _opts \\ []) do
+    case id_or_obj_id do
+      <<_::288>> ->
+        Repo.get(Comment, id_or_obj_id)
+
+      _ ->
+        Comment
+        |> where(object_id: ^id_or_obj_id)
+        |> Repo.one()
+    end
+  end
+
   defp prep_video_upsert_map(input_map) do
     Map.merge(input_map, %{
       id: input_map[:id] || Ecto.UUID.generate(),
@@ -193,4 +204,14 @@ defmodule ZaZaar.Transcript do
       buyer_name: attrs[:buyer_name]
     }
   end
+
+  defp cast_videos_opts_to_query(query, []), do: query
+  defp cast_videos_opts_to_query(query, [{:order_by, value} | t]), do: query |> order_by(^value) |> cast_videos_opts_to_query(t)
+  defp cast_videos_opts_to_query(query, [{:on_date, date} | t]) do
+    query
+    |> where([v], fragment("?::date", v.creation_time) == ^date)
+    |> cast_videos_opts_to_query(t)
+  end
+
+  defp cast_videos_opts_to_query(query, [_ | t]), do: cast_videos_opts_to_query(query, t)
 end
