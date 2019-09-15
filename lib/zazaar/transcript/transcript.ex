@@ -134,11 +134,8 @@ defmodule ZaZaar.Transcript do
   def get_merchandises(%Video{} = video, opts), do: get_merchandises(%{video_id: video.id}, opts)
 
   def get_merchandises(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
     Merchandise
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
+    |> get_many_query(attrs, opts)
     |> Repo.all()
   end
 
@@ -206,9 +203,6 @@ defmodule ZaZaar.Transcript do
   end
 
   defp cast_videos_opts_to_query(query, []), do: query
-
-  defp cast_videos_opts_to_query(query, [{:order_by, value} | t]),
-    do: query |> order_by(^value) |> cast_videos_opts_to_query(t)
 
   defp cast_videos_opts_to_query(query, [{:on_date, date} | t]) do
     query

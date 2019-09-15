@@ -1,92 +1,92 @@
 <!-- Add Item Modal -->
 <div class="modal <%= if @show_modal, do: "is-active" %>" id="merch-modal">
   <div class="modal-background"></div>
-  <form class="modal-card">
-      <header class="modal-card-head has-background-primary has-text-centered">
-        <p class="modal-card-title has-text-white"><%= gettext "New Merchandise" %></p>
-      </header>
+  <form class="modal-card" phx-submit="save-merch">
+    <header class="modal-card-head has-background-primary has-text-centered">
+      <p class="modal-card-title has-text-white"><%= gettext "New Merchandise" %></p>
+    </header>
 
-      <section class="modal-card-body">
+    <section class="modal-card-body">
 
-        <!-- 商品截圖 -->
-        <%= if @snapshot_url do %>
-          <div class="level">
-            <div class="level-item">
-              <figure class="image is-snapshot">
-                <img id="merch-modal-img" src="<%= @snapshot_url %>">
-              </figure>
-            </div>
-          </div>
-        <% end %>
-
-        <!-- 得標主 -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal is-paddingless">
-            <label class="has-text-weight-semibold">
-              <%= gettext "Bid Winner" %>
-            </label>
-          </div>
-          <div class="field-body">
-            <span class="is-username has-text-primary has-text-weight-semibold is-link" id="merch-modal-username">
-              <%= @commenter_fb_name %>
-            </span>
+      <!-- 商品截圖 -->
+      <%= if @snapshot_url do %>
+        <div class="level">
+          <div class="level-item">
+            <figure class="image is-snapshot">
+              <img id="merch-modal-img" src="<%= @snapshot_url %>">
+            </figure>
           </div>
         </div>
+      <% end %>
 
-        <!-- Original Message -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal is-paddingless">
-            <label class="has-text-weight-semibold">
-              <%= gettext "Message" %>
-            </label>
-          </div>
-          <div class="field-body">
-            <span id="merch-modal-message">
-              <%= @message %>
-            </span>
-          </div>
+      <!-- 得標主 -->
+      <div class="field is-horizontal">
+        <div class="field-label is-normal is-paddingless">
+          <label class="has-text-weight-semibold">
+            <%= gettext "Bid Winner" %>
+          </label>
         </div>
-
-        <!-- 商品名稱 -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label" for="title">
-              <%= gettext "Title" %>
-            </label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input class="input" id="merch-modal-title" type="text" name="title" placeholder="<%= gettext "Title" %>" value="<%= @title %>">
-              </div>
-            </div>
-          </div>
+        <div class="field-body">
+          <span class="is-username has-text-primary has-text-weight-semibold is-link" id="merch-modal-username">
+            <%= @commenter_fb_name %>
+          </span>
         </div>
+      </div>
 
-        <!-- 得標金額 -->
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label" for="price">
-              <%= gettext "Price" %>
-            </label>
-          </div>
-          <div class="field-body">
-            <div class="field">
-              <div class="control">
-                <input class="input" id="merch-modal-price" type="text" name="price" placeholder="<%= gettext "Price" %>" value="<%= @price %>">
-              </div>
+      <!-- Original Message -->
+      <div class="field is-horizontal">
+        <div class="field-label is-normal is-paddingless">
+          <label class="has-text-weight-semibold">
+            <%= gettext "Message" %>
+          </label>
+        </div>
+        <div class="field-body">
+          <span id="merch-modal-message">
+            <%= @message %>
+          </span>
+        </div>
+      </div>
+
+      <!-- 商品名稱 -->
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label" for="title">
+            <%= gettext "Title" %>
+          </label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <input class="input" id="merch-modal-title" type="text" name="title" placeholder="<%= gettext "Title" %>" value="<%= @title %>">
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <footer class="modal-card-foot has-background-white is-justified-end">
-        <button class="button is-primary" drab-click="create_merchandise">
-          <%= gettext "Save" %>
-        </button>
-        <button class="button" type="button" onclick="closeNewMerchModal()">
-          <%= gettext "Cancel" %>
-        </button>
-      </footer>
-    </form>
+      <!-- 得標金額 -->
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label" for="price">
+            <%= gettext "Price" %>
+          </label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <input class="input" id="merch-modal-price" type="text" name="price" placeholder="<%= gettext "Price" %>" value="<%= @price %>">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="modal-card-foot has-background-white is-justified-end">
+      <button class="button is-primary" type="submit">
+        <%= gettext "Save" %>
+      </button>
+      <button class="button" type="button" phx-click="close-modal">
+        <%= gettext "Cancel" %>
+      </button>
+    </footer>
+  </form>
 </div>

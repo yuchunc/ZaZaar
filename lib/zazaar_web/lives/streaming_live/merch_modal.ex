@@ -5,10 +5,12 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
     show_modal: false,
     has_snapshot: true,
     snapshot_url: nil,
-    commenter_fb_name: "",
+    commenter_fb_name: nil,
+    commenter_fb_id: nil,
     message: "",
     title: nil,
-    price: nil
+    price: nil,
+    merch_id: nil
   }
 
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_modal.html", assigns)
@@ -52,13 +54,14 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
         result -> result
       end
 
-    [price] = Regex.scan(~r/\d+/, comment.message)
+    [price] = Regex.run(~r/\d+/, comment.message)
 
     assigns = %{
       show_modal: true,
       has_snapshot: true,
       snapshot_url: thumbnails |> List.last() |> Map.get("uri"),
       commenter_fb_name: comment.commenter_fb_name,
+      commenter_fb_id: comment.commenter_fb_id,
       message: comment.message,
       title:
         gettext("%{today} Stream #%{vid_count} Merchandise #%{merch_count}",
@@ -73,4 +76,24 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   end
 
   def handle_info(_, socket), do: {:noreply, socket}
+
+  def handle_event("save-merch", params, socket) do
+    assigns = socket.assigns
+
+    merch_attrs = %{
+      title: params["title"],
+      price: params["price"],
+      snapshot_url: assigns.snapshot_url,
+      video_id: assigns.video_id,
+      buyer_name: assigns.commenter_fb_name,
+      buyer_fb_id: assigns.commenter_fb_id
+    }
+
+    case Transcript.save_merchandise(merch_attrs) do
+      {:ok, _} -> {:noreply, assign(socket, @default_state)}
+      _ -> {:noreply, socket}
+    end
+  end
+
+  def handle_event("close-modal", _, socket), do: {:noreply, assign(socket, @default_state)}
 end
