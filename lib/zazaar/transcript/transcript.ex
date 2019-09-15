@@ -206,7 +206,10 @@ defmodule ZaZaar.Transcript do
   end
 
   defp cast_videos_opts_to_query(query, []), do: query
-  defp cast_videos_opts_to_query(query, [{:order_by, value} | t]), do: query |> order_by(^value) |> cast_videos_opts_to_query(t)
+
+  defp cast_videos_opts_to_query(query, [{:order_by, value} | t]),
+    do: query |> order_by(^value) |> cast_videos_opts_to_query(t)
+
   defp cast_videos_opts_to_query(query, [{:on_date, date} | t]) do
     query
     |> where([v], fragment("?::date", v.creation_time) == ^date)

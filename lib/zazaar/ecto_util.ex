@@ -1,7 +1,7 @@
 defmodule ZaZaar.EctoUtil do
   import Ecto.Query
 
-  #@opts [:get_count]
+  # @opts [:get_count]
 
   def get_many_query(query, attrs, opts \\ []) do
     query
@@ -9,7 +9,8 @@ defmodule ZaZaar.EctoUtil do
     |> apply_opts(opts)
   end
 
-  defp apply_filter(query, attrs) when is_map(attrs), do: apply_filter(query, Enum.into(attrs, []))
+  defp apply_filter(query, attrs) when is_map(attrs),
+    do: apply_filter(query, Enum.into(attrs, []))
 
   defp apply_filter(query, []), do: query
 

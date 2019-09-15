@@ -6,8 +6,9 @@ defmodule ZaZaar.EctoUtilTest do
 
   describe "get_many_query/3" do
     test "generate query from attrs" do
-      query = Merchandise
-      |> EctoUtil.get_many_query(%{buyer_fb_id: "foobar"})
+      query =
+        Merchandise
+        |> EctoUtil.get_many_query(%{buyer_fb_id: "foobar"})
 
       assert %{from: %{source: {"merchandises", Merchandise}}} = query
 
@@ -17,7 +18,8 @@ defmodule ZaZaar.EctoUtilTest do
     end
 
     test "returns count when get_count option is true" do
-      assert %{select: %{expr: {:count, _, _}}} = EctoUtil.get_many_query(Merchandise, %{}, get_count: true)
+      assert %{select: %{expr: {:count, _, _}}} =
+               EctoUtil.get_many_query(Merchandise, %{}, get_count: true)
     end
   end
 end
