@@ -9,11 +9,11 @@
       <section class="modal-card-body">
 
         <!-- 商品截圖 -->
-        <%= if @view_module == ZaZaarWeb.StreamingView do %>
+        <%= if @snapshot_url do %>
           <div class="level">
             <div class="level-item">
               <figure class="image is-snapshot">
-                <img id="merch-modal-img" src="">
+                <img id="merch-modal-img" src="<%= @snapshot_url %>">
               </figure>
             </div>
           </div>
@@ -28,6 +28,7 @@
           </div>
           <div class="field-body">
             <span class="is-username has-text-primary has-text-weight-semibold is-link" id="merch-modal-username">
+              <%= @commenter_fb_name %>
             </span>
           </div>
         </div>
@@ -40,7 +41,9 @@
             </label>
           </div>
           <div class="field-body">
-            <span id="merch-modal-message"></span>
+            <span id="merch-modal-message">
+              <%= @message %>
+            </span>
           </div>
         </div>
 
@@ -54,7 +57,7 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="input" id="merch-modal-title" type="text" name="title" placeholder="<%= gettext "Title" %>" value="">
+                <input class="input" id="merch-modal-title" type="text" name="title" placeholder="<%= gettext "Title" %>" value="<%= @title %>">
               </div>
             </div>
           </div>
@@ -70,16 +73,11 @@
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <input class="input" id="merch-modal-price" type="text" name="price" placeholder="<%= gettext "Price" %>" value="">
+                <input class="input" id="merch-modal-price" type="text" name="price" placeholder="<%= gettext "Price" %>" value="<%= @price %>">
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Hidden Inputs -->
-        <input class="is-hidden" id="merch-modal-buyer-id" name="buyer_fb_id" value="" readonly>
-        <input class="is-hidden" id="merch-modal-buyer-name" name="buyer_name" value="" readonly>
-        <input class="is-hidden" id="merch-modal-snapshot-url" name="snapshot_url" value="" readonly>
       </section>
 
       <footer class="modal-card-foot has-background-white is-justified-end">
