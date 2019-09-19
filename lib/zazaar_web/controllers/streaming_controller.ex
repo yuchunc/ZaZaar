@@ -15,14 +15,11 @@ defmodule ZaZaarWeb.StreamingController do
           video_id: video.id
         }
 
-        merchs = Transcript.get_merchandises(video, order_by: [desc: :inserted_at])
-
         conn
         |> assign(:drab_assigns, drab_assigns)
         |> render("show.html",
           video: Map.delete(video, :comments),
-          comments: video.comments,
-          merchandises: merchs
+          comments: video.comments
         )
 
       %{fb_status: :vod} ->

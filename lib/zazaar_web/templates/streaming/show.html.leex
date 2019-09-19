@@ -51,18 +51,8 @@
       <%= live_render(@conn, ZaZaarWeb.StreamingLive.CommentArea, session: %{fb_video_id: @video.fb_video_id, comments: @comments, page: current_page(@conn)}, container: {:div, class: "tile is-parent is-4 streaming__comments"}) %>
 
       <!-- Merchandises List -->
-      <div class="tile is-parent is-4 streaming__merchandises">
-        <div class="tile is-child card">
-          <header class="card-header">
-            <p class="card-header-title">商品列表</p>
-          </header>
+      <%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchList, session: %{video_id: @video.id}, container: {:div, class: "tile is-parent is-4 streaming__merchandises"}) %>
 
-          <div class="card-content">
-            <%= render_many @merchandises, __MODULE__, "merchandise_media.html", as: :merchandise %>
-          </div>
-
-        </div>
-      </div>
     </div>
   </div>
 </section>

@@ -75,8 +75,6 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
     {:noreply, assign(socket, assigns)}
   end
 
-  def handle_info(_, socket), do: {:noreply, socket}
-
   def handle_event("save-merch", params, socket) do
     assigns = socket.assigns
 
