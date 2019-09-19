@@ -54,7 +54,11 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
         result -> result
       end
 
-    [price] = Regex.run(~r/\d+/, comment.message)
+    price =
+      case Regex.run(~r/\d+/, comment.message) do
+        [value] -> value
+        _ -> nil
+      end
 
     assigns = %{
       show_modal: true,

@@ -1,5 +1,6 @@
-//import socket from '../../socket';
-import {el} from "../../utils/dom_control"
+import socket from '../../socket';
+import { Socket } from "phoenix"
+import { el } from "../../utils/dom_control"
 
 import "phoenix_html"
 import LiveSocket from "phoenix_live_view"
@@ -84,7 +85,7 @@ const mount = () => {
     }
   }
 
-  const liveSocket = new LiveSocket("/live", {hooks: Hooks})
+  const liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks})
   liveSocket.connect()
 
   console.log("Streaming show mounted");

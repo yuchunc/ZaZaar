@@ -9,17 +9,10 @@ defmodule ZaZaarWeb.StreamingController do
 
     case video do
       %{fb_status: :live} ->
-        drab_assigns = %{
-          user_token: current_user(conn, :token),
-          page_id: current_page(conn) |> Map.get(:id),
-          video_id: video.id
-        }
-
         conn
-        |> assign(:drab_assigns, drab_assigns)
         |> render("show.html",
           video: Map.delete(video, :comments),
-          comments: video.comments
+          page_id: current_page(conn) |> Map.get(:id)
         )
 
       %{fb_status: :vod} ->

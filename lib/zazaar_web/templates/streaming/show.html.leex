@@ -48,13 +48,30 @@
         </div>
       </div>
 
-      <%= live_render(@conn, ZaZaarWeb.StreamingLive.CommentArea, session: %{fb_video_id: @video.fb_video_id, comments: @comments, page: current_page(@conn)}, container: {:div, class: "tile is-parent is-4 streaming__comments"}) %>
+      <%= live_render(@conn, ZaZaarWeb.StreamingLive.CommentArea,
+            session: %{fb_video_id: @video.fb_video_id, page_id: @page_id},
+            container: {:div, class: "tile is-parent is-4 streaming__comments"},
+            id: @video.id <> "_comment_area")
+      %>
 
       <!-- Merchandises List -->
-      <%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchList, session: %{video_id: @video.id}, container: {:div, class: "tile is-parent is-4 streaming__merchandises"}) %>
+      <%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchList,
+            session: %{video_id: @video.id},
+            container: {:div, class: "tile is-parent is-4 streaming__merchandises"},
+            id: @video.id <> "_merch_list")
+      %>
 
     </div>
   </div>
 </section>
 
-<%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal, session: %{fb_video_id: @video.fb_video_id, page_id: current_page(@conn) |> Map.get(:id)}) %>
+<%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal,
+      session: %{fb_video_id: @video.fb_video_id, page_id: @page_id},
+      id: @video.id <> "_merch_modal")
+%>
+
+<script charset="utf-8">
+  window.appConfig = {
+    userToken: "<%= current_user(@conn, :token) %>"
+  }
+</script>

@@ -28,7 +28,7 @@ defmodule ZaZaarWeb.StreamController do
     case Transcript.get_video(fb_video_id) do
       %{fb_status: :live, id: id} ->
         conn
-        |> put_session(:page, current_page(conn))
+        |> put_session(:page_id, current_page(conn) |> Map.get(:id))
         |> put_session(:video_id, id)
         |> redirect(to: "/s/current")
 

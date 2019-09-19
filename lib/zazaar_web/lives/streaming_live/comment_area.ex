@@ -1,6 +1,8 @@
 defmodule ZaZaarWeb.StreamingLive.CommentArea do
   use ZaZaarWeb, :live
 
+  alias ZaZaar.Account
+
   def render(assigns) do
     ~L"""
     <div class="tile is-child card">
@@ -21,11 +23,11 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
           <figure class="media-left image is-32x32 is-avatar">
             <img class="is-rounded" src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
           </figure>
-          <form phx-submit="new_comment">
+          <form action="#" phx-submit="new_comment">
             <div class="media-content">
               <div class="field">
                 <div class="control">
-                  <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" phx-keyup="set_comment"/>
+                  <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
                 </div>
               </div>
             </div>
@@ -74,25 +76,47 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   end
 
   def mount(session, socket) do
-    %{fb_video_id: fb_video_id, comments: comments, page: page} = session
-    assigns = %{comments: comments, page: page, textarea: nil, fb_video_id: fb_video_id}
+    %{fb_video_id: fb_video_id, page_id: page_id} = session
+
+    assigns = %{
+      comments: [],
+      page: Account.get_page(page_id),
+      textarea: nil,
+      fb_video_id: fb_video_id
+    }
+
+    send(self(), {:mounted, fb_video_id})
 
     {:ok, assign(socket, assigns)}
   end
 
-  def handle_event("set_comment", %{"value" => value}, socket) do
-    {:noreply, assign(socket, :textarea, value)}
-  end
+  def handle_event("new_comment", %{"comment" => comment0}, socket) do
+    %{comments: comments, page: page, fb_video_id: fb_video_id} = socket.assigns
 
-  def handle_event("new_comment", %{"comment" => comment}, socket) do
-    send(self(), {:new_comment, comment})
-    {:noreply, assign(socket, :textarea, "")}
+    comments_1 =
+      case Fb.publish_comment(fb_video_id, comment0, page.access_token) do
+        {:ok, comment1} ->
+          comments ++ [comment1]
+
+        _ ->
+          comments
+      end
+
+    assigns = %{comments: comments_1, textarea: ""}
+
+    {:noreply, assign(socket, assigns)}
   end
 
   def handle_event("enable-merch-modal", params, socket) do
     payload = cast_new_merch(params, socket)
     Phoenix.PubSub.broadcast(ZaZaar.PubSub, "stream:#{payload.fb_video_id}", payload)
     {:noreply, socket}
+  end
+
+  def handle_info({:mounted, video_id}, socket) do
+    video = Transcript.get_video(video_id, preload: :comments)
+
+    {:noreply, assign(socket, :comments, video.comments)}
   end
 
   def handle_info({:new_comment, new_comment}, socket) do
