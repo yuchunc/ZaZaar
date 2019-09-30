@@ -16,23 +16,21 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_modal.html", assigns)
 
   def mount(session, socket) do
-    %{fb_video_id: fb_video_id} = session
-
-    if connected?(socket) do
-      Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{fb_video_id}")
-    end
+    %{video_id: video_id} = session
 
     send(self(), {:mounted, session})
+    Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
 
-    {:ok, assign(socket, @default_state)}
+    assigns = Map.merge(@default_state, session)
+
+    {:ok, assign(socket, assigns)}
   end
 
   def handle_info({:mounted, session}, socket) do
-    %{page_id: page_id, fb_video_id: fb_video_id} = session
+    %{page_id: page_id} = session
 
     assigns = %{
-      access_token: Account.get_page(page_id) |> Map.get(:access_token),
-      video_id: Transcript.get_video(fb_video_id) |> Map.get(:id)
+      access_token: Account.get_page(page_id) |> Map.get(:access_token)
     }
 
     {:noreply, assign(socket, assigns)}
@@ -79,21 +77,33 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
     {:noreply, assign(socket, assigns)}
   end
 
+  def handle_info(_, socket), do: {:noreply, socket}
+
   def handle_event("save-merch", params, socket) do
-    assigns = socket.assigns
+    %{
+      snapshot_url: snapshot_url,
+      video_id: video_id,
+      commenter_fb_name: com_fb_name,
+      commenter_fb_id: com_fb_id
+    } = socket.assigns
 
     merch_attrs = %{
       title: params["title"],
       price: params["price"],
-      snapshot_url: assigns.snapshot_url,
-      video_id: assigns.video_id,
-      buyer_name: assigns.commenter_fb_name,
-      buyer_fb_id: assigns.commenter_fb_id
+      snapshot_url: snapshot_url,
+      video_id: video_id,
+      buyer_name: com_fb_name,
+      buyer_fb_id: com_fb_id
     }
 
     case Transcript.save_merchandise(merch_attrs) do
-      {:ok, _} -> {:noreply, assign(socket, @default_state)}
-      _ -> {:noreply, socket}
+      {:ok, merch} ->
+        payload = %{action: :save_merch, merch_id: merch.id}
+        Phoenix.PubSub.broadcast(ZaZaar.PubSub, "stream:#{video_id}", payload)
+        {:noreply, assign(socket, @default_state)}
+
+      _ ->
+        {:noreply, socket}
     end
   end
 
