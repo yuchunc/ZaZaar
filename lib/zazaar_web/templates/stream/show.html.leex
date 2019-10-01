@@ -85,40 +85,14 @@
       %>
 
       <!-- Stream Table -->
-      <div class="column stream__page__order">
-        <form>
-          <table class="table main-table is-striped is-hoverable">
-            <thead class="main-table__header">
-              <tr>
-                <th width="10%"><%= gettext "Created Time" %></th>
-                <th width="20%"><%= gettext "Snapshot" %></th>
-                <th width="22%"><%= gettext "Product Name" %></th>
-                <th width="22%"><%= gettext "Buyer" %></th>
-                <th width="10%"><%= gettext "Amount" %></th>
-                <th width="16%"></th>
-              </tr>
-            </thead>
-
-            <tbody class="main-table__body" id="items-table-body">
-              <%= render_many @merchandises, @view_module, "merch_tr.html", as: :merchandise, video: @video %>
-            </tbody>
-          </table>
-        </form>
-      </div>
+      <%= live_render(@conn, ZaZaarWeb.StreamLive.MerchTable,
+            session: %{video_id: @video.id, page_id: @page_id, is_completed: !!@video.completed_at},
+            container: {:div, class: "column stream__page__order"},
+            id: @video.id <> "_stream_comment_area")
+      %>
     </div>
   </div>
 </section>
-
-<!-- Product Image Preview -->
-<div class="modal" id="merch-snapshot-modal">
-  <div class="modal-background"></div>
-  <div class="modal-content">
-    <p class="image is-4by3">
-      <img src="#">
-    </p>
-  </div>
-  <button class="modal-close is-large" aria-label="close"></button>
-</div>
 
 <%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal,
       session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, has_snapshot: false},

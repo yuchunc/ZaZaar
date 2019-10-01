@@ -33,15 +33,8 @@ defmodule ZaZaarWeb.StreamController do
         |> redirect(to: "/s/current")
 
       %Video{} = video ->
-        merchs =
-          video
-          |> Transcript.get_merchandises(
-            order_by: [desc: :inserted_at, desc_nulls_first: :invalidated_at]
-          )
-
         render(conn, "show.html",
           video: video,
-          merchandises: merchs,
           page_id: current_page(conn) |> Map.get(:id)
         )
 

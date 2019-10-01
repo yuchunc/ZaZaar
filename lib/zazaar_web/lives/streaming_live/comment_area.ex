@@ -139,6 +139,7 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
     %{
       source: __MODULE__,
       action: :new_merch,
+      has_snapshot: true,
       fb_video_id: socket.assigns.fb_video_id,
       object_id: raw_params["object-id"]
     }

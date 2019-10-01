@@ -56,11 +56,6 @@ const closePreviewModal = () => {
 }
 
 const mount = () => {
-  window.commentsListDom = document.querySelector(".card-content.comments");
-  window.closeNewMerchModal = closeNewMerchModal;
-
-  merchSnapshotModal.onclick = closePreviewModal;
-
   const liveSocket = new LiveSocket("/live", Socket)
   liveSocket.connect()
 
