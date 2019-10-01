@@ -1,4 +1,0 @@
-<script>
-  let channel = Drab.socket.channel("video:<%= @video_id%>")
-  channel.join
-</script>

@@ -125,6 +125,28 @@ defmodule ZaZaar.TranscriptTest do
     end
   end
 
+  describe "get_comments/2" do
+    setup do
+      video = insert(:video)
+      comments = insert_list(3, :comment, video_id: video.id)
+      {:ok, comments: comments, video: video}
+    end
+
+    test "get by video", ctx do
+      %{video: video, comments: comments} = ctx
+
+      assert Transcript.get_comments(video) |> Enum.map(& &1.id) |> Enum.sort() ==
+               comments |> Enum.map(& &1.id) |> Enum.sort()
+    end
+
+    test "get by attribute", ctx do
+      %{video: video, comments: comments} = ctx
+
+      assert Transcript.get_comments(video_id: video.id) |> Enum.map(& &1.id) |> Enum.sort() ==
+               comments |> Enum.map(& &1.id) |> Enum.sort()
+    end
+  end
+
   describe "get_comment/2" do
     setup do
       {:ok, comment: insert(:comment)}

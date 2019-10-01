@@ -50,7 +50,7 @@
         </div>
         <!-- Create Order Button-->
         <div class="level-right">
-          <%= if !@video.completed_at && @video.comments != [] do %>
+          <%= if !@video.completed_at do %>
             <%= form_tag("/s/batch_orders") %>
               <input class="is-hidden" name="video_id" value="<%= @video.id%>" />
               <input class="button is-primary is-medium" type="submit" value="<%= gettext "Create Orders" %>"/ >
@@ -78,17 +78,11 @@
 
     <div class="columns main-columns">
       <!-- Comment Area-->
-      <div class="column comment-container is-one-third-desktop">
-        <div class="card">
-          <header class="card-header">
-            <p class="card-header-title"><%= gettext "Comments" %></p>
-          </header>
-
-          <div class="card-content comments">
-            <%= render_many @video.comments, @view_module, "comment.html", as: :comment %>
-          </div>
-        </div>
-      </div>
+      <%= live_render(@conn, ZaZaarWeb.StreamLive.CommentArea,
+            session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, is_completed: !!@video.completed_at},
+            container: {:div, class: "column comment-container is-one-third-desktop"},
+            id: @video.id <> "_stream_comment_area")
+      %>
 
       <!-- Stream Table -->
       <div class="column stream__page__order">
@@ -126,7 +120,10 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
-<%= render __MODULE__, "new_merchandise_modal.html", conn: @conn %>
+<%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal,
+      session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, has_snapshot: false},
+      id: @video.id <> "_merch_modal")
+%>
 
 <script charset="utf-8">
   window.appConfig = {

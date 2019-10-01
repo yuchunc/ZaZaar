@@ -37,13 +37,12 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   end
 
   def handle_info(%{action: :new_merch} = payload, socket) do
-    %{object_id: object_id, fb_video_id: fb_video_id} = payload
-    %{assigns: %{access_token: access_token, video_id: vid_id}} = socket
+    %{object_id: object_id, fb_video_id: fb_video_id, has_snapshot: has_snapshot} = payload
+    %{access_token: access_token, video_id: vid_id} = socket.assigns
 
     # NOTE this might need to take user tz
     today = Date.utc_today()
     comment = Transcript.get_comment(object_id)
-    {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(fb_video_id, access_token)
     [vid_count] = Transcript.get_videos([], get_count: true, on_date: today)
 
     [merch_count] =
@@ -58,10 +57,10 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
         _ -> nil
       end
 
-    assigns = %{
+    assigns0 = %{
       show_modal: true,
-      has_snapshot: true,
-      snapshot_url: thumbnails |> List.last() |> Map.get("uri"),
+      has_snapshot: has_snapshot,
+      snapshot_url: "",
       commenter_fb_name: comment.commenter_fb_name,
       commenter_fb_id: comment.commenter_fb_id,
       message: comment.message,
@@ -74,7 +73,16 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
       price: price
     }
 
-    {:noreply, assign(socket, assigns)}
+    assigns1 =
+      if has_snapshot do
+        {:ok, %{"data" => thumbnails}} = Fb.video_thumbnails(fb_video_id, access_token)
+        snapshot_url = thumbnails |> List.last() |> Map.get("uri")
+        %{assigns0 | snapshot_url: snapshot_url}
+      else
+        assigns0
+      end
+
+    {:noreply, assign(socket, assigns1)}
   end
 
   def handle_info(_, socket), do: {:noreply, socket}

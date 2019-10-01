@@ -169,6 +169,19 @@ defmodule ZaZaar.Transcript do
     |> save_merchandise()
   end
 
+  @spec get_comments(attrs :: Video | keyword) :: Comments | []
+  def get_comments(attrs), do: get_comments(attrs, [])
+
+  @spec get_comments(attrs :: Video | keyword, opts :: keyword) :: Comments | []
+  def get_comments(%Video{} = vid, opts), do: get_comments([video_id: vid.id], opts)
+
+  def get_comments(attrs, opts) do
+    Comment
+    |> get_many_query(attrs, opts)
+    |> cast_videos_opts_to_query(opts)
+    |> Repo.all()
+  end
+
   @spec get_comment(id :: String.t(), opts :: keyword) :: Comment | nil
   def get_comment(id_or_obj_id, _opts \\ []) do
     case id_or_obj_id do

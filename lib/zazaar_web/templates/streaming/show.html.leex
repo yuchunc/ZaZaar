@@ -51,7 +51,7 @@
       <%= live_render(@conn, ZaZaarWeb.StreamingLive.CommentArea,
             session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id},
             container: {:div, class: "tile is-parent is-4 streaming__comments"},
-            id: @video.id <> "_comment_area")
+            id: @video.id <> "_streaming_comment_area")
       %>
 
       <!-- Merchandises List -->
