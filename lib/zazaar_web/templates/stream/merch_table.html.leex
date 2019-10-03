@@ -1,5 +1,5 @@
 <div class="column stream__page__order">
-  <form>
+  <form phx-submit="update-merch">
     <table class="table main-table is-striped is-hoverable">
       <thead class="main-table__header">
         <tr>
@@ -20,11 +20,11 @@
 </div>
 
 <!-- Product Image Preview -->
-<div class="modal <%= if @show_snapshot_modal, do: "is-active" %>" id="merch-snapshot-modall" phx-click="toggle-snapshot-modal" phx-value-snapshot="">
+<div class="modal <%= if @snapshot_modal_url != "", do: "is-active" %>" id="merch-snapshot-modall" phx-click="toggle-snapshot-modal" phx-value-snapshot="">
   <div class="modal-background"></div>
   <div class="modal-content">
     <p class="image is-4by3">
-      <img src="<%= if @show_snapshot_modal, do: @snapshot_modal_url %>">
+      <img src="<%= if @snapshot_modal_url != "", do: @snapshot_modal_url %>">
     </p>
   </div>
   <button class="modal-close is-large" aria-label="close"></button>
