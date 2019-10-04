@@ -80,7 +80,7 @@
       <!-- Comment Area-->
       <%= live_render(@conn, ZaZaarWeb.StreamLive.CommentArea,
             session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, is_completed: !!@video.completed_at},
-            container: {:div, class: "column comment-container is-one-third-desktop"},
+            container: {:div, class: "column comment-container is-one-third-desktop is-hidden-mobile"},
             id: @video.id <> "_stream_comment_area")
       %>
 

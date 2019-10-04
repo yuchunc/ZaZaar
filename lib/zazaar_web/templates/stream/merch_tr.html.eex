@@ -40,7 +40,7 @@
     <td class="has-text-centered">
       <%= if @video.completed_at do %>
         <!-- TODO redirect to the given order-->
-        <button class="button is-primary is-outlined is-centered is-hidden">
+        <button class="button is-primary is-outlined is-centered">
           <%= gettext "Check Order" %>
         </button>
       <% else %>
