@@ -4,6 +4,7 @@ defmodule ZaZaar.Booking do
   import ZaZaar.EctoUtil
   import ZaZaar.TimeUtil
 
+  alias ZaZaar.Account
   alias ZaZaar.Booking
   alias Booking.{Order, Buyer}
 
@@ -15,10 +16,10 @@ defmodule ZaZaar.Booking do
   Creates a list of orders from merchs,
   one order per video perperson
   """
-  @spec create_video_orders(Video.t(), [Merch.t()]) :: [Order.t()]
-  def create_video_orders(_video, []), do: {:ok, []}
+  @spec create_video_orders(Video.t(), [Merch.t()], String.t()) :: [Order.t()]
+  def create_video_orders(_video, [], _page_id), do: {:ok, []}
 
-  def create_video_orders(video, merchs) do
+  def create_video_orders(video, merchs, page_id) do
     local_dt = video.creation_time |> convert_local_dt("Asia/Taipei")
 
     merchs = Enum.reject(merchs, &(!!&1.invalidated_at))
@@ -26,7 +27,7 @@ defmodule ZaZaar.Booking do
     users_with_items =
       Enum.group_by(
         merchs,
-        &%{fb_id: &1.buyer_fb_id, fb_name: &1.buyer_name, page_id: video.fb_page_id},
+        &%{fb_id: &1.buyer_fb_id, fb_name: &1.buyer_name, page_id: page_id},
         fn merch ->
           %{
             merchandise_id: merch.id,
@@ -60,7 +61,7 @@ defmodule ZaZaar.Booking do
            %{
              title: Timex.format!(local_dt, "%F %T", :strftime) <> " ##{count}",
              total_amount: Enum.reduce(items, 0, &(&1.price + &2)),
-             page_id: video.fb_page_id,
+             page_id: page_id,
              buyer_id: buyer.id,
              video_id: video.id,
              inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),

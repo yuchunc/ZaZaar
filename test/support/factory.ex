@@ -74,7 +74,7 @@ defmodule ZaZaar.Factory do
     %Booking.Order{
       title: Faker.Lorem.sentence(),
       total_amount: Enum.random(0..20000),
-      page_id: page.fb_page_id,
+      page_id: page.id,
       video_id: video.id,
       buyer: insert(:buyer, page_id: page.fb_page_id)
     }

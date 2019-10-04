@@ -19,7 +19,7 @@ defmodule ZaZaar.Booking.Order do
   schema "orders" do
     field :title, :string
     field :total_amount, :integer, null: false
-    field :page_id, :string
+    field :page_id, Ecto.UUID
     field :video_id, Ecto.UUID
     field :notified_at, :naive_datetime
     field :void_at, :naive_datetime

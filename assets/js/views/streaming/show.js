@@ -1,6 +1,4 @@
 import { Socket } from "phoenix"
-import { el } from "../../utils/dom_control"
-
 import "phoenix_html"
 import LiveSocket from "phoenix_live_view"
 
