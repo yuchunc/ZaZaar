@@ -60,7 +60,7 @@ defmodule ZaZaar.BookingTest do
       orders = insert_list(3, :order, page_id: page.id, buyer: buyer)
       insert(:order)
 
-      {:ok, page_id: page.id, orders: orders}
+      {:ok, page_id: page.id, orders: orders, buyer: buyer}
     end
 
     test "get orders with an attribute", ctx do
@@ -70,6 +70,13 @@ defmodule ZaZaar.BookingTest do
     test "get orders with an attribute, with preloads", ctx do
       orders = Booking.get_orders([page_id: ctx.page_id], preload: :buyer)
       refute Enum.map(orders, & &1.buyer) == [nil, nil, nil]
+    end
+
+    test "filter by buyer's name", ctx do
+      order = insert(:order, page_id: ctx.page_id)
+
+      assert [result] = Booking.get_orders(page_id: ctx.page_id, buyer_name: order.buyer.fb_name)
+      assert result.id == order.id
     end
   end
 end

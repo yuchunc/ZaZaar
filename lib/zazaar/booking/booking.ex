@@ -85,11 +85,11 @@ defmodule ZaZaar.Booking do
   end
 
   def get_orders(attrs, opts \\ []) do
-    preload = Keyword.get(opts, :preload, [])
+    {assoc_attrs, order_attrs} = Keyword.split(attrs, [:buyer_name])
 
     Order
-    |> get_many_query(attrs)
-    |> preload(^preload)
+    |> filter_by_assoc_attrs(assoc_attrs)
+    |> get_many_query(order_attrs, opts)
     |> Repo.all()
   end
 
@@ -97,5 +97,14 @@ defmodule ZaZaar.Booking do
     Buyer
     |> get_many_query(attrs)
     |> Repo.all()
+  end
+
+  defp filter_by_assoc_attrs(query, []), do: query
+
+  defp filter_by_assoc_attrs(query, [{:buyer_name, buyer_name} | t]) do
+    query
+    |> join(:inner, [order], buyer in assoc(order, :buyer))
+    |> where([..., buyer], like(buyer.fb_name, ^"%#{buyer_name}%"))
+    |> filter_by_assoc_attrs(t)
   end
 end
