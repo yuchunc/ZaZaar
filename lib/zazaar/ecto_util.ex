@@ -1,8 +1,6 @@
 defmodule ZaZaar.EctoUtil do
   import Ecto.Query
 
-  # @opts [:get_count]
-
   def get_many_query(query, attrs, opts \\ []) do
     query
     |> apply_filter(attrs)
@@ -32,7 +30,13 @@ defmodule ZaZaar.EctoUtil do
     query |> select(count()) |> apply_opts(t)
   end
 
-  defp apply_opts(query, [{:order_by, value} | t]), do: query |> order_by(^value) |> apply_opts(t)
+  defp apply_opts(query, [{:order_by, value} | t]) do
+    query |> order_by(^value) |> apply_opts(t)
+  end
+
+  defp apply_opts(query, [{:preload, value} | t]) do
+    query |> preload(^value) |> apply_opts(t)
+  end
 
   defp apply_opts(query, [_ | t]), do: apply_opts(query, t)
 end

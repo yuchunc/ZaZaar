@@ -101,7 +101,9 @@ defmodule ZaZaar.Booking do
 
   defp filter_by_assoc_attrs(query, []), do: query
 
-  defp filter_by_assoc_attrs(query, [{:buyer_name, buyer_name} | t]) do
+  defp filter_by_assoc_attrs(query, [{_, value} | t]) when value == nil or value == "", do: query
+
+  defp filter_by_assoc_attrs(query, [{:buyer_name, buyer_name} | t])  do
     query
     |> join(:inner, [order], buyer in assoc(order, :buyer))
     |> where([..., buyer], like(buyer.fb_name, ^"%#{buyer_name}%"))
