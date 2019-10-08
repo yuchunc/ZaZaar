@@ -4,7 +4,6 @@ defmodule ZaZaar.Booking do
   import ZaZaar.EctoUtil
   import ZaZaar.TimeUtil
 
-  alias ZaZaar.Account
   alias ZaZaar.Booking
   alias Booking.{Order, Buyer}
 
@@ -85,11 +84,11 @@ defmodule ZaZaar.Booking do
   end
 
   def get_orders(attrs, opts \\ []) do
-    {assoc_attrs, order_attrs} = Keyword.split(attrs, [:buyer_name])
+    {assoc_attrs, order_attrs} = Keyword.split(attrs, [:buyer_name, :date_range])
 
     Order
-    |> filter_by_assoc_attrs(assoc_attrs)
     |> get_many_query(order_attrs, opts)
+    |> additional_filters(assoc_attrs)
     |> Repo.all()
   end
 
@@ -99,14 +98,68 @@ defmodule ZaZaar.Booking do
     |> Repo.all()
   end
 
-  defp filter_by_assoc_attrs(query, []), do: query
+  defp additional_filters(query, []), do: query
 
-  defp filter_by_assoc_attrs(query, [{_, value} | t]) when value == nil or value == "", do: query
+  defp additional_filters(query, [{_, value} | t]) when value == nil or value == "",
+    do: additional_filters(query, t)
 
-  defp filter_by_assoc_attrs(query, [{:buyer_name, buyer_name} | t])  do
+  defp additional_filters(query, [{:buyer_name, buyer_name} | t]) do
     query
     |> join(:inner, [order], buyer in assoc(order, :buyer))
     |> where([..., buyer], like(buyer.fb_name, ^"%#{buyer_name}%"))
-    |> filter_by_assoc_attrs(t)
+    |> additional_filters(t)
   end
+
+  defp additional_filters(query, [{:date_range, date_range} | t]) do
+    query
+    |> where(^filter_by_date_range(date_range, Date.utc_now()))
+    |> additional_filters(t)
+  end
+
+  defp filter_by_date_range("today", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "day"))
+  end
+
+  defp filter_by_date_range("yesterday", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "day") and o.inserted_at < date_add(^now, -1, "day")
+    )
+  end
+
+  defp filter_by_date_range("this-week", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "week"))
+  end
+
+  defp filter_by_date_range("last-week", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "week") and o.inserted_at < date_add(^now, -1, "week")
+    )
+  end
+
+  defp filter_by_date_range("this-month", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "month"))
+  end
+
+  defp filter_by_date_range("last-month", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "month") and
+        o.inserted_at < date_add(^now, -1, "month")
+    )
+  end
+
+  defp filter_by_date_range("this-year", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "year"))
+  end
+
+  defp filter_by_date_range("last-year", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "year") and o.inserted_at < date_add(^now, -1, "year")
+    )
+  end
+
+  defp filter_by_date_range(_, now), do: []
 end

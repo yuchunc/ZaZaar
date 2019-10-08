@@ -36,12 +36,12 @@
         </div>
       </header>
       <div class="card-content">
-
-        <!-- By Name -->
-        <label class="label has-text-grey-light">
-          <%= gettext "Search Buyer" %>
-        </label>
         <form phx-submit="set-filters" phx-change="set-filters">
+
+          <!-- By Name -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Search Buyer" %>
+          </label>
           <div class="field has-addons is-fullwidth">
             <div class="control is-expanded">
               <input class="input" type="text"
@@ -58,58 +58,58 @@
               </div>
             <% end %>
           </div>
+
+          <hr>
+
+          <!-- By Stream Date Range -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Stream Date" %>
+          </label>
+          <div class="field">
+            <div class="control has-icons-left">
+              <span class="select is-fullwidth">
+                <select name="filters[time_range]">
+                  <option value="" selected><%= gettext "Not Selected" %></option>
+                  <option value="today"><%= gettext "Today" %></option>
+                  <option value="yesterday"><%= gettext "Yesterday" %></option>
+                  <option value="this-week"><%= gettext "This week" %></option>
+                  <option value="last-week"><%= gettext "Last week" %></option>
+                  <option value="this-month"><%= gettext "This month" %></option>
+                  <option value="last-month"><%= gettext "Last month" %></option>
+                  <option value="this-year"><%= gettext "This year" %></option>
+                  <option value="last-year"><%= gettext "Last year" %></option>
+                </select>
+              </span>
+              <span class="icon is-small is-left">
+                <i class="fas fa-calendar-alt"></i>
+              </span>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- By Order Status -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Order Status" %>
+          </label>
+          <div class="field">
+            <div class="control">
+              <label class="checkbox is-block is-marginless">
+                <input type="checkbox" name="filters[states][notified]" checked>
+                <%= gettext "Notified Buyer" %>
+              </label>
+              <label class="checkbox is-block is-marginless">
+                <input type="checkbox" name="filters[states][completed]" checked>
+                <%= gettext "Completed" %>
+              </label>
+              <label class="checkbox is-block is-marginless">
+                <input type="checkbox" name="filters[states][invalidated]" checked>
+                <%= gettext "Invalidated" %>
+              </label>
+            </div>
+          </div>
+
         </form>
-
-        <hr>
-
-        <!-- By Stream Date Range -->
-        <label class="label has-text-grey-light">
-          <%= gettext "Stream Date" %>
-        </label>
-        <div class="field">
-          <div class="control has-icons-left">
-            <span class="select is-fullwidth">
-              <select>
-                <option selected>未選擇</option>
-                <option>Today</option>
-                <option>Yesterday</option>
-                <option>This week</option>
-                <option>Last week</option>
-                <option>This month</option>
-                <option>Last month</option>
-                <option>This year</option>
-                <option>Last year</option>
-              </select>
-            </span>
-            <span class="icon is-small is-left">
-              <i class="fas fa-calendar-alt"></i>
-            </span>
-          </div>
-        </div>
-
-        <hr>
-
-        <!-- By Order Status -->
-        <label class="label has-text-grey-light">
-          <%= gettext "Order Status" %>
-        </label>
-        <div class="field">
-          <div class="control">
-            <label class="checkbox is-block is-marginless">
-              <input type="checkbox" name="answer" checked>
-              <%= gettext "Notified Buyer" %>
-            </label>
-            <label class="checkbox is-block is-marginless">
-              <input type="checkbox" name="answer" checked>
-              <%= gettext "Completed" %>
-            </label>
-            <label class="checkbox is-block is-marginless">
-              <input type="checkbox" name="answer" checked>
-              <%= gettext "Invalidated" %>
-            </label>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -157,7 +157,6 @@
 </div>
 
 <%= if false do %>
-
   <nav class="pagination is-centered has-margin-top-md" role="navigation" aria-label="pagination">
     <a class="pagination-previous" disabled><%= gettext "Previous Page" %></a>
     <a class="pagination-next"><%= gettext "Next Page"%></a>
