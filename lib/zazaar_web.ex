@@ -76,8 +76,6 @@ defmodule ZaZaarWeb do
 
   def commander do
     quote do
-      use Drab.Commander
-
       import Phoenix.Socket
       import ZaZaarWeb.Gettext
 

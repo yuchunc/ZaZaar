@@ -53,7 +53,6 @@ defmodule ZaZaar.MixProject do
       {:ueberauth, "~> 0.5"},
       {:ueberauth_facebook, "~> 0.7"},
       # Utils
-      {:drab, "~> 0.10.0"},
       {:ecto_enum, "~> 1.0"},
       {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},
