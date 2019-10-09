@@ -112,7 +112,7 @@ defmodule ZaZaar.Booking do
 
   defp additional_filters(query, [{:date_range, date_range} | t]) do
     query
-    |> where(^filter_by_date_range(date_range, Date.utc_now()))
+    |> where(^filter_by_date_range(date_range, Date.utc_today()))
     |> additional_filters(t)
   end
 
@@ -161,5 +161,5 @@ defmodule ZaZaar.Booking do
     )
   end
 
-  defp filter_by_date_range(_, now), do: []
+  defp filter_by_date_range(_, _), do: []
 end

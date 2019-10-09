@@ -30,9 +30,14 @@
           <%= gettext "Filters" %>
         </p>
         <div class="card-header-icon">
-          <span class="icon has-text-grey-lighter">
-            <i class="fas fa-xs fa-filter" aria-hidden="true"></i>
-          </span>
+          <button class="button is-text is-small" phx-click="clear-filters">
+            <%= gettext "Clear Filters" %>
+          </button>
+          <%= if false do %>
+            <span class="icon has-text-grey-lighter">
+              <i class="fas fa-xs fa-filter" aria-hidden="true"></i>
+            </span>
+          <% end %>
         </div>
       </header>
       <div class="card-content">
@@ -44,11 +49,12 @@
           </label>
           <div class="field has-addons is-fullwidth">
             <div class="control is-expanded">
-              <input class="input" type="text"
-                                   name="filters[buyer]"
-                                   placeholder="<%= gettext "Buyer Name" %>"
-                                   phx-change="set-filters"
-                                   value="<%= @filters.buyer %>">
+              <input class="input"
+                     type="text"
+                     name="filters[buyer]"
+                     placeholder="<%= gettext "Buyer Name" %>"
+                     phx-change="set-filters"
+                     value="<%= @filters.buyer %>">
             </div>
             <% if false do %>
               <div class="control">
@@ -68,16 +74,16 @@
           <div class="field">
             <div class="control has-icons-left">
               <span class="select is-fullwidth">
-                <select name="filters[time_range]">
-                  <option value="" selected><%= gettext "Not Selected" %></option>
-                  <option value="today"><%= gettext "Today" %></option>
-                  <option value="yesterday"><%= gettext "Yesterday" %></option>
-                  <option value="this-week"><%= gettext "This week" %></option>
-                  <option value="last-week"><%= gettext "Last week" %></option>
-                  <option value="this-month"><%= gettext "This month" %></option>
-                  <option value="last-month"><%= gettext "Last month" %></option>
-                  <option value="this-year"><%= gettext "This year" %></option>
-                  <option value="last-year"><%= gettext "Last year" %></option>
+                <select name="filters[date_range]">
+                  <option value="" <%= is_selected("", @filters.date_range) %>><%= gettext "Not Selected" %></option>
+                  <option value="today" <%= is_selected("today", @filters.date_range) %>><%= gettext "Today" %></option>
+                  <option value="yesterday" <%= is_selected("yesterday", @filters.date_range) %>><%= gettext "Yesterday" %></option>
+                  <option value="this-week" <%= is_selected("this-week", @filters.date_range) %>><%= gettext "This week" %></option>
+                  <option value="last-week" <%= is_selected("last-week", @filters.date_range) %>><%= gettext "Last week" %></option>
+                  <option value="this-month" <%= is_selected("this-month", @filters.date_range) %>><%= gettext "This month" %></option>
+                  <option value="last-month" <%= is_selected("last-month", @filters.date_range) %>><%= gettext "Last month" %></option>
+                  <option value="this-year" <%= is_selected("this-year", @filters.date_range) %>><%= gettext "This year" %></option>
+                  <option value="last-year" <%= is_selected("last-year", @filters.date_range) %>><%= gettext "Last year" %></option>
                 </select>
               </span>
               <span class="icon is-small is-left">
@@ -95,15 +101,17 @@
           <div class="field">
             <div class="control">
               <label class="checkbox is-block is-marginless">
-                <input type="checkbox" name="filters[states][notified]" checked>
+                <input type="checkbox" name="filters[states][notified]" <%= if "notified" in @filters.states, do: "checked" %>>
                 <%= gettext "Notified Buyer" %>
               </label>
+              <%= if false do %>
+                <label class="checkbox is-block is-marginless">
+                  <input type="checkbox" name="filters[states][completed]">
+                  <%= gettext "Completed" %>
+                </label>
+              <% end %>
               <label class="checkbox is-block is-marginless">
-                <input type="checkbox" name="filters[states][completed]" checked>
-                <%= gettext "Completed" %>
-              </label>
-              <label class="checkbox is-block is-marginless">
-                <input type="checkbox" name="filters[states][invalidated]" checked>
+                <input type="checkbox" name="filters[states][invalidated]" <%= if "invalidated" in @filters.states, do: "checked" %>>
                 <%= gettext "Invalidated" %>
               </label>
             </div>

@@ -6,8 +6,8 @@ defmodule ZaZaarWeb.OrderLive.IndexLive do
   @default_assigns %{
     filters: %{
       buyer: "",
-      time_range: "",
-      states: nil
+      date_range: "",
+      states: []
     },
     orders: []
   }
@@ -40,9 +40,30 @@ defmodule ZaZaarWeb.OrderLive.IndexLive do
     {:noreply, assign(socket, assigns)}
   end
 
+  def handle_event("clear-filters", _, socket) do
+    %{page_id: page_id} = socket.assigns
+
+    assigns = %{
+      filters: @default_assigns.filters,
+      orders: Booking.get_orders([page_id: page_id], preload: :buyer)
+    }
+
+    {:noreply, assign(socket, assigns)}
+  end
+
   defp get_orders_by_filters(page_id, filters) do
-    [page_id: page_id, buyer_name: filters.buyer, date_range: filters.time_range]
+    [page_id: page_id, buyer_name: filters.buyer, date_range: filters.date_range]
+    |> state_filters(filters.states)
     |> Booking.get_orders(preload: :buyer)
+  end
+
+  defp state_filters(list, []), do: list
+
+  defp state_filters(list, [state | t]) do
+    case state do
+      "invalidated" -> state_filters([{:void_at, true} | list], t)
+      "notified" -> state_filters([{:notified_at, true} | list], t)
+    end
   end
 
   defp cast_filters(current, raw) do
@@ -52,7 +73,7 @@ defmodule ZaZaarWeb.OrderLive.IndexLive do
 
     %{
       buyer: raw["buyer"] || current.buyer,
-      time_range: raw["time_range"] || current.time_range,
+      date_range: raw["date_range"] || current.date_range,
       states: states
     }
   end

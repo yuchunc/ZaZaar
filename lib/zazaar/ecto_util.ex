@@ -12,6 +12,12 @@ defmodule ZaZaar.EctoUtil do
 
   defp apply_filter(query, []), do: query
 
+  defp apply_filter(query, [{k, true} | t]) do
+    query
+    |> where([r], not is_nil(field(r, ^k)))
+    |> apply_filter(t)
+  end
+
   defp apply_filter(query, [{k, v} | t]) when is_list(v) do
     query
     |> where([r], field(r, ^k) in ^v)
