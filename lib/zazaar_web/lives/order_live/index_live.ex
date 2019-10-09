@@ -51,6 +51,31 @@ defmodule ZaZaarWeb.OrderLive.IndexLive do
     {:noreply, assign(socket, assigns)}
   end
 
+  def handle_event("toggle-void", params, socket) do
+    %{"order-id" => order_id} = params
+    %{orders: orders0} = socket.assigns
+
+    orders1 =
+      Enum.map(orders0, fn
+        %{id: ^order_id, void_at: nil} = order ->
+          {:ok, order} =
+            Booking.save_order(order, %{
+              void_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+            })
+
+          order
+
+        %{id: ^order_id} = order ->
+          {:ok, order} = Booking.save_order(order, %{void_at: nil})
+          order
+
+        order ->
+          order
+      end)
+
+    {:noreply, assign(socket, :orders, orders1)}
+  end
+
   defp get_orders_by_filters(page_id, filters) do
     [page_id: page_id, buyer_name: filters.buyer, date_range: filters.date_range]
     |> state_filters(filters.states)

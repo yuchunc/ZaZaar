@@ -79,4 +79,20 @@ defmodule ZaZaar.BookingTest do
       assert result.id == order.id
     end
   end
+
+  describe "save_order/2" do
+    setup do
+      {:ok, order: insert(:order)}
+    end
+
+    test "can update an attribute on order", ctx do
+      %{order: order} = ctx
+
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      order_map = order |> Map.from_struct() |> Map.put(:void_at, now)
+
+      assert {:ok, order} = Booking.save_order(order_map)
+      assert !!order.void_at
+    end
+  end
 end

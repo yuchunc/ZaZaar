@@ -92,6 +92,24 @@ defmodule ZaZaar.Booking do
     |> Repo.all()
   end
 
+  @spec save_order(attrs :: map) :: {:ok, Order.t()} | {:error, any}
+  def save_order(attrs) do
+    upsert_fields = [:void_at]
+
+    struct(Order, attrs)
+    |> IO.inspect(label: "label")
+    |> Order.changeset(attrs)
+    |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
+  end
+
+  @spec save_order(order :: Order.t(), attrs :: Map) :: {:ok, Order.t()} | {:error, any}
+  def save_order(%Order{} = order, attrs) do
+    order
+    |> Map.from_struct()
+    |> Map.merge(%{void_at: attrs[:void_at]})
+    |> save_order
+  end
+
   defp get_buyers(attrs) do
     Buyer
     |> get_many_query(attrs)

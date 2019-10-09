@@ -154,8 +154,7 @@ defmodule ZaZaar.Transcript do
   def save_merchandise(attrs) do
     upsert_fields = [:title, :price, :invalidated_at]
 
-    attrs
-    |> prep_merch_struct
+    struct(Merchandise, attrs)
     |> Merchandise.changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
@@ -203,16 +202,6 @@ defmodule ZaZaar.Transcript do
       updated_at:
         input_map[:updated_at] || NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
-  end
-
-  defp prep_merch_struct(attrs) do
-    %Merchandise{
-      id: attrs[:id],
-      video_id: attrs[:video_id],
-      snapshot_url: attrs[:snapshot_url],
-      buyer_fb_id: attrs[:buyer_fb_id],
-      buyer_name: attrs[:buyer_name]
-    }
   end
 
   defp cast_videos_opts_to_query(query, []), do: query

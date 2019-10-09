@@ -20,9 +20,11 @@ defmodule ZaZaar.Booking.Item do
     field :status, OrderItemStatus
   end
 
+  def changeset(item, %__MODULE__{}), do: cast(item, %{}, [])
+
   def changeset(item, params) do
     item
-    |> cast(params, [:merchandise_id, :title, :price, :snapshot_url, :status])
+    |> cast(params, [:merchandise_id, :title, :price, :snapshot_url, :status, :void_at])
     |> validate_required([:merchandise_id, :title, :price, :status])
   end
 end
