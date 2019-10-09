@@ -5,24 +5,14 @@ defmodule ZaZaarWeb.StreamingController do
     video =
       conn
       |> get_session(:video_id)
-      |> Transcript.get_video()
+      |> Transcript.get_video(preload: :comments)
 
     case video do
       %{fb_status: :live} ->
-        drab_assigns = %{
-          user_token: current_user(conn, :token),
-          page_id: current_page(conn) |> Map.get(:id),
-          video_id: video.id
-        }
-
-        merchs = Transcript.get_merchandises(video, order_by: [desc: :inserted_at])
-
         conn
-        |> assign(:drab_assigns, drab_assigns)
         |> render("show.html",
           video: Map.delete(video, :comments),
-          comments: video.comments,
-          merchandises: merchs
+          page_id: current_page(conn) |> Map.get(:id)
         )
 
       %{fb_status: :vod} ->

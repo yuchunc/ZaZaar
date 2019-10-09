@@ -37,11 +37,9 @@ defmodule ZaZaar.Transcript do
   def get_videos(%{fb_page_id: page_id}, opts), do: get_videos([fb_page_id: page_id], opts)
 
   def get_videos(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
     Video
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
+    |> get_many_query(attrs, opts)
+    |> cast_videos_opts_to_query(opts)
     |> Repo.all()
   end
 
@@ -136,11 +134,8 @@ defmodule ZaZaar.Transcript do
   def get_merchandises(%Video{} = video, opts), do: get_merchandises(%{video_id: video.id}, opts)
 
   def get_merchandises(attrs, opts) do
-    order_by = Keyword.get(opts, :order_by, [])
-
     Merchandise
-    |> get_many_query(attrs)
-    |> order_by(^order_by)
+    |> get_many_query(attrs, opts)
     |> Repo.all()
   end
 
@@ -159,8 +154,7 @@ defmodule ZaZaar.Transcript do
   def save_merchandise(attrs) do
     upsert_fields = [:title, :price, :invalidated_at]
 
-    attrs
-    |> prep_merch_struct
+    struct(Merchandise, attrs)
     |> Merchandise.changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
@@ -174,6 +168,32 @@ defmodule ZaZaar.Transcript do
     |> save_merchandise()
   end
 
+  @spec get_comments(attrs :: Video | keyword) :: Comments | []
+  def get_comments(attrs), do: get_comments(attrs, [])
+
+  @spec get_comments(attrs :: Video | keyword, opts :: keyword) :: Comments | []
+  def get_comments(%Video{} = vid, opts), do: get_comments([video_id: vid.id], opts)
+
+  def get_comments(attrs, opts) do
+    Comment
+    |> get_many_query(attrs, opts)
+    |> cast_videos_opts_to_query(opts)
+    |> Repo.all()
+  end
+
+  @spec get_comment(id :: String.t(), opts :: keyword) :: Comment | nil
+  def get_comment(id_or_obj_id, _opts \\ []) do
+    case id_or_obj_id do
+      <<_::288>> ->
+        Repo.get(Comment, id_or_obj_id)
+
+      _ ->
+        Comment
+        |> where(object_id: ^id_or_obj_id)
+        |> Repo.one()
+    end
+  end
+
   defp prep_video_upsert_map(input_map) do
     Map.merge(input_map, %{
       id: input_map[:id] || Ecto.UUID.generate(),
@@ -184,13 +204,13 @@ defmodule ZaZaar.Transcript do
     })
   end
 
-  defp prep_merch_struct(attrs) do
-    %Merchandise{
-      id: attrs[:id],
-      video_id: attrs[:video_id],
-      snapshot_url: attrs[:snapshot_url],
-      buyer_fb_id: attrs[:buyer_fb_id],
-      buyer_name: attrs[:buyer_name]
-    }
+  defp cast_videos_opts_to_query(query, []), do: query
+
+  defp cast_videos_opts_to_query(query, [{:on_date, date} | t]) do
+    query
+    |> where([v], fragment("?::date", v.creation_time) == ^date)
+    |> cast_videos_opts_to_query(t)
   end
+
+  defp cast_videos_opts_to_query(query, [_ | t]), do: cast_videos_opts_to_query(query, t)
 end

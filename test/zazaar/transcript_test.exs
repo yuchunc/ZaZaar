@@ -20,6 +20,14 @@ defmodule ZaZaar.TranscriptTest do
 
       assert Transcript.get_videos(attr) |> Enum.count() == 3
     end
+
+    test "get video counts by attributes" do
+      attr = [title: "bangbang", fb_page_id: "102301301103103201203"]
+      insert_list(3, :video, attr)
+      insert(:video)
+
+      assert Transcript.get_videos(attr, get_count: true) == [3]
+    end
   end
 
   describe "get_video/1" do
@@ -114,6 +122,42 @@ defmodule ZaZaar.TranscriptTest do
       assert {:ok, merch} = Transcript.save_merchandise(merch_map)
       assert merch.id == merch_map.id
       assert merch.title == new_title
+    end
+  end
+
+  describe "get_comments/2" do
+    setup do
+      video = insert(:video)
+      comments = insert_list(3, :comment, video_id: video.id)
+      {:ok, comments: comments, video: video}
+    end
+
+    test "get by video", ctx do
+      %{video: video, comments: comments} = ctx
+
+      assert Transcript.get_comments(video) |> Enum.map(& &1.id) |> Enum.sort() ==
+               comments |> Enum.map(& &1.id) |> Enum.sort()
+    end
+
+    test "get by attribute", ctx do
+      %{video: video, comments: comments} = ctx
+
+      assert Transcript.get_comments(video_id: video.id) |> Enum.map(& &1.id) |> Enum.sort() ==
+               comments |> Enum.map(& &1.id) |> Enum.sort()
+    end
+  end
+
+  describe "get_comment/2" do
+    setup do
+      {:ok, comment: insert(:comment)}
+    end
+
+    test "get comment by id", %{comment: comment} do
+      assert Transcript.get_comment(comment.id) |> Map.get(:id) == comment.id
+    end
+
+    test "get comment by object_id", %{comment: comment} do
+      assert Transcript.get_comment(comment.object_id) |> Map.get(:id) == comment.id
     end
   end
 

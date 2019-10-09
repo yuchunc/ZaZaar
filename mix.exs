@@ -35,13 +35,13 @@ defmodule ZaZaar.MixProject do
   defp deps do
     [
       # Phoenix
-      {:phoenix, github: "phoenixframework/phoenix", branch: "v1.4", override: true},
+      {:phoenix, "~> 1.4"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.13", github: "phoenixframework/phoenix_html", override: true},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
+      {:phoenix_html, "~> 2.13"},
+      {:phoenix_live_view, "~> 0.3"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
@@ -53,7 +53,6 @@ defmodule ZaZaar.MixProject do
       {:ueberauth, "~> 0.5"},
       {:ueberauth_facebook, "~> 0.7"},
       # Utils
-      {:drab, "~> 0.10.0"},
       {:ecto_enum, "~> 1.0"},
       {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},

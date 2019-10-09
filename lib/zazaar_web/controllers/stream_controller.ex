@@ -25,24 +25,18 @@ defmodule ZaZaarWeb.StreamController do
   end
 
   def show(conn, %{"id" => fb_video_id}) do
-    case Transcript.get_video(fb_video_id) do
+    case Transcript.get_video(fb_video_id, preload: :comments) do
       %{fb_status: :live, id: id} ->
-        conn |> put_session(:video_id, id) |> redirect(to: "/s/current")
+        conn
+        |> put_session(:page_id, current_page(conn) |> Map.get(:id))
+        |> put_session(:video_id, id)
+        |> redirect(to: "/s/current")
 
       %Video{} = video ->
-        drab_assigns = %{
-          user_token: current_user(conn, :token),
-          page_id: current_page(conn) |> Map.get(:id),
-          video_id: video.id
-        }
-
-        merchs =
-          video
-          |> Transcript.get_merchandises(
-            order_by: [desc: :inserted_at, desc_nulls_first: :invalidated_at]
-          )
-
-        render(conn, "show.html", video: video, merchandises: merchs, drab_assigns: drab_assigns)
+        render(conn, "show.html",
+          video: video,
+          page_id: current_page(conn) |> Map.get(:id)
+        )
 
       _ ->
         {:error, :not_found}

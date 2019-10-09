@@ -1,6 +1,7 @@
   <tr class="<%= if @order.void_at, do: "is-void" %>">
     <td>
-      <%= Timex.lformat!(@order.inserted_at, "%F", "Asia/Taipei", :strftime) %>
+      <%=# Timex.lformat!(@order.inserted_at, "%F", "Asia/Taipei", :strftime) %>
+      <%= Timex.format!(@order.inserted_at, "%F", :strftime) %>
     </td>
     <td>
       <a class="is-link" href="#">
@@ -9,26 +10,33 @@
     </td>
     <td><%= @order.total_amount %></td>
     <td>
-        <%= cond do %>
-        <% @order.void_at -> %>
-          <span class="tag is-medium">
-            <%= dgettext "order", "Void" %>
-          </span>
-        <% @order.notified_at -> %>
-          <span class="tag is-medium">
-            <%= dgettext "order", "Notified"  %>
-          </span>
-        <% true -> %>
-        <% end %>
+      <%= cond do %>
+      <% @order.void_at -> %>
+        <span class="tag is-medium">
+          <%= dgettext "order", "Void" %>
+        </span>
+      <% @order.notified_at -> %>
+        <span class="tag is-medium">
+          <%= dgettext "order", "Notified"  %>
+        </span>
+      <% true -> %>
+      <% end %>
       </span>
     </td>
     <td>
-      <a class="button is-hover-primary" href="#" <%= if @order.void_at, do: "disabled"%>>檢視明細</a>
-      <a class="button" <%= if @order.void_at, do: "disabled"%>>完成</a>
+      <a class="button is-hover-primary" href="/o/<%= @order.id %>" <%= if @order.void_at, do: "disabled"%>><%= dgettext "order", "Details" %></a>
+      <%= if false do %>
+        <a class="button" <%= if @order.void_at, do: "disabled"%>><%= dgettext "order", "Completed" %></a>
+      <% end %>
+
       <%= if @order.void_at do %>
-        <a class="button is-hover-success">恢復</a>
+        <a class="button is-hover-success" phx-click="toggle-void" phx-value-order-id=<%=  @order.id %>>
+          <%= dgettext "order", "Recover" %>
+        </a>
       <% else %>
-        <a class="button is-hover-danger">作廢</a>
+        <a class="button is-hover-danger" phx-click="toggle-void" phx-value-order-id=<%= @order.id %>>
+          <%= dgettext "order", "Invalidate" %>
+        </a>
       <% end %>
     </td>
   </tr>

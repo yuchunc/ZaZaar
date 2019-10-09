@@ -22,6 +22,7 @@ defmodule ZaZaarWeb do
       use Phoenix.Controller, namespace: ZaZaarWeb
 
       import Plug.Conn
+      import Phoenix.LiveView.Controller, only: [live_render: 3]
       import ZaZaarWeb.Gettext
       import ZaZaarWeb, only: :functions
 
@@ -41,9 +42,8 @@ defmodule ZaZaarWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, action_name: 1, controller_module: 1]
 
-      import Phoenix.LiveView, only: [live_render: 2, live_render: 3]
+      import Phoenix.LiveView, only: [live_render: 2, live_render: 3, live_link: 1, live_link: 2]
 
-      # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
       import ZaZaarWeb.ErrorHelpers
@@ -60,10 +60,22 @@ defmodule ZaZaarWeb do
     end
   end
 
+  def live do
+    quote do
+      use Phoenix.LiveView
+
+      import Phoenix.View, only: [render: 3]
+      import ZaZaarWeb.Gettext
+
+      alias Phoenix.LiveView.Socket
+      alias ZaZaarWeb.Router.Helpers, as: Routes
+
+      ZaZaarWeb.aliases()
+    end
+  end
+
   def commander do
     quote do
-      use Drab.Commander
-
       import Phoenix.Socket
       import ZaZaarWeb.Gettext
 

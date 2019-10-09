@@ -52,8 +52,7 @@ config :zazaar, ZaZaarWeb.Endpoint,
       ~r{priv/gettext/.*(po)$},
       ~r{lib/zazaar_web/views/.*(ex)$},
       ~r{lib/zazaar_web/commanders/.*(ex)$},
-      ~r{lib/zazaar_web/live/.*(ex)},
-      ~r{lib/zazaar_web/templates/.*(eex|drab)$}
+      ~r{lib/zazaar_web/lives/.*(ex)}
     ]
   ]
 

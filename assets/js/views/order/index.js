@@ -8,11 +8,11 @@ const mount = () => {
   const liveSocket = new LiveSocket("/live", Socket)
   liveSocket.connect()
 
-  console.log("Stream show mounted");
+  console.log("Order index mounted");
 };
 
 const unmount = () => {
-  console.log("Stream show unmounted");
+  console.log("Order index unmounted");
 }
 
 export default () => {

@@ -1,5 +1,4 @@
 .stream {
-
   .currently-streamming {
 
     &:hover {
@@ -25,7 +24,11 @@
           .comments {
             height: calc( 100% - 3rem);
           }
-        }  
+        }
+      }
+
+      .stream__page__order {
+        overflow-y: scroll;
       }
     }
   }

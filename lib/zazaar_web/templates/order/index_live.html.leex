@@ -1,0 +1,179 @@
+<header class="has-margin-bottom-sm">
+
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li>
+        <a href="/m">
+          <%= gettext "Home" %>
+        </a>
+      </li>
+      <li class="is-active">
+        <a href="#" aria-current="page">
+          <%= gettext "Order Management" %>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <h1 class="title">
+    <%= gettext "Order Management" %>
+  </h1>
+</header>
+
+<div class="columns">
+
+  <!-- Filters -->
+  <div class="column is-one-third is-one-quarter-desktop">
+    <div class="card order__filters">
+      <header class="card-header">
+        <p class="card-header-title">
+          <%= gettext "Filters" %>
+        </p>
+        <div class="card-header-icon">
+          <button class="button is-text is-small" phx-click="clear-filters">
+            <%= gettext "Clear Filters" %>
+          </button>
+          <%= if false do %>
+            <span class="icon has-text-grey-lighter">
+              <i class="fas fa-xs fa-filter" aria-hidden="true"></i>
+            </span>
+          <% end %>
+        </div>
+      </header>
+      <div class="card-content">
+        <form phx-submit="set-filters" phx-change="set-filters">
+
+          <!-- By Name -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Search Buyer" %>
+          </label>
+          <div class="field has-addons is-fullwidth">
+            <div class="control is-expanded">
+              <input class="input"
+                     type="text"
+                     name="filters[buyer]"
+                     placeholder="<%= gettext "Buyer Name" %>"
+                     phx-change="set-filters"
+                     value="<%= @filters.buyer %>">
+            </div>
+            <% if false do %>
+              <div class="control">
+                <button class="button" type="submit">
+                  <%= gettext "Search" %>
+                  </a>
+              </div>
+            <% end %>
+          </div>
+
+          <hr>
+
+          <!-- By Stream Date Range -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Stream Date" %>
+          </label>
+          <div class="field">
+            <div class="control has-icons-left">
+              <span class="select is-fullwidth">
+                <select name="filters[date_range]">
+                  <option value="" <%= is_selected("", @filters.date_range) %>><%= gettext "Not Selected" %></option>
+                  <option value="today" <%= is_selected("today", @filters.date_range) %>><%= gettext "Today" %></option>
+                  <option value="yesterday" <%= is_selected("yesterday", @filters.date_range) %>><%= gettext "Yesterday" %></option>
+                  <option value="this-week" <%= is_selected("this-week", @filters.date_range) %>><%= gettext "This week" %></option>
+                  <option value="last-week" <%= is_selected("last-week", @filters.date_range) %>><%= gettext "Last week" %></option>
+                  <option value="this-month" <%= is_selected("this-month", @filters.date_range) %>><%= gettext "This month" %></option>
+                  <option value="last-month" <%= is_selected("last-month", @filters.date_range) %>><%= gettext "Last month" %></option>
+                  <option value="this-year" <%= is_selected("this-year", @filters.date_range) %>><%= gettext "This year" %></option>
+                  <option value="last-year" <%= is_selected("last-year", @filters.date_range) %>><%= gettext "Last year" %></option>
+                </select>
+              </span>
+              <span class="icon is-small is-left">
+                <i class="fas fa-calendar-alt"></i>
+              </span>
+            </div>
+          </div>
+
+          <hr>
+
+          <!-- By Order Status -->
+          <label class="label has-text-grey-light">
+            <%= gettext "Order Status" %>
+          </label>
+          <div class="field">
+            <div class="control">
+              <label class="checkbox is-block is-marginless">
+                <input type="checkbox" name="filters[states][notified]" <%= if "notified" in @filters.states, do: "checked" %>>
+                <%= gettext "Notified Buyer" %>
+              </label>
+              <%= if false do %>
+                <label class="checkbox is-block is-marginless">
+                  <input type="checkbox" name="filters[states][completed]">
+                  <%= gettext "Completed" %>
+                </label>
+              <% end %>
+              <label class="checkbox is-block is-marginless">
+                <input type="checkbox" name="filters[states][invalidated]" <%= if "invalidated" in @filters.states, do: "checked" %>>
+                <%= gettext "Invalidated" %>
+              </label>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Table -->
+  <div class="column">
+
+    <table class="table main-table is-striped is-hoverable has-margin-left">
+      <thead class="main-table__header">
+        <tr>
+          <th width="18%">
+            <%= gettext "Stream Date" %>
+            <span class="icon">
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th width="20%">
+            <%= gettext "Name" %>
+            <span class="icon">
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th width="15%">
+            <%= gettext "Amount" %>
+            <span class="icon">
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th width="15%">
+            <%= gettext "Status" %>
+            <span class="icon">
+              <i class="fas fa-caret-down" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody class="main-table__body" id="items-table-body">
+        <%= render_many @orders, ZaZaarWeb.OrderView, "order_tr.html", as: :order %>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<%= if false do %>
+  <nav class="pagination is-centered has-margin-top-md" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" disabled><%= gettext "Previous Page" %></a>
+    <a class="pagination-next"><%= gettext "Next Page"%></a>
+    <ul class="pagination-list">
+      <li><a class="pagination-link is-current" aria-label="Goto page 1" aria-current="page">1</a></li>
+      <li><a class="pagination-link" aria-label="Goto page 2">2</a></li>
+      <li><a class="pagination-link" aria-label="Goto page 3">3</a></li>
+      <li><a class="pagination-link" aria-label="Goto page 4">4</a></li>
+      <li><a class="pagination-link" aria-label="Goto page 5">5</a></li>
+    </ul>
+  </nav>
+<% end %>

@@ -1,0 +1,9 @@
+<div class="tile is-child card">
+  <header class="card-header">
+    <p class="card-header-title">商品列表</p>
+  </header>
+
+  <div class="card-content">
+    <%= render_many @merchs, __MODULE__, "merch_media.html", as: :merch %>
+  </div>
+</div>

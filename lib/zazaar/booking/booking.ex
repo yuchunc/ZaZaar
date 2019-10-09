@@ -15,10 +15,10 @@ defmodule ZaZaar.Booking do
   Creates a list of orders from merchs,
   one order per video perperson
   """
-  @spec create_video_orders(Video.t(), [Merch.t()]) :: [Order.t()]
-  def create_video_orders(_video, []), do: {:ok, []}
+  @spec create_video_orders(Video.t(), [Merch.t()], String.t()) :: [Order.t()]
+  def create_video_orders(_video, [], _page_id), do: {:ok, []}
 
-  def create_video_orders(video, merchs) do
+  def create_video_orders(video, merchs, page_id) do
     local_dt = video.creation_time |> convert_local_dt("Asia/Taipei")
 
     merchs = Enum.reject(merchs, &(!!&1.invalidated_at))
@@ -26,7 +26,7 @@ defmodule ZaZaar.Booking do
     users_with_items =
       Enum.group_by(
         merchs,
-        &%{fb_id: &1.buyer_fb_id, fb_name: &1.buyer_name, page_id: video.fb_page_id},
+        &%{fb_id: &1.buyer_fb_id, fb_name: &1.buyer_name, page_id: page_id},
         fn merch ->
           %{
             merchandise_id: merch.id,
@@ -60,7 +60,7 @@ defmodule ZaZaar.Booking do
            %{
              title: Timex.format!(local_dt, "%F %T", :strftime) <> " ##{count}",
              total_amount: Enum.reduce(items, 0, &(&1.price + &2)),
-             page_id: video.fb_page_id,
+             page_id: page_id,
              buyer_id: buyer.id,
              video_id: video.id,
              inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
@@ -84,12 +84,30 @@ defmodule ZaZaar.Booking do
   end
 
   def get_orders(attrs, opts \\ []) do
-    preload = Keyword.get(opts, :preload, [])
+    {assoc_attrs, order_attrs} = Keyword.split(attrs, [:buyer_name, :date_range])
 
     Order
-    |> get_many_query(attrs)
-    |> preload(^preload)
+    |> get_many_query(order_attrs, opts)
+    |> additional_filters(assoc_attrs)
     |> Repo.all()
+  end
+
+  @spec save_order(attrs :: map) :: {:ok, Order.t()} | {:error, any}
+  def save_order(attrs) do
+    upsert_fields = [:void_at]
+
+    struct(Order, attrs)
+    |> IO.inspect(label: "label")
+    |> Order.changeset(attrs)
+    |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
+  end
+
+  @spec save_order(order :: Order.t(), attrs :: Map) :: {:ok, Order.t()} | {:error, any}
+  def save_order(%Order{} = order, attrs) do
+    order
+    |> Map.from_struct()
+    |> Map.merge(%{void_at: attrs[:void_at]})
+    |> save_order
   end
 
   defp get_buyers(attrs) do
@@ -97,4 +115,69 @@ defmodule ZaZaar.Booking do
     |> get_many_query(attrs)
     |> Repo.all()
   end
+
+  defp additional_filters(query, []), do: query
+
+  defp additional_filters(query, [{_, value} | t]) when value == nil or value == "",
+    do: additional_filters(query, t)
+
+  defp additional_filters(query, [{:buyer_name, buyer_name} | t]) do
+    query
+    |> join(:inner, [order], buyer in assoc(order, :buyer))
+    |> where([..., buyer], like(buyer.fb_name, ^"%#{buyer_name}%"))
+    |> additional_filters(t)
+  end
+
+  defp additional_filters(query, [{:date_range, date_range} | t]) do
+    query
+    |> where(^filter_by_date_range(date_range, Date.utc_today()))
+    |> additional_filters(t)
+  end
+
+  defp filter_by_date_range("today", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "day"))
+  end
+
+  defp filter_by_date_range("yesterday", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "day") and o.inserted_at < date_add(^now, -1, "day")
+    )
+  end
+
+  defp filter_by_date_range("this-week", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "week"))
+  end
+
+  defp filter_by_date_range("last-week", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "week") and o.inserted_at < date_add(^now, -1, "week")
+    )
+  end
+
+  defp filter_by_date_range("this-month", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "month"))
+  end
+
+  defp filter_by_date_range("last-month", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "month") and
+        o.inserted_at < date_add(^now, -1, "month")
+    )
+  end
+
+  defp filter_by_date_range("this-year", now) do
+    dynamic([o], o.inserted_at > date_add(^now, -1, "year"))
+  end
+
+  defp filter_by_date_range("last-year", now) do
+    dynamic(
+      [o],
+      o.inserted_at > date_add(^now, -2, "year") and o.inserted_at < date_add(^now, -1, "year")
+    )
+  end
+
+  defp filter_by_date_range(_, _), do: []
 end

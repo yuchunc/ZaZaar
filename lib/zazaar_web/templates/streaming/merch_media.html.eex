@@ -1,9 +1,9 @@
-<div class="media is-flex-column <%= invalidate_class(@merchandise) %>">
+<div class="media is-flex-column <%= invalidate_class(@merch) %>">
   <!-- 商品截圖 -->
   <div class="level">
     <div class="level-item">
       <figure class="image is-snapshot">
-        <img src="<%= snapshot_url(@merchandise) %>">
+        <img src="<%= snapshot_url(@merch) %>">
       </figure>
     </div>
   </div>
@@ -18,15 +18,15 @@
       </div>
       <div class="level-item">
         <a class="is-username has-text-primary has-text-weight-semibold is-link">
-          <%= @merchandise.buyer_name %>
+          <%= @merch.buyer_name %>
         </a>
       </div>
     </div>
   </div>
 
   <!-- 商品名稱 -->
-  <%= if Map.get(@merchandise, :editing) do %>
-    <form>
+  <%= if Map.get(@merch, :editing, false) do %>
+    <form phx-submit="update-merch">
       <div class="level">
         <div class="level-left">
           <div class="level-item">
@@ -37,7 +37,9 @@
           <div class="level-item is-flex-grow is-shrinkable">
             <input class="input" name="title"
                                  placeholder="<%= gettext "Title" %>"
-                                 value="<%= @merchandise.title %>" />
+                                 value="<%= @merch.title %>"
+                                 autocomplete="off"
+            />
           </div>
         </div>
       </div>
@@ -52,20 +54,21 @@
           <div class="level-item is-flex-grow is-shrinkable">
             <input class="input" name="price"
                                  placeholder="<%= gettext "Amount" %>"
-                                 value="<%= @merchandise.price %>">
+                                 value="<%= @merch.price %>"
+                                 autocomplete="off"
+            />
           </div>
         </div>
       </div>
 
-      <input class="is-hidden" name="id" value="<%= @merchandise.id %>" readonly/>
+      <input class="is-hidden" name="merch-id" value="<%= @merch.id %>" readonly/>
 
       <div class="level is-justified-end">
         <div class="buttons">
-          <a class="button is-small is-outlined is-hover-success has-text-grey" drab-click="update_merchandise">
+          <button class="button is-small is-outlined is-hover-success has-text-grey" type="submit">
             <%= gettext "Save" %>
-          </a>
-          <a class="button is-small is-outlined is-hover-danger has-text-grey"
-             drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
+          </button>
+          <a class="button is-small is-outlined is-hover-danger has-text-grey" phx-click='cancel-merch-edit' phx-value-merch-id="<%= @merch.id %>">
              <%= gettext "Cancel" %>
           </a>
         </div>
@@ -80,7 +83,7 @@
           </label>
         </div>
         <div class="level-item is-flex-grow is-shrinkable">
-          <p><%= @merchandise.title %></p>
+          <p><%= @merch.title %></p>
         </div>
       </div>
     </div>
@@ -94,7 +97,7 @@
           </label>
         </div>
         <div class="level-item is-flex-grow is-shrinkable">
-          <p><%= @merchandise.price %></p>
+          <p><%= @merch.price %></p>
         </div>
       </div>
     </div>
@@ -102,18 +105,15 @@
     <!-- Actions -->
     <div class="level is-justified-end">
       <div class="buttons">
-        <%= if @merchandise.invalidated_at do %>
-          <a class="button is-small is-outlined is-hover-success has-text-grey"
-             drab-click='toggle_merchandise(<%= Jason.encode! ["activate", @merchandise.id] %>)'>
+        <%= if @merch.invalidated_at do %>
+          <a class="button is-small is-outlined is-hover-success has-text-grey" phx-click='reactiveate-merch' phx-value-merch-id=<%= @merch.id %>>
              <%= gettext "Reactivate" %>
           </a>
         <% else %>
-          <a class="button is-small is-outlined is-hover-success has-text-grey"
-             drab-click='edit_merchandise("<%= @merchandise.id %>")'>
+          <a class="button is-small is-outlined is-hover-success has-text-grey" phx-click='edit-merch' phx-value-merch-id=<%= @merch.id %>>
              <%= gettext "Edit" %>
           </a>
-          <a class="button is-small is-outlined is-hover-danger has-text-grey"
-             drab-click='toggle_merchandise(<%= Jason.encode! ["invalidate", @merchandise.id] %>)'>
+          <a class="button is-small is-outlined is-hover-danger has-text-grey" phx-click='invalidate-merch' phx-value-merch-id=<%= @merch.id %>>
              <%= gettext "Invalidate" %>
           </a>
         <% end %>

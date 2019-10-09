@@ -1,58 +1,70 @@
-<tr>
+<tr style='<%= if @merch.invalidated_at, do: "background-color: #ddd" %>'>
   <td>
-    <%= @merchandise.inserted_at |> Timex.to_datetime("Asia/Taipei") |> Timex.format!("%F", :strftime)%>
+    <%= @merch.inserted_at |> Timex.to_datetime("Asia/Taipei") |> Timex.format!("%F", :strftime)%>
   </td>
   <td>
-    <figure class="image is-thumbnail"> <!-- Modal Trigger -->
-      <img class="merch-snapshot" src=<%= @merchandise.snapshot_url %>>
+    <figure class="image is-thumbnail" phx-click="toggle-snapshot-modal" phx-value-snapshot="<%= @merch.snapshot_url %>"> <!-- Modal Trigger -->
+      <img class="merch-snapshot" src=<%= @merch.snapshot_url %>>
     </figure>
   </td>
-  <%= if Map.get(@merchandise, :editing) do %>
-    <td class="merch-name editable">
-      <input class="input" type="text" name="<%= @merchandise.id %>:title" value="<%= @merchandise.title %>">
-    </td>
-    <td> <%= @merchandise.buyer_name %> </td>
-    <td class="editable">
-      <input class="input" type="text" name="<%= @merchandise.id %>:price" value="<%= @merchandise.price %>">
-    </td>
-    <td class="has-text-centered">
-      <div class="field is-grouped is-centered merch-actions editable">
-        <div class="control">
-          <button class="button is-primary is-outlined save-merch"
-                  drab-click="update_merchandise('<%= @merchandise.id %>')">
-                  <%= gettext "Save" %>
-          </button>
+  <%= if Map.get(@merch, :editing) do %>
+      <td class="merch-name editable">
+        <input class="input" type="text" name="merch[title]" value="<%= @merch.title %>">
+      </td>
+      <td> <%= @merch.buyer_name %> </td>
+      <td class="editable">
+        <input class="input" type="text" name="merch[price]" value="<%= @merch.price %>">
+      </td>
+      <td class="has-text-centered">
+        <div class="field is-grouped is-centered merch-actions editable">
+          <div class="control">
+            <input type="hidden" value="<%= @merch.id %>" name="merch[id]"/>
+            <button class="button is-primary is-outlined save-merch" type="submit">
+              <%= gettext "Save" %>
+            </button>
+          </div>
+          <div class="control">
+            <a class="button is-outlined cancel-merch"
+                    phx-click='toggle-edit-merch'
+                    phx-value-merch-id="<%= @merch.id %>"
+            >
+              <%= gettext "Cancel" %>
+            </a>
+          </div>
         </div>
-        <div class="control">
-          <button class="button is-outlined cancel-merch"
-                  drab-click='cancel_edit_merchandise("<%= @merchandise.id %>")'>
-                  <%= gettext "Cancel" %>
-          </button>
-        </div>
-      </div>
-    </td>
+      </td>
   <% else %>
-    <td class="merch-name editable"><%= @merchandise.title %></td>
-    <td><%= @merchandise.buyer_name %></td>
-    <td class="editable"> <%= @merchandise.price %></td>
+    <td class="merch-name editable"><%= @merch.title %></td>
+    <td><%= @merch.buyer_name %></td>
+    <td class="editable"> <%= @merch.price %></td>
     <td class="has-text-centered">
       <%= if @video.completed_at do %>
         <!-- TODO redirect to the given order-->
-        <button class="button is-primary is-outlined is-centered is-hidden">
+        <button class="button is-primary is-outlined is-centered">
           <%= gettext "Check Order" %>
         </button>
       <% else %>
         <div class="field is-grouped is-centered merch-actions editable">
           <div class="control">
-            <button class="button is-primary is-outlined edit-merch"
-                    drab-click='edit_merchandise("<%= @merchandise.id %>")'>
-                    <%= gettext "Edit" %>
-            </button>
+            <%= if !@merch.invalidated_at do %>
+              <button class="button is-primary is-outlined edit-merch"
+                      phx-click='toggle-edit-merch'
+                      phx-value-merch-id="<%= @merch.id %>"
+              >
+                      <%= gettext "Edit" %>
+              </button>
+            <% end %>
           </div>
           <div class="control">
             <button class="button"
-             drab-click='toggle_merchandise(<%= Jason.encode! ["invalidate", @merchandise.id] %>)'>
-              <%= gettext "Invalidate" %>
+                    phx-click='toggle-merch-valid'
+                    phx-value-merch-id="<%= @merch.id %>"
+            >
+              <%= if @merch.invalidated_at do %>
+                <%= gettext "Reactivate" %>
+              <% else %>
+                <%= gettext "Invalidate" %>
+              <% end %>
             </button>
           </div>
         </div>
