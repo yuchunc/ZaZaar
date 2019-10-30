@@ -97,7 +97,6 @@ defmodule ZaZaar.Booking do
     upsert_fields = [:void_at]
 
     struct(Order, attrs)
-    |> IO.inspect(label: "label")
     |> Order.changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end

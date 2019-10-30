@@ -19,7 +19,7 @@ defmodule ZaZaarWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @spec connect(params :: map, socket :: Phoenix.Socket.t()) :: {:ok, Phoenix.Socket.t()} | :error
-  def connect(params, socket0, _connecton_info) do
+  def connect(params, socket0) do
     with %{"userToken" => user_token} <- params,
          {:ok, socket1} <-
            Guardian.Phoenix.Socket.authenticate(socket0, Auth.Guardian, user_token, %{},

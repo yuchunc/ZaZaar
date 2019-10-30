@@ -24,7 +24,7 @@ defmodule ZaZaar.Booking.Item do
 
   def changeset(item, params) do
     item
-    |> cast(params, [:merchandise_id, :title, :price, :snapshot_url, :status, :void_at])
+    |> cast(params, [:merchandise_id, :title, :price, :snapshot_url, :status])
     |> validate_required([:merchandise_id, :title, :price, :status])
   end
 end
