@@ -5,7 +5,7 @@ defmodule ZaZaar.Booking do
   import ZaZaar.TimeUtil
 
   alias ZaZaar.Booking
-  alias Booking.{Order, Buyer, Item}
+  alias Booking.{Order, Buyer}
 
   alias ZaZaar.Transcript
   alias Transcript.Video
@@ -96,13 +96,7 @@ defmodule ZaZaar.Booking do
   def save_order(%Order{} = order, attrs) do
     order
     |> Map.from_struct()
-    |> Map.merge(%{
-      void_at: attrs[:void_at],
-      number: attrs[:number],
-      title: attrs[:title],
-      total_amount: attrs[:total_amount],
-      items: attrs[:items]
-    })
+    |> Map.merge(attrs)
     |> save_order
   end
 
