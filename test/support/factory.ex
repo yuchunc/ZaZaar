@@ -76,7 +76,10 @@ defmodule ZaZaar.Factory do
       total_amount: Enum.random(0..20000),
       page_id: page.id,
       video_id: video.id,
-      buyer: insert(:buyer, page_id: page.fb_page_id)
+      buyer: insert(:buyer, page_id: page.fb_page_id),
+      number: sequence(:order_number, fn num ->
+        num |> Integer.to_string |> String.pad_leading(6, "0")
+      end)
     }
   end
 

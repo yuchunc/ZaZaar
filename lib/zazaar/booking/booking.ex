@@ -71,13 +71,13 @@ defmodule ZaZaar.Booking do
          ]}
       end)
 
-    Enum.map(order_maps, fn om ->
-      {:ok, order} =
-        %Order{page_id: om.page_id, video_id: om.video_id, buyer_id: om.buyer_id}
+    Enum.reduce(order_maps, order_count(page_id) + 1, fn om, current_count ->
+      {:ok, _} =
+        %Order{page_id: om.page_id, video_id: om.video_id, buyer_id: om.buyer_id, number: current_count |> Integer.to_string |> String.pad_leading(7, "0") }
         |> Order.changeset(om)
         |> Repo.insert()
 
-      order
+      current_count + 1
     end)
 
     {:ok, get_orders(video_id: video.id)}
@@ -94,7 +94,7 @@ defmodule ZaZaar.Booking do
 
   @spec save_order(attrs :: map) :: {:ok, Order.t()} | {:error, any}
   def save_order(attrs) do
-    upsert_fields = [:void_at]
+    upsert_fields = [:void_at, :number]
 
     struct(Order, attrs)
     |> Order.changeset(attrs)
@@ -105,7 +105,7 @@ defmodule ZaZaar.Booking do
   def save_order(%Order{} = order, attrs) do
     order
     |> Map.from_struct()
-    |> Map.merge(%{void_at: attrs[:void_at]})
+    |> Map.merge(%{void_at: attrs[:void_at], number: attrs[:number]})
     |> save_order
   end
 
@@ -179,4 +179,10 @@ defmodule ZaZaar.Booking do
   end
 
   defp filter_by_date_range(_, _), do: []
+
+  defp order_count(page_id) do
+    Order
+    |> where(page_id: ^page_id) |> select(count()) |> Repo.all
+    |> List.first
+  end
 end
