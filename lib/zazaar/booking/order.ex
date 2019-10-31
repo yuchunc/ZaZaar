@@ -38,7 +38,7 @@ defmodule ZaZaar.Booking.Order do
     order
     |> cast(attrs, [:title, :total_amount, :notified_at, :void_at])
     |> cast_embed(:items)
-    |> validate_required([:title, :total_amount, :page_id, :video_id])
+    |> validate_required([:title, :total_amount, :page_id, :video_id, :number])
     |> assoc_constraint(:buyer)
     |> unique_constraint(:orders_buyer_id_video_id_index)
     |> unique_constraint(:orders_number_page_id_index)

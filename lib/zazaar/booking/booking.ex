@@ -5,7 +5,7 @@ defmodule ZaZaar.Booking do
   import ZaZaar.TimeUtil
 
   alias ZaZaar.Booking
-  alias Booking.{Order, Buyer}
+  alias Booking.{Order, Buyer, Item}
 
   alias ZaZaar.Transcript
   alias Transcript.Video
@@ -51,33 +51,24 @@ defmodule ZaZaar.Booking do
         page_id: Enum.map(buyer_maps, & &1.page_id)
       )
 
-    {_, order_maps} =
-      Enum.reduce(users_with_items, {1, []}, fn {buyer_map, items}, {count, acc} ->
-        buyer = Enum.find(buyers, {:error, :buyer_not_found}, &(&1.fb_id == buyer_map.fb_id))
+    Enum.reduce(users_with_items, order_count(page_id) + 1, fn {buyer_map, items}, count ->
+      buyer = Enum.find(buyers, {:error, :buyer_not_found}, &(&1.fb_id == buyer_map.fb_id))
+      str_count = count |> Integer.to_string() |> String.pad_leading(7, "0")
 
-        {count + 1,
-         [
-           %{
-             title: Timex.format!(local_dt, "%F %T", :strftime) <> " ##{count}",
-             total_amount: Enum.reduce(items, 0, &(&1.price + &2)),
-             page_id: page_id,
-             buyer_id: buyer.id,
-             video_id: video.id,
-             inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-             updated_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-             items: items
-           }
-           | acc
-         ]}
-      end)
-
-    Enum.reduce(order_maps, order_count(page_id) + 1, fn om, current_count ->
       {:ok, _} =
-        %Order{page_id: om.page_id, video_id: om.video_id, buyer_id: om.buyer_id, number: current_count |> Integer.to_string |> String.pad_leading(7, "0") }
-        |> Order.changeset(om)
-        |> Repo.insert()
+        save_order(%{
+          page_id: page_id,
+          buyer_id: buyer.id,
+          video_id: video.id,
+          title: str_count <> " " <> Timex.format!(local_dt, "%F %T", :strftime),
+          total_amount: Enum.reduce(items, 0, &(&1.price + &2)),
+          # inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+          # updated_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+          number: str_count,
+          items: items
+        })
 
-      current_count + 1
+      count + 1
     end)
 
     {:ok, get_orders(video_id: video.id)}
@@ -94,9 +85,9 @@ defmodule ZaZaar.Booking do
 
   @spec save_order(attrs :: map) :: {:ok, Order.t()} | {:error, any}
   def save_order(attrs) do
-    upsert_fields = [:void_at, :number]
+    upsert_fields = [:void_at, :number, :title, :total_amount]
 
-    struct(Order, attrs)
+    struct(Order, Map.delete(attrs, :items))
     |> Order.changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: {:replace, upsert_fields}, conflict_target: :id)
   end
@@ -105,7 +96,13 @@ defmodule ZaZaar.Booking do
   def save_order(%Order{} = order, attrs) do
     order
     |> Map.from_struct()
-    |> Map.merge(%{void_at: attrs[:void_at], number: attrs[:number]})
+    |> Map.merge(%{
+      void_at: attrs[:void_at],
+      number: attrs[:number],
+      title: attrs[:title],
+      total_amount: attrs[:total_amount],
+      items: attrs[:items]
+    })
     |> save_order
   end
 
@@ -182,7 +179,9 @@ defmodule ZaZaar.Booking do
 
   defp order_count(page_id) do
     Order
-    |> where(page_id: ^page_id) |> select(count()) |> Repo.all
-    |> List.first
+    |> where(page_id: ^page_id)
+    |> select(count())
+    |> Repo.all()
+    |> List.first()
   end
 end

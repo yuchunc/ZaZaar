@@ -77,9 +77,10 @@ defmodule ZaZaar.Factory do
       page_id: page.id,
       video_id: video.id,
       buyer: insert(:buyer, page_id: page.fb_page_id),
-      number: sequence(:order_number, fn num ->
-        num |> Integer.to_string |> String.pad_leading(6, "0")
-      end)
+      number:
+        sequence(:order_number, fn num ->
+          num |> Integer.to_string() |> String.pad_leading(6, "0")
+        end)
     }
   end
 
