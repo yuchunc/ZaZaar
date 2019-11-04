@@ -10,6 +10,6 @@ defmodule ZaZaarWeb.OrderController do
   end
 
   def show(conn, %{"id" => id}) do
-    render(conn, "show.html", id: id)
+    render(conn, "show.html", order_id: id)
   end
 end

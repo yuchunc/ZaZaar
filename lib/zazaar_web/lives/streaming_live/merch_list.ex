@@ -10,9 +10,8 @@ defmodule ZaZaarWeb.StreamingLive.MerchList do
   def mount(session, socket) do
     %{video_id: video_id} = session
 
-    Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
+    if connected?(socket), do: Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
     send(self(), {:mounted, video_id})
-
     assigns = Map.merge(@default_state, session)
 
     {:ok, assign(socket, assigns)}
