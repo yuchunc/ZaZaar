@@ -4,3 +4,9 @@
       container: {:div, class: "container"})
   %>
 </section>
+
+<script charset="utf-8">
+  window.appConfig = {
+    userToken: "<%= current_user(@conn, :token) %>"
+  }
+</script>

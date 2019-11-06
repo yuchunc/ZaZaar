@@ -2,6 +2,7 @@ defmodule ZaZaarWeb.OrderLive.ShowOrder do
   use ZaZaarWeb, :live
 
   @default_state %{
+    adding_item: true,
     order: nil,
     video: nil
   }
@@ -20,5 +21,9 @@ defmodule ZaZaarWeb.OrderLive.ShowOrder do
       |> Map.merge(%{order: order, video: Transcript.get_video(order.video_id)})
 
     {:ok, assign(socket, assigns)}
+  end
+
+  def handle_event("toggle-add", _, socket) do
+    {:noreply, assign(socket, :adding_item, !socket.assigns.adding_item)}
   end
 end
