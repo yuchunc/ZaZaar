@@ -18,11 +18,13 @@ defmodule ZaZaar.Booking.Order do
   @foreign_key_type :binary_id
   schema "orders" do
     field :title, :string
-    field :total_amount, :integer, null: false
-    field :page_id, Ecto.UUID
-    field :video_id, Ecto.UUID
+    field :total_amount, :integer
     field :notified_at, :naive_datetime
     field :void_at, :naive_datetime
+    field :number, :string
+
+    field :page_id, Ecto.UUID
+    field :video_id, Ecto.UUID
 
     belongs_to :buyer, Booking.Buyer
 
@@ -36,7 +38,9 @@ defmodule ZaZaar.Booking.Order do
     order
     |> cast(attrs, [:title, :total_amount, :notified_at, :void_at])
     |> cast_embed(:items)
-    |> validate_required([:title, :total_amount, :page_id, :video_id])
+    |> validate_required([:title, :total_amount, :page_id, :video_id, :number])
     |> assoc_constraint(:buyer)
+    |> unique_constraint(:orders_buyer_id_video_id_index)
+    |> unique_constraint(:orders_number_page_id_index)
   end
 end

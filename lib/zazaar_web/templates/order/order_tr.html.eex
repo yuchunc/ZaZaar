@@ -24,7 +24,16 @@
       </span>
     </td>
     <td>
-      <a class="button is-hover-primary" href="/o/<%= @order.id %>" <%= if @order.void_at, do: "disabled"%>><%= dgettext "order", "Details" %></a>
+      <%= if @order.void_at do %>
+        <button class="button is-hover-primary" <%= if @order.void_at, do: "disabled"%>>
+          <%= dgettext "order", "Details" %>
+        </button>
+      <% else %>
+        <a type="button" class="button is-hover-primary" href="/o/<%= @order.id %>">
+          <%= dgettext "order", "Details" %>
+        </a>
+      <% end %>
+
       <%= if false do %>
         <a class="button" <%= if @order.void_at, do: "disabled"%>><%= dgettext "order", "Completed" %></a>
       <% end %>

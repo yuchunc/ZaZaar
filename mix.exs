@@ -56,6 +56,7 @@ defmodule ZaZaar.MixProject do
       {:ecto_enum, "~> 1.0"},
       {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},
+      {:ex_money, "~> 4.3"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},

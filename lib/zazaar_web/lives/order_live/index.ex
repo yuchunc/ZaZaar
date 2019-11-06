@@ -1,4 +1,4 @@
-defmodule ZaZaarWeb.OrderLive.IndexLive do
+defmodule ZaZaarWeb.OrderLive.Index do
   use ZaZaarWeb, :live
 
   alias ZaZaarWeb.OrderView

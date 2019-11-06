@@ -31,7 +31,7 @@ a {
   color: #363636;
 
   &.is-link:hover{
-    color: $primary;  
+    color: $primary;
   }
 }
 
@@ -107,7 +107,7 @@ footer {
     border-width: 0;
     padding-top: 0;
   }
-  
+
   .comment {
     border-radius: 1rem;
     padding: 0.5rem 0.75rem;
@@ -129,6 +129,7 @@ footer {
   &__body {
     td {
       vertical-align: middle;
+      height: 6em;
     }
 
     tr.is-void {

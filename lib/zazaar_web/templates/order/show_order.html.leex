@@ -1,0 +1,176 @@
+<header class="has-margin-bottom-sm">
+
+  <div class="level">
+    <!-- Breadcrumb -->
+    <div class="level-left">
+      <div class="level-item">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><a href="/"><%= gettext "Home" %></a></li>
+            <li><a href="/o"><%= gettext "Order List" %></a></li>
+            <li class="is-active"><a href="#" aria-current="page">Mickey 的訂單</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- Order State -->
+    <div class="level-right">
+      <div class="level-item">
+        <div class="tags has-addons">
+          <span class="tag is-medium">訂單狀態</span>
+          <span class="tag is-primary is-medium">已通知買家</span>
+          <!-- 已完成狀態
+            <span class="tag is-success is-medium">已完成</span>
+          -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="level">
+    <!-- Title -->
+    <div class="level-left">
+      <div class="level-item">
+        <h1 class="title"><%= dgettext "order", "%{name}'s Order", name: @order.buyer.fb_name %></h1>
+      </div>
+    </div>
+    <!-- Edit Button -->
+    <div class="level-right">
+      <div class="level-item">
+        <a class="button is-medium is-success is-outlined">
+          <%= gettext "Edit Orders" %>
+        </a>
+      </div>
+      <div class="level-item">
+        <a class="button is-medium is-primary is-outlined" href=<%= "/i/#{@order.id}" %> target="_target">
+          <%= gettext "View Invoice" %>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Invoice Page -->
+<div class="box invoice-container">
+
+  <div class="tile is-ancestor">
+
+    <div class="tile is-4 is-vertical is-parent">
+      <div class="tile is-child">
+        <span class="has-text-grey"><%= gettext "Billed To" %></span>
+        <p class="is-size-5"> <%= @order.buyer.fb_name %></p>
+      </div>
+      <div class="tile is-child">
+        <p class="has-text-grey"><%= gettext "Fb Stream Link" %></p>
+        <p class="is-size-5">
+          <a class="has-text-link" href="<%= @video.permalink_url %>" target="_blank">
+            <%= dgettext "order", "FB Video Link" %>
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="tile is-4 is-vertical is-parent">
+      <div class="tile is-child">
+        <span class="has-text-grey"><%= dgettext "order", "Order Number" %></span>
+        <p class="is-size-5"> <%= @order.number %></p>
+      </div>
+      <div class="tile is-child">
+        <span class="has-text-grey"><%= dgettext "order", "Date of Created" %></span>
+        <p class="is-size-5"><%= @order.inserted_at |> NaiveDateTime.to_date %></p>
+      </div>
+    </div>
+
+    <div class="tile is-parent">
+      <div class="tile is-child has-text-right">
+        <span class="has-text-grey"><%= dgettext "order", "Amount Due (NTD)" %></span>
+        <p class="has-text-weight-semibold is-size-3">
+          $<%= delimit(@order.total_amount) %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <table class="table main-table is-striped is-hoverable">
+    <thead class="main-table__header">
+      <tr>
+        <th width="20%"><%= dgettext "order", "Snapshot" %></th>
+        <th width="50%"><%= dgettext "order", "Product Name" %></th>
+        <th width="20%"><%= dgettext "order", "Amount" %></th>
+        <th width="10%"></th>
+      </tr>
+    </thead>
+
+    <tbody class="main-table__body" id="items-table-body">
+      <%= for item <- @order.items do %>
+        <tr>
+          <td>
+            <figure class="image is-thumbnail">
+              <img class="merch-snapshot" src="<%= item.snapshot_url %>">
+            </figure>
+          </td>
+          <td class="merch-name editable">
+            <%= item.title %>
+          </td>
+          <td class="editable">
+            <%= item.price %>
+          </td>
+          <td></td>
+        </tr>
+      <% end %>
+
+      <!-- Start: Edit Mode -->
+
+      <tr>
+        <!-- Add Item Link-->
+        <td colspan="4">
+          <a class="button is-block is-text has-text-primary" phx-click="toggle-add">
+            <%= dgettext "order", "Add Item" %>
+          </a>
+        </td>
+
+        <%= if false do %>
+          <!-- Add Item Form-->
+          <td> </td>
+          <td class="merch-name editable">
+            <div class="control">
+              <input class="input" type="text" placeholder=<%= dgettext "order", "Title" %>>
+            </div>
+          </td>
+          <td class="editable">
+            <div class="control">
+              <input class="input" type="text" placeholder=<%= dgettext "order", "Amount" %>>
+            </div>
+          </td>
+          <td>
+            <span class="buttons has-addons">
+              <a class="button is-outlined is-success">
+                <span class="icon is-small"><i class="fas fa-check"></i></span>
+              </a>
+              <a class="button is-outlined is-danger" phx-click="toggle-add">
+                <span class="icon is-small"><i class="fas fa-times"></i></span>
+              </a>
+            </span>
+          </td>
+        <% end %>
+      </tr>
+
+      <!-- End: Edit Mode -->
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="2" class="has-text-right has-text-grey-light"><%= gettext "Amount Due (NTD)" %></td>
+        <td colspan="2">$<%= delimit @order.total_amount %></td>
+      </tr>
+    </tfoot>
+
+  </table>
+
+</div>
+
+<%= live_render(@socket, ZaZaarWeb.StreamingLive.MerchModal,
+      session: %{video_id: @order.video_id, page_id: @order.page_id, has_snapshot: false},
+      id: @order.video_id <> "_merch_modal")
+%>

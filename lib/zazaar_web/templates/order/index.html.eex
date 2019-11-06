@@ -1,5 +1,5 @@
 <section class="section order">
-  <%= live_render(@conn, ZaZaarWeb.OrderLive.IndexLive,
+  <%= live_render(@conn, ZaZaarWeb.OrderLive.Index,
         session: %{page_id: current_page(@conn) |> Map.get(:id)},
         conatiner: {:div, class: "container"},
         id: "order_index_live")
