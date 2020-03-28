@@ -7,8 +7,8 @@ defmodule ZaZaarWeb.StreamingLive.MerchList do
 
   def render(assigns), do: render(ZaZaarWeb.StreamingView, "merch_list.html", assigns)
 
-  def mount(session, socket) do
-    %{video_id: video_id} = session
+  def mount(_, session, socket) do
+    %{"video_id" => video_id} = session
 
     if connected?(socket), do: Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
     send(self(), {:mounted, video_id})

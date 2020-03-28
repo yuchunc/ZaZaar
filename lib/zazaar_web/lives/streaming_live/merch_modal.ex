@@ -15,8 +15,8 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
 
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_modal.html", assigns)
 
-  def mount(session, socket) do
-    %{video_id: video_id} = session
+  def mount(_, session, socket) do
+    %{"video_id" => video_id} = session
 
     send(self(), {:mounted, session})
     Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
