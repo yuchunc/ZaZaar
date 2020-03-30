@@ -3,13 +3,15 @@ defmodule ZaZaarWeb.StreamLive.MerchTable do
 
   @default_assign %{
     snapshot_modal_url: "",
+    video_id: nil,
     merchs: []
   }
 
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_table.html", assigns)
 
-  def mount(session, socket) do
-    video = Transcript.get_video(session.video_id)
+  def mount(_params, session, socket) do
+    %{"video_id" =>  video_id} = session
+    video = Transcript.get_video(video_id)
 
     assigns =
       Map.merge(session, @default_assign)

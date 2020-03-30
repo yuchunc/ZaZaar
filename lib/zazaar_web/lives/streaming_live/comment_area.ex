@@ -2,12 +2,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   use Phoenix.LiveView, container: {:div, class: "tile is-parent is-4 streaming__comments"}
 
   alias ZaZaar.Account
+  alias ZaZaar.Transcript
   alias ZaZaarWeb.StreamView
 
   def render(assigns), do: StreamView.render("comment_area.html", assigns)
 
   def mount(_, session, socket) do
-    %{"video_id" => video_id, "page_id" => page_id} = session |> IO.inspect(label: "sess")
+    %{"video_id" => video_id, "page_id" => page_id} = session
 
     assigns =
       Map.merge(session, %{

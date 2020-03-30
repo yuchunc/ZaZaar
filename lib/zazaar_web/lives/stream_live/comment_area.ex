@@ -2,12 +2,13 @@ defmodule ZaZaarWeb.StreamLive.CommentArea do
   use ZaZaarWeb, :live
 
   @default_state %{
+    video_id: nil,
     comments: []
   }
 
   def render(assigns), do: render(ZaZaarWeb.StreamView, "comment_area.html", assigns)
 
-  def mount(session, socket) do
+  def mount(_, session, socket) do
     assigns = Map.merge(session, @default_state)
 
     send(self(), {:mounted, assigns.video_id})

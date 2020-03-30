@@ -27,7 +27,7 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   end
 
   def handle_info({:mounted, session}, socket) do
-    %{page_id: page_id} = session
+    %{"page_id" => page_id} = session
 
     assigns = %{
       access_token: Account.get_page(page_id) |> Map.get(:access_token)
