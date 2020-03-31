@@ -6,7 +6,7 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   alias ZaZaarWeb.StreamView
 
   def render(assigns) do
-      ~L"""
+    ~L"""
     <div class="tile is-child card">
       <header class="card-header">
         <p class="card-header-title">
@@ -36,11 +36,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
       </div>
     </div>
     """
+
     # <textarea class="input" id="comment-input" name="comment" placeholder="<%= gettext("Comment Here...") %>"><%= @textarea %></textarea>
   end
 
   def comment_elem(assigns) do
     assigns = Enum.into(assigns, %{})
+
     ~L"""
     <div class="media comment-panel">
       <figure class="media-left image is-32x32 is-avatar">

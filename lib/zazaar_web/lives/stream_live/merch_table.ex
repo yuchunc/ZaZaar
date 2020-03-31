@@ -10,7 +10,7 @@ defmodule ZaZaarWeb.StreamLive.MerchTable do
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_table.html", assigns)
 
   def mount(_params, session, socket) do
-    %{"video_id" =>  video_id} = session
+    %{"video_id" => video_id} = session
     video = Transcript.get_video(video_id)
 
     assigns =
