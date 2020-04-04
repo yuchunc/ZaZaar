@@ -23,15 +23,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
           <figure class="media-left image is-32x32 is-avatar">
             <img class="is-rounded" src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
           </figure>
-          <form phx-submit="new_comment">
-            <div class="media-content">
-              <div class="field">
-                <div class="control">
-                  <input class="ui fluid input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
-                </div>
-              </div>
+          <div class="media-content">
+            <div class="field">
+              <form phx-submit="new_comment" class="control">
+                <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
