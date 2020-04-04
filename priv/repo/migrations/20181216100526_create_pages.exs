@@ -8,7 +8,7 @@ defmodule ZaZaar.Repo.Migrations.CreatePages do
       add :access_token, :string, null: false
       add :name, :string, null: false
       add :tasks, {:array, :jsonb}, null: false
-      add :picture_url, :string
+      add :picture_url, :text
 
       add :user_id, references(:users, type: :uuid, on_delete: :delete_all), null: false
 

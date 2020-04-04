@@ -79,14 +79,14 @@
     <div class="columns main-columns">
       <!-- Comment Area-->
       <%= live_render(@conn, ZaZaarWeb.StreamLive.CommentArea,
-            session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, is_completed: !!@video.completed_at},
+            session: %{"video_id" => @video.id, "fb_video_id" => @video.fb_video_id, "page_id" => @page_id, "is_completed" => !!@video.completed_at},
             container: {:div, class: "column comment-container is-one-third-desktop is-hidden-mobile"},
             id: @video.id <> "_stream_comment_area")
       %>
 
       <!-- Stream Table -->
       <%= live_render(@conn, ZaZaarWeb.StreamLive.MerchTable,
-            session: %{video_id: @video.id, page_id: @page_id, is_completed: !!@video.completed_at},
+            session: %{"video_id" => @video.id, "page_id" => @page_id, "is_completed" => !!@video.completed_at},
             container: {:div, class: "column stream__page__order"},
             id: @video.id <> "_stream_comment_area")
       %>
@@ -95,7 +95,7 @@
 </section>
 
 <%= live_render(@conn, ZaZaarWeb.StreamingLive.MerchModal,
-      session: %{video_id: @video.id, fb_video_id: @video.fb_video_id, page_id: @page_id, has_snapshot: false},
+      session: %{"video_id" => @video.id, "fb_video_id" => @video.fb_video_id, "page_id" => @page_id, "has_snapshot" => false},
       id: @video.id <> "_merch_modal")
 %>
 

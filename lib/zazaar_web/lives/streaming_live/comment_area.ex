@@ -2,6 +2,8 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   use ZaZaarWeb, :live
 
   alias ZaZaar.Account
+  alias ZaZaar.Transcript
+  alias ZaZaarWeb.StreamView
 
   def render(assigns) do
     ~L"""
@@ -11,14 +13,12 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
           <%= gettext "Live Comments" %>
         </p>
       </header>
-
       <div class="card-content comments" id="streaming-comments-list" phx-hook="COMMENT_LIST">
         <%= for comment <- @comments do %>
           <%= comment_elem(comment: comment, fb_video_id: @fb_video_id) %>
         <% end %>
       </div>
-
-      <footer class="card-footer has-background-light">
+      <div class="card-footer has-background-light">
         <div class="media">
           <figure class="media-left image is-32x32 is-avatar">
             <img class="is-rounded" src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
@@ -27,13 +27,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
             <div class="media-content">
               <div class="field">
                 <div class="control">
-                  <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
+                  <input class="ui fluid input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
                 </div>
               </div>
             </div>
           </form>
         </div>
-      </footer>
+      </div>
     </div>
     """
 
@@ -57,7 +57,6 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
             <%= @comment.message %>
           </p>
         </div>
-
         <!-- 留言時間 + 手動新增 btn -->
         <div class="level is-mobile">
           <small class="has-text-grey-light">
@@ -75,8 +74,8 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
     """
   end
 
-  def mount(session, socket) do
-    %{video_id: video_id, page_id: page_id} = session
+  def mount(_, session, socket) do
+    %{"video_id" => video_id, "page_id" => page_id} = session
 
     assigns =
       Map.merge(session, %{
@@ -84,6 +83,7 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
         page: Account.get_page(page_id),
         textarea: nil
       })
+      |> Enum.into([])
 
     send(self(), {:mounted, video_id})
 
@@ -91,9 +91,9 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   end
 
   def handle_info({:mounted, video_id}, socket) do
-    video = Transcript.get_video(video_id, preload: :comments)
+    comments = Transcript.get_comments(video_id: video_id)
 
-    {:noreply, assign(socket, :comments, video.comments)}
+    {:noreply, assign(socket, :comments, comments)}
   end
 
   def handle_info({:new_comment, new_comment}, socket) do

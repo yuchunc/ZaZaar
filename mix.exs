@@ -64,7 +64,7 @@ defmodule ZaZaar.MixProject do
       {:mox, "~> 0.4", only: :test},
       {:ex_ngrok, "~> 0.3", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
-      {:mix_test_watch, "~> 0.8", only: :dev, runtime: false}
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
     ]
   end
 
