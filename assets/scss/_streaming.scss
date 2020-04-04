@@ -7,6 +7,12 @@
 
   &__view, &__action {
     flex-grow: 0;
+
+    .card-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   &__metrics {
