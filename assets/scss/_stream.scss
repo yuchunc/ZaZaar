@@ -5,6 +5,12 @@
       box-shadow: 0 2px 3px rgba($c-z-light, 1), 0 0 0 1px rgba($c-z-light, 1);
     }
 
+    .current-stream {
+      display: flex;
+      //align-items: center;
+      justify-content: center;
+    }
+
     .comments {
       max-height: 19.75rem;
     }
