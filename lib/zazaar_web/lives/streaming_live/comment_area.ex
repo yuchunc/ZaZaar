@@ -3,7 +3,6 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
 
   alias ZaZaar.Account
   alias ZaZaar.Transcript
-  alias ZaZaarWeb.StreamView
 
   def render(assigns) do
     ~L"""
