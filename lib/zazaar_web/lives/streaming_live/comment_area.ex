@@ -4,6 +4,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   alias ZaZaar.Account
   alias ZaZaar.Transcript
 
+  @default_assigns %{
+    comments: [],
+    page: nil,
+    fb_video_id: nil,
+    textarea: nil
+  }
+
   def render(assigns) do
     ~L"""
     <div class="tile is-child card">
@@ -72,15 +79,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   end
 
   def mount(_, session, socket) do
-    %{"video_id" => video_id, "page_id" => page_id} = session
+    %{"video_id" => video_id, "page_id" => page_id, "fb_video_id" => fb_vid_id} = session
 
     assigns =
-      Map.merge(session, %{
-        comments: [],
+      Map.merge(@default_assigns, %{
         page: Account.get_page(page_id),
-        textarea: nil
+        fb_video_id: fb_vid_id
       })
-      |> Enum.into([])
 
     send(self(), {:mounted, video_id})
 
