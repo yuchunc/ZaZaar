@@ -6,7 +6,7 @@ defmodule ZaZaar.Repo.Migrations.CreateMerchandises do
       add :id, :binary_id, primary_key: true
       add :title, :string
       add :price, :integer, null: false
-      add :snapshot_url, :string
+      add :snapshot_url, :text
       add :buyer_name, :string
       add :buyer_fb_id, :string
       add :invalidated_at, :naive_datetime
