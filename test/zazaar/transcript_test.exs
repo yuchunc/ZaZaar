@@ -47,7 +47,7 @@ defmodule ZaZaar.TranscriptTest do
   end
 
   describe "upsert_videos/2" do
-    test "update or insert video accordingly" do
+    test "update or insert video accordingly, and sorted by creation_time" do
       fb_page_id = "foofoobarbar"
 
       curr_vid_map =
@@ -57,15 +57,23 @@ defmodule ZaZaar.TranscriptTest do
         |> Map.delete(:comments)
 
       new_vid_map =
-        build(:video, fb_page_id: fb_page_id)
+        build(:video,
+          fb_page_id: fb_page_id,
+          creation_time:
+            NaiveDateTime.utc_now()
+            |> NaiveDateTime.truncate(:second)
+            |> NaiveDateTime.add(1, :second)
+        )
         |> Map.from_struct()
         |> Map.delete(:__meta__)
         |> Map.delete(:comments)
 
+      %{id: curr_vid_map_id} = curr_vid_map
+
       vid_maps = [Map.put(curr_vid_map, :id, nil), new_vid_map]
 
       assert {:ok, videos} = Transcript.upsert_videos(fb_page_id, vid_maps)
-      assert curr_vid_map.id in Enum.map(videos, & &1.id)
+      assert [_, ^curr_vid_map_id] = videos |> Enum.map(& &1.id)
     end
   end
 

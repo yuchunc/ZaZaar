@@ -77,7 +77,7 @@ defmodule ZaZaar.Transcript do
       video_maps
       |> Enum.map(& &1.fb_video_id)
 
-    {:ok, get_videos(fb_video_id: video_ids)}
+    {:ok, get_videos([fb_video_id: video_ids], order_by: [desc: :creation_time])}
   end
 
   @doc """
