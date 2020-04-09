@@ -57,6 +57,7 @@ defmodule ZaZaar.MixProject do
       {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},
       {:ex_money, "~> 4.3"},
+      {:norm, "~> 0.10.4"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},
