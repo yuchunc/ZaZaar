@@ -7,6 +7,7 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   @default_assigns %{
     comments: [],
     page: nil,
+    video_id: nil,
     fb_video_id: nil,
     textarea: nil
   }
@@ -84,6 +85,7 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
     assigns =
       Map.merge(@default_assigns, %{
         page: Account.get_page(page_id),
+        video_id: video_id,
         fb_video_id: fb_vid_id
       })
 

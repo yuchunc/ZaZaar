@@ -21,7 +21,7 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
     send(self(), {:mounted, session})
     Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
 
-    assigns = Map.merge(@default_state, session)
+    assigns = Map.merge(@default_state, %{video_id: video_id})
 
     {:ok, assign(socket, assigns)}
   end
