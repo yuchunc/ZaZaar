@@ -9,13 +9,15 @@ defmodule ZaZaarWeb.OrderLive.Index do
       date_range: "",
       states: []
     },
+    page_id: nil,
     orders: []
   }
 
   def render(assigns), do: render(OrderView, "index_live.html", assigns)
 
-  def mount(session, socket) do
-    assigns = Map.merge(@default_assigns, session)
+  def mount(_, session, socket) do
+    %{"page_id" => page_id} = session
+    assigns = Map.merge(@default_assigns, %{page_id: page_id})
     send(self(), {:mounted, assigns.page_id})
     {:ok, assign(socket, assigns)}
   end

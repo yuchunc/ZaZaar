@@ -9,8 +9,8 @@ defmodule ZaZaarWeb.OrderLive.ShowOrder do
 
   def render(assigns), do: render(ZaZaarWeb.OrderView, "show_order.html", assigns)
 
-  def mount(session, socket) do
-    %{order_id: order_id} = session
+  def mount(_, session, socket) do
+    %{"order_id" => order_id} = session
 
     [order] =
       [id: order_id]
