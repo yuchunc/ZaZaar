@@ -164,7 +164,7 @@ defmodule ZaZaar.Transcript do
   def save_merchandise(%Merchandise{} = merch, attrs) do
     merch
     |> Map.from_struct()
-    |> Map.merge(%{price: attrs[:price], title: attrs[:title]})
+    |> Map.merge(%{price: attrs[:price], title: attrs[:title], video: nil})
     |> save_merchandise()
   end
 
