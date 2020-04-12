@@ -1,6 +1,6 @@
 <section class="section order__page">
   <%= live_render(@conn, ZaZaarWeb.OrderLive.ShowOrder,
-      session: %{order_id: @order_id},
+      session: %{"order_id" => @order_id},
       container: {:div, class: "container"})
   %>
 </section>

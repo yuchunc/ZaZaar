@@ -69,6 +69,7 @@ defmodule ZaZaarWeb.StreamLive.MerchTable do
     {:ok, merch} =
       merch_id
       |> Transcript.get_merchandise()
+      |> Map.put(:video, nil)
       |> Transcript.save_merchandise(%{
         price: merch_params["price"],
         title: merch_params["title"]
@@ -88,7 +89,8 @@ defmodule ZaZaarWeb.StreamLive.MerchTable do
   def handle_event("toggle-merch-valid", %{"merch-id" => merch_id}, socket) do
     %{merchs: merchs0} = socket.assigns
 
-    {:ok, merch} = merch_id |> Transcript.get_merchandise() |> toggle_merch_validity
+    {:ok, merch} =
+      merch_id |> Transcript.get_merchandise() |> Map.put(:video, nil) |> toggle_merch_validity
 
     merchs1 =
       Enum.map(merchs0, fn

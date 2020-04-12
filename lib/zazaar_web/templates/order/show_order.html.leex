@@ -171,6 +171,6 @@
 </div>
 
 <%= live_render(@socket, ZaZaarWeb.StreamingLive.MerchModal,
-      session: %{video_id: @order.video_id, page_id: @order.page_id, has_snapshot: false},
+      session: %{"video_id" => @order.video_id, "page_id" => @order.page_id, "has_snapshot" => false, "fb_video_id" => @video.fb_video_id},
       id: @order.video_id <> "_merch_modal")
 %>

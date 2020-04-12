@@ -3,7 +3,14 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
 
   alias ZaZaar.Account
   alias ZaZaar.Transcript
-  alias ZaZaarWeb.StreamView
+
+  @default_assigns %{
+    comments: [],
+    page: nil,
+    video_id: nil,
+    fb_video_id: nil,
+    textarea: nil
+  }
 
   def render(assigns) do
     ~L"""
@@ -23,15 +30,13 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
           <figure class="media-left image is-32x32 is-avatar">
             <img class="is-rounded" src="<%= if @page.picture_url, do: @page.picture_url, else: "https://bulma.io/images/placeholders/30x30.png"%>">
           </figure>
-          <form phx-submit="new_comment">
-            <div class="media-content">
-              <div class="field">
-                <div class="control">
-                  <input class="ui fluid input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
-                </div>
-              </div>
+          <div class="media-content">
+            <div class="field">
+              <form phx-submit="new_comment" class="control">
+                <input class="input" id="comment-input" name="comment" value="<%= @textarea %>" autocomplete="off" />
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -75,15 +80,14 @@ defmodule ZaZaarWeb.StreamingLive.CommentArea do
   end
 
   def mount(_, session, socket) do
-    %{"video_id" => video_id, "page_id" => page_id} = session
+    %{"video_id" => video_id, "page_id" => page_id, "fb_video_id" => fb_vid_id} = session
 
     assigns =
-      Map.merge(session, %{
-        comments: [],
+      Map.merge(@default_assigns, %{
         page: Account.get_page(page_id),
-        textarea: nil
+        video_id: video_id,
+        fb_video_id: fb_vid_id
       })
-      |> Enum.into([])
 
     send(self(), {:mounted, video_id})
 

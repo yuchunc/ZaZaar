@@ -4,8 +4,8 @@
       <%= @live_stream.title || @live_stream.creation_time |> NaiveDateTime.to_iso8601 %>
     </h1>
     <div class="columns">
-      <div class="column">
-        <div class="fb-video" data-href=<%= @live_stream.permalink_url %> data-width="500" data-autopaly="true"></div>
+      <div class="column current-stream">
+        <div class="fb-video" data-href=<%= @live_stream.permalink_url %> data-width="260" data-autopaly="true"></div>
       </div>
 
       <div class="column">

@@ -77,7 +77,7 @@ defmodule ZaZaar.Transcript do
       video_maps
       |> Enum.map(& &1.fb_video_id)
 
-    {:ok, get_videos(fb_video_id: video_ids)}
+    {:ok, get_videos([fb_video_id: video_ids], order_by: [desc: :creation_time])}
   end
 
   @doc """
@@ -164,7 +164,7 @@ defmodule ZaZaar.Transcript do
   def save_merchandise(%Merchandise{} = merch, attrs) do
     merch
     |> Map.from_struct()
-    |> Map.merge(%{price: attrs[:price], title: attrs[:title]})
+    |> Map.merge(%{price: attrs[:price], title: attrs[:title], video: nil})
     |> save_merchandise()
   end
 

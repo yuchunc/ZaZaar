@@ -14,7 +14,7 @@ defmodule ZaZaar.Repo.Migrations.CreateComments do
 
       # Commenter Info
       add :commenter_fb_id, :string
-      add :commenter_picture, :string
+      add :commenter_picture, :text
       add :commenter_fb_name, :string
 
       add :video_id, references("videos", type: :uuid), null: false

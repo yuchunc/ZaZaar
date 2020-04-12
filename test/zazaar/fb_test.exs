@@ -153,7 +153,10 @@ defmodule ZaZaar.FbTest do
       access_token = "Imthealmightyaccesstoken"
       message = "foofoobarbar"
 
-      expect(ApiMock, :publish, fn :comments, ^fb_video_id, [fields: _, message: msg], _ ->
+      expect(ApiMock, :publish, fn :comments,
+                                   ^fb_video_id,
+                                   [fields: _, message: msg, object_id: _],
+                                   _ ->
         resp = RespMock.comment(message: msg, parent_id: video.fb_video_id)
         {:ok, resp}
       end)

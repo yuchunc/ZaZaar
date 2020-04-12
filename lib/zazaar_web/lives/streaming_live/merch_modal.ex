@@ -2,6 +2,7 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   use ZaZaarWeb, :live
 
   @default_state %{
+    fb_video_id: nil,
     show_modal: false,
     has_snapshot: true,
     snapshot_url: nil,
@@ -16,12 +17,12 @@ defmodule ZaZaarWeb.StreamingLive.MerchModal do
   def render(assigns), do: render(ZaZaarWeb.StreamView, "merch_modal.html", assigns)
 
   def mount(_, session, socket) do
-    %{"video_id" => video_id} = session
+    %{"video_id" => video_id, "fb_video_id" => fb_video_id} = session
 
     send(self(), {:mounted, session})
     Phoenix.PubSub.subscribe(ZaZaar.PubSub, "stream:#{video_id}")
 
-    assigns = Map.merge(@default_state, session)
+    assigns = Map.merge(@default_state, %{video_id: video_id, fb_video_id: fb_video_id})
 
     {:ok, assign(socket, assigns)}
   end
