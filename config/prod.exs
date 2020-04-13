@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
@@ -10,19 +10,11 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :zazaar, ZaZaarWeb.Endpoint,
-  http: [:inet6, port: {:system, "PORT"} || 4000],
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :zazaar, ZaZaar.Auth.Guardian,
-  secret_key: "2/nWZqdFSoZfy6uBodFFsa/irmciffdFGUoV+wP1auIFXGt8ruAV+LFgVM1LNyFZ"
-
 # Do not print debug messages in production
 config :logger, level: :info
-
-config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
-  client_id: {:system, "FACEBOOK_CLIENT_ID"},
-  client_secret: {:system, "FACEBOOK_CLIENT_SECRET"}
 
 # ## SSL Support
 #
@@ -75,4 +67,3 @@ config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
 
 # Finally import the config/prod.secret.exs which should be versioned
 # separately.
-import_config "prod.secret.exs"
