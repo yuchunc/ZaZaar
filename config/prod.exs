@@ -16,6 +16,15 @@ config :zazaar, ZaZaarWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :mix_systemd,
+  app_user: "app",
+  app_group: "app",
+  base_dir: "/srv",
+  output_dir: "rel/overlays",
+  env_files: [
+    ["/etc/zazaar/environment"]
+  ]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
