@@ -63,7 +63,6 @@ RUN npm install --prefix assets \
 RUN mix phx.digest \
   && mix systemd.generate \
   && mix release \
-  && _build/prod/rel/zazaar/bin/zazaar version \
   && COMMIT_ID=$(git rev-parse HEAD) \
   && APP_NAME=$(_build/prod/rel/zazaar/bin/zazaar version | cut -d ' ' -f1) \
   && APP_VERSION=$(_build/prod/rel/zazaar/bin/zazaar version | cut -d ' ' -f2) \
