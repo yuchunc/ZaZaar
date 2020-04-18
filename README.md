@@ -47,3 +47,14 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 #### 5.Order 完成後
 -> 直播主可以手動把 Order complete 掉
+
+## Deployment
+
+### Building Release
+
+1. docker build -f rel/release.Dockerfile -t zazaar .
+2. docker run --rm -v /tmp:/app/tmp zazaar bash -c "cp release.tar.gz /app/tmp/"
+
+### Build Server
+
+https://rustyfinger.com/deploying-phoenix-to-ten-dollar-setup/
