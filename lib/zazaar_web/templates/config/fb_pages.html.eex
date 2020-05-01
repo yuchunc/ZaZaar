@@ -17,7 +17,7 @@
 
         <div class="panel-block">
 
-          <%= link to: "/config/pages/refetch", method: :delete, class: "button is-primary is-outlined is-fullwidth" do %>
+          <%= link to: "/auth/facebook", class: "button is-primary is-outlined is-fullwidth" do %>
             <%= gettext "Refetch Pages from Facebook" %>
           <% end %>
 

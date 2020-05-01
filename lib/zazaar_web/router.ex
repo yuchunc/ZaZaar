@@ -10,6 +10,7 @@ defmodule ZaZaarWeb.Router do
     plug :put_secure_browser_headers
 
     plug Auth.UserPipeline
+    plug Auth.PagePipeline
   end
 
   pipeline :public do
@@ -22,7 +23,8 @@ defmodule ZaZaarWeb.Router do
   end
 
   pipeline :page_authed do
-    plug Auth.PagePipeline
+    plug Guardian.Plug.EnsureAuthenticated
+    plug Guardian.Plug.LoadResource, allow_blank: false
   end
 
   pipeline :api do
@@ -53,7 +55,7 @@ defmodule ZaZaarWeb.Router do
   scope "/", ZaZaarWeb, as: :config do
     pipe_through [:browser, :user_authed]
 
-    resources "/config/pages", Config.FbPageController, only: [:index, :show, :delete]
+    resources "/config/pages", Config.FbPageController, only: [:index, :show]
 
     delete("/logout", SessionController, :delete)
   end

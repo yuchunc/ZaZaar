@@ -5,6 +5,4 @@ defmodule ZaZaar.Auth.PagePipeline do
     key: :page
 
   plug Guardian.Plug.VerifySession
-  plug Guardian.Plug.EnsureAuthenticated
-  plug Guardian.Plug.LoadResource, allow_blank: false
 end

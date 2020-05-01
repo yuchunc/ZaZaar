@@ -7,3 +7,5 @@ require ZaZaarWeb
 ZaZaarWeb.aliases()
 
 alias ZaZaar.Booking.{Order, Buyer}
+
+user = User |> Repo.one()

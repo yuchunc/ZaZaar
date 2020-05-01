@@ -8,7 +8,7 @@
 
     <div id="main-navbar" class="navbar-menu is-marginless">
       <div class="navbar-start">
-        <%= if page = current_page(@conn) do %>
+        <%= if page = current_page(@conn) |> IO.inspect() do %>
           <%= link(to: "/config/pages", class: "navbar-item") do %>
             <div class="button is-primary">
               <span class="icon"><i class="fab fa-trello"></i></span>
