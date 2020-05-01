@@ -10,6 +10,7 @@ defmodule ZaZaarWeb.Router do
     plug :put_secure_browser_headers
 
     plug Auth.UserPipeline
+    plug Auth.PagePipeline
   end
 
   pipeline :public do
@@ -22,7 +23,8 @@ defmodule ZaZaarWeb.Router do
   end
 
   pipeline :page_authed do
-    plug Auth.PagePipeline
+    plug Guardian.Plug.EnsureAuthenticated
+    plug Guardian.Plug.LoadResource, allow_blank: false
   end
 
   pipeline :api do
