@@ -11,13 +11,8 @@ defmodule ZaZaarWeb.Config.FbPageController do
   """
   def index(conn, _) do
     with %User{} = user <- current_user(conn),
-         pages0 <- Account.get_pages(user) do
-      {:ok, pages1} =
-        case pages0 do
-          [] -> Fb.set_pages(user)
-          pages -> {:ok, pages}
-        end
-
+         pages0 <- Account.get_pages(user),
+         {:ok, pages1} <- Fb.set_pages(user) do
       render(conn, "fb_pages.html", pages: Enum.sort_by(pages1, & &1.fb_page_id))
     end
   end
@@ -38,15 +33,5 @@ defmodule ZaZaarWeb.Config.FbPageController do
         |> put_flash(:warning, dgettext("errors", "Unable to find page."))
         |> redirect(to: "/config/pages")
     end
-  end
-
-  def delete(conn, _) do
-    conn
-    |> current_user
-    |> Fb.set_pages()
-
-    conn
-    |> put_flash(:success, dgettext("success", "Pages Refetched!"))
-    |> redirect(to: "/config/pages")
   end
 end

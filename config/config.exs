@@ -41,7 +41,7 @@ config :ueberauth, Ueberauth,
     facebook:
       {Ueberauth.Strategy.Facebook,
        [
-         default_scope: "email,public_profile",
+         default_scope: "email,public_profile,manage_pages,publish_pages",
          profile_fields: "name,email,first_name,last_name",
          display: "popup"
        ]}
