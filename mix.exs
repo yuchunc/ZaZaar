@@ -10,7 +10,16 @@ defmodule ZaZaar.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        zazaar: [
+          # TODO uncomment this when going live
+          # version: set_release_version(),
+          include_executables_for: [:unix],
+          applications: [runtime_tools: :permanent],
+          steps: [:assemble, :tar]
+        ]
+      ]
     ]
   end
 
@@ -58,6 +67,7 @@ defmodule ZaZaar.MixProject do
       {:timex, "~> 3.1"},
       {:ex_money, "~> 4.3"},
       {:norm, "~> 0.11.0"},
+      {:mix_systemd, github: "cogini/mix_systemd"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:faker, "~> 0.11", only: [:test, :dev]},
@@ -82,5 +92,10 @@ defmodule ZaZaar.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
+  end
+
+  defp set_release_version do
+    %{year: y, month: mon, day: d, hour: h, minute: m} = NaiveDateTime.utc_now()
+    "#{y}#{mon}#{d}#{h}#{m}"
   end
 end

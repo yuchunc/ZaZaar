@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -86,4 +86,4 @@ config :ex_ngrok,
   api_url: "http://localhost:4040/api/tunnels",
   sleep_between_attempts: 200
 
-import_config "dev.secret*.exs"
+import_config "dev.secret.exs"

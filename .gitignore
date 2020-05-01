@@ -43,3 +43,6 @@ npm-debug.log
 
 # Using structure.sql as guidelines only
 priv/repo/structure.sql
+
+# Ignore production envs
+/rel/overlays/environment
