@@ -28,14 +28,14 @@ defmodule ZaZaarWeb.StreamController do
     case Transcript.get_video(fb_video_id, preload: :comments) do
       %{fb_status: :live, id: id} ->
         conn
-        |> put_session(:page_id, current_page(conn) |> Map.get(:id))
+        |> put_session(:page_id, current_page(conn).id)
         |> put_session(:video_id, id)
         |> redirect(to: "/s/current")
 
       %Video{} = video ->
         render(conn, "show.html",
           video: video,
-          page_id: current_page(conn) |> Map.get(:id)
+          page_id: current_page(conn).id
         )
 
       _ ->
