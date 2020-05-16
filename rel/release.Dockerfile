@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 AS base
+FROM ubuntu:20.04 AS base
 
 WORKDIR /app
 
@@ -11,12 +11,13 @@ RUN apt update -q \
     build-essential \
     autoconf \
     libncurses5-dev \
-    libwxgtk3.0-dev \
+    #libwxgtk3.0-dev \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
     libpng-dev \
     libssh-dev \
     unixodbc-dev \
+    zip unzip \
   && apt clean
 
 RUN locale-gen en_US.UTF-8
@@ -25,12 +26,12 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # install asdf and its plugins
-# ASDF will only correctly install plugins into the home directory as of 0.7.5
+# ASDF will only correctly install plugins into the home directory as of 0.7.8
 # so .... Just go with it.
 ENV ASDF_ROOT /root/.asdf
 ENV PATH "${ASDF_ROOT}/bin:${ASDF_ROOT}/shims:$PATH"
 
-RUN git clone https://github.com/asdf-vm/asdf.git ${ASDF_ROOT} --branch v0.7.5  \
+RUN git clone https://github.com/asdf-vm/asdf.git ${ASDF_ROOT} --branch v0.7.8  \
   && asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang \
   && asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir \
   && asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs \
