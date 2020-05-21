@@ -38,7 +38,7 @@ defmodule ZaZaar.Fb do
          {:ok, %{"data" => accounts}} <-
            @api.get_object_edge("accounts", user.fb_id, user.fb_access_token, fields: fields),
          pages1 <- Enum.map(accounts, &format_page_map/1) do
-      Account.upsert_pages(user, pages1, strategy: :flush)
+      Account.upsert_pages(user, pages1)
     else
       {:error, %{error: msg}} ->
         {:error, msg}
