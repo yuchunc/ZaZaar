@@ -31,7 +31,7 @@ defmodule ZaZaar.Account.Page do
   @doc false
   def changeset(page, attrs) do
     page
-    |> cast(attrs, [:name, :picture_url])
+    |> cast(attrs, [:name, :picture_url, :access_token])
     |> validate_change(:tasks, &validate_tasks/2)
     |> validate_required([:fb_page_id, :access_token, :tasks, :name, :user_id])
     |> unique_constraint(:fb_page_id, name: :pages_user_id_fb_page_id_index)

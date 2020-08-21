@@ -22,7 +22,8 @@
     <main role="main" class="main-container">
       <%= render(ZaZaarWeb.LayoutView, "main_nav.html", conn: @conn) %>
       <div class="main">
-        <%= render @view_module, @view_template, assigns %>
+        <%=# render @view_module, @view_template, assigns %>
+        <%= @inner_content %>
       </div>
       <%= render(ZaZaarWeb.LayoutView, "main_footer.html", conn: @conn) %>
     </main>
