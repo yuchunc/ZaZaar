@@ -44,8 +44,8 @@ defmodule ZaZaar.MixProject do
   defp deps do
     [
       # Phoenix
-      {:phoenix, "~> 1.4"},
-      {:phoenix_pubsub, "~> 1.1"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
@@ -65,8 +65,8 @@ defmodule ZaZaar.MixProject do
       {:ecto_enum, "~> 1.0"},
       {:facebook, "~> 0.22"},
       {:timex, "~> 3.1"},
-      {:ex_money, "~> 4.3"},
-      {:norm, "~> 0.11.0"},
+      {:ex_money, "~> 5.2"},
+      {:norm, "~> 0.12.0"},
       {:mix_systemd, github: "cogini/mix_systemd"},
       # Dev and Test Utils
       {:ex_machina, "~> 2.2", only: [:test, :dev]},
